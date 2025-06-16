@@ -1,0 +1,37 @@
+<div class="relative">
+  <div>
+    <!-- Botão cancelar (só aparece no modo de edição) -->
+    <button
+      *ngIf="modoEdicao"
+      class="botao-cancelar"
+      pTooltip="Cancelar edição"
+      tooltipPosition="left"
+      (click)="cancelarEdicao()"
+    >
+      <i class="pi pi-times"></i>
+    </button>
+    <!-- Ícone do lápis -->
+    <button
+      class="botao-editar"
+      pTooltip="Editar idiomas"
+      tooltipPosition="left"
+      (click)="executarAcaoEdicao()"
+    >
+      <i class="pi {{ !modoEdicao ? 'pi-pencil' : 'pi-check' }}"></i>
+    </button>
+  </div>
+  <div class="mt-3">
+    <p-fieldset legend="Idiomas" toggleable="true">
+      <div class="checkbox-group-horizontal">
+        <div class="checkbox-item" *ngFor="let idioma of idiomasDisponiveis">
+          <p-checkbox
+            [(ngModel)]="idiomasAluno"
+            [label]="idioma.nome"
+            [value]="idioma.id"
+            [disabled]="!modoEdicao"
+          ></p-checkbox>
+        </div>
+      </div>
+    </p-fieldset>
+  </div>
+</div>

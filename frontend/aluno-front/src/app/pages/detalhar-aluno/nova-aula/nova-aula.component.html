@@ -1,0 +1,98 @@
+<form [formGroup]="form" class="p-fluid p-3">
+  <!-- Linha 1: Data (2 colunas = ~16%) -->
+  <div class="flex flex-wrap mb-4">
+    <div class="basis-1/6 md:basis-1/6 pr-3">
+      <label for="dataAula">Data da aula:</label>
+      <p-calendar
+        formControlName="dataAula"
+        inputId="dataAula"
+        dateFormat="dd/mm/yy"
+        [showIcon]="true"
+        class="w-full"
+        [maxDate]="hoje"
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+            form.get('dataAula')?.invalid && form.get('dataAula')?.touched
+        }"
+      />
+      <small
+        class="p-error"
+        *ngIf="
+          form.get('date')?.hasError('required') && form.get('date')?.touched
+        "
+      >
+        Data da aula é obrigatória</small
+      >
+
+      <small
+        class="p-error"
+        *ngIf="form.get('dataAula')?.errors?.['dataNoFuturo']"
+      >
+        A data não pode ser futura.
+      </small>
+    </div>
+  </div>
+
+  <!-- Linha 2: Itens lado a lado ocupando quase 6 colunas (~50%) cada -->
+  <div class="flex flex-wrap gap-4">
+    <div class="flex-1 md:w-12">
+      <label for="anotacoes">Anotações:</label>
+      <textarea
+        pInputTextarea
+        id="anotacoes"
+        formControlName="anotacoes"
+        rows="10"
+        class="w-full"
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+            form.get('anotacoes')?.invalid && form.get('anotacoes')?.touched
+        }"
+      ></textarea>
+      <small
+        class="p-error"
+        *ngIf="
+          form.get('date')?.hasError('required') && form.get('date')?.touched
+        "
+      >
+        O campo Anotações é obrigatório</small
+      >
+    </div>
+    <!-- Exemplo de um campo do lado esquerdo -->
+    <div class="flex-1 md:w-5">
+      <label for="campo1">Comentários do professor:</label>
+      <textarea
+        pInputTextarea
+        id="comentarios"
+        formControlName="comentarios"
+        rows="5"
+        class="w-full"
+      ></textarea>
+    </div>
+    <!-- Exemplo de outro campo ao lado -->
+    <div class="flex-1 md:w-5">
+      <label for="proxima-aula">Próxima aula:</label>
+      <textarea
+        pInputTextarea
+        id="proxima-aula"
+        formControlName="proximaAula"
+        rows="5"
+        class="w-full"
+      ></textarea>
+    </div>
+  </div>
+  <!-- Botões ao centro -->
+  <div class="flex gap-2 justify-content-start mt-8">
+    <p-button
+      label="Salvar"
+      icon="pi pi-check"
+      class="p-button-primary"
+      (onClick)="salvar()"
+    ></p-button>
+    <p-button
+      label="Cancelar"
+      icon="pi pi-times"
+      class="p-button-secondary"
+      (onClick)="onCancel()"
+    ></p-button>
+  </div>
+</form>

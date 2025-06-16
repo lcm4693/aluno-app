@@ -1,0 +1,44 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# SQLite database
+*.db
+
+# Environment variables or config
+.env
+*.env
+
+# Virtual environment (Windows/macOS/Linux)
+venv/
+ENV/
+env/
+.venv/
+
+# VSCode
+.vscode/
+
+# IDEs
+.idea/
+*.swp
+
+# MacOS
+.DS_Store
+
+# Logs
+*.log
+
+# Cache
+.cache/
+*.bak
+
+# Arquivos temporários
+*.tmp
+
+# Imagens de upload (opcional — se quiser ignorar fotos locais)
+# static/fotos/
+
+# Arquivos do sistema (Windows)
+Thumbs.db
+desktop.ini

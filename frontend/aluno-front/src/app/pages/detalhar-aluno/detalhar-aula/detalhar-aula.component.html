@@ -1,0 +1,55 @@
+<!-- detalhar-aula.component.html -->
+<span #topo tabindex="-10000"></span>
+<div class="p-fluid p-3">
+  <!-- Linha 1: Data -->
+  <div class="flex flex-wrap mt-4 mb-4">
+    <div class="basis-1/6 md:basis-1/6 pr-3">
+      <label>Data da aula:</label>
+      <p-calendar
+        [ngModel]="aula!.dataAula"
+        dateFormat="dd/mm/yy"
+        [showIcon]="true"
+        class="w-full"
+        [readonlyInput]="true"
+        disabled
+      ></p-calendar>
+    </div>
+  </div>
+
+  <!-- Linha 2: Anotações e demais campos -->
+  <div class="flex flex-wrap gap-4">
+    <div class="flex-1 md:w-12">
+      <p-panel class="w-full" header="Anotações">
+        <div class="white-space-pre-line">
+          {{ aula!.anotacoes || "—" }}
+        </div>
+      </p-panel>
+    </div>
+
+    <div class="flex-1 md:w-5">
+      <p-panel class="w-full" header="Comentários do professor">
+        <div class="white-space-pre-line">
+          {{ aula!.comentarios || "—" }}
+        </div>
+      </p-panel>
+    </div>
+
+    <div class="flex-1 md:w-5">
+      <p-panel class="w-full" header="Próxima aula">
+        <div class="white-space-pre-line">
+          {{ aula!.proximaAula || "—" }}
+        </div>
+      </p-panel>
+    </div>
+  </div>
+
+  <!-- Botão de Fechar -->
+  <div class="flex justify-content-center mt-4">
+    <p-button
+      label="Fechar"
+      icon="pi pi-times"
+      class="p-button-secondary"
+      (onClick)="fechar.emit()"
+    ></p-button>
+  </div>
+</div>

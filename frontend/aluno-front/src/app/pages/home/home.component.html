@@ -1,0 +1,24 @@
+<div
+  class="flex flex-column align-items-center justify-content-center min-h-screen p-4 gap-4"
+>
+  <p-card header="Bem-vindo!" class="w-full max-w-md text-center">
+    <p>O que você deseja fazer?</p>
+
+    <div
+      style="display: flex"
+      class="flex flex-row gap-3 mt-4 justify-content-center"
+    >
+      <p-button
+        label="Cadastrar Aluno"
+        icon="pi pi-user-plus"
+        (onClick)="navegar('/alunos/cadastrar')"
+      ></p-button>
+      <p-button
+        label="Listar Alunos"
+        icon="pi pi-users"
+        (onClick)="navegar('/listar')"
+        class="p-button-secondary"
+      ></p-button>
+    </div>
+  </p-card>
+</div>

@@ -1,0 +1,101 @@
+<div class="container mt-4" style="margin-bottom: 80px">
+  <h1 class="mb-4 titulo">🎓 Alunos Cadastrados</h1>
+
+  <!-- ConfirmDialog -->
+  <p-confirmDialog
+    header="Confirmar exclusão"
+    icon="pi pi-exclamation-triangle"
+  ></p-confirmDialog>
+
+  <!-- Tabela -->
+  <p-table
+    [value]="alunos"
+    styleClass="p-datatable-gridlines p-datatable-striped text-center"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-center" style="width: 380px">Nome</th>
+        <th class="text-center">Nível</th>
+        <th class="text-center" style="width: 200px">Cidade</th>
+        <th class="text-center" style="width: 180px">Profissão</th>
+        <th class="text-center">Pontos a saber</th>
+        <th class="text-center" style="width: 120px">Ações</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-aluno>
+      <tr>
+        <td style="width: 380px">
+          <div class="flex align-items-center gap-2">
+            <img
+              [src]="aluno.fotoUrl"
+              alt="Foto do aluno"
+              width="150"
+              height="150"
+              class="border-circle shadow-1 img-miniatura"
+            />
+
+            <span class="nome-tabela ml-6">
+              {{ aluno.nome }}
+            </span>
+          </div>
+        </td>
+
+        <td>{{ aluno.nivel }}</td>
+        <td style="width: 200px">{{ aluno.mora }}</td>
+        <td style="width: 180px; text-align: center">
+          {{ aluno.profissao }}
+        </td>
+        <td>
+          {{
+            aluno.pontos?.length > 200
+              ? (aluno.pontos | slice : 0 : 197) + "..."
+              : aluno.pontos
+          }}
+        </td>
+
+        <td>
+          <div class="flex gap-2 justify-content-center">
+            <p-button
+              icon="pi pi-trash"
+              styleClass="botaoAcao p-button-rounded p-button-danger p-button-outlined"
+              (onClick)="confirmarExclusao(aluno)"
+              pTooltip="Excluir aluno"
+              tooltipPosition="top"
+              aria-label="Excluir aluno"
+            ></p-button>
+            <p-button
+              icon="pi pi-search"
+              styleClass="botaoAcao p-button-rounded p-button-info p-button-outlined"
+              pTooltip="Ver detalhes"
+              tooltipPosition="top"
+              aria-label="Detalhar aluno"
+              [routerLink]="['/alunos', aluno.id]"
+            ></p-button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <footer class="footer-fixo shadow-3">
+    <div class="flex gap-3" style="justify-content: center">
+      <p-button
+        label="Voltar"
+        icon="pi pi-arrow-left"
+        class="p-button-text p-button-secondary"
+        (onClick)="voltarInicio()"
+      >
+      </p-button>
+
+      <!-- Outros botões de ação, se quiser -->
+      <!--
+    <p-button
+      label="Salvar"
+      icon="pi pi-save"
+      class="p-button-success p-button-sm"
+      (onClick)="salvar()"
+    ></p-button>
+    --></div>
+  </footer>
+</div>
