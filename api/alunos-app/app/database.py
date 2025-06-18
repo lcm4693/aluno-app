@@ -43,6 +43,27 @@ def init_db():
         """
         )
 
+        # Verifica se há idiomas
+        c.execute("SELECT COUNT(*) FROM idiomas")
+        total = c.fetchone()[0]
+
+        if total == 0:
+            """
+            INSERT INTO idiomas (nome) VALUES
+              ('Inglês'),
+              ('Espanhol'),
+              ('Francês'),
+              ('Alemão'),
+              ('Italiano'),
+              ('Chinês'),
+              ('Japonês'),
+              ('Russo'),
+              ('Coreano'),
+              ('Polonês'),
+              ('Urdu'),
+              ('Árabe');
+            """
+
         c.execute(
             """
             CREATE TABLE IF NOT EXISTS aluno_idioma (
