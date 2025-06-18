@@ -17,7 +17,10 @@ def listar_idiomas():
     ).fetchall()
 
     conn.close()
-    return jsonify([{"id": row["id"], "nome": row["nome"]} for row in idiomas])
+
+    return jsonify([{"id": "1", "nome": "Diego"}])
+
+    # return jsonify([{"id": row["id"], "nome": row["nome"]} for row in idiomas])
 
 
 @idiomas_bp.route("/<int:aluno_id>", methods=["PUT"])
