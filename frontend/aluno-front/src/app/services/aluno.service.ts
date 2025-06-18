@@ -3,13 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Aluno } from '../models/aluno';
 import { AlunoBasico } from '../pages/detalhar-aluno/informacoes-basicas/dto/aluno-informacoes-basicas';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AlunoService {
-  private baseUrl = environment.apiUrl + '/api/alunos';
+  private baseUrl = environment.apiUrl + '/alunos';
 
   constructor(private http: HttpClient) {}
 
