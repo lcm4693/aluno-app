@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Idioma } from '../models/idioma';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class IdiomaService {
-  private baseUrl = '/api';
+  private baseUrl = environment.apiUrl + '/api';
 
   constructor(private http: HttpClient) {}
 
