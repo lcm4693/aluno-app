@@ -48,7 +48,8 @@ def init_db():
         total = c.fetchone()[0]
 
         if total == 0:
-            """
+            c.execute(
+                """
             INSERT INTO idiomas (nome) VALUES
               ('Inglês'),
               ('Espanhol'),
@@ -63,6 +64,7 @@ def init_db():
               ('Urdu'),
               ('Árabe');
             """
+            )
 
         c.execute(
             """
