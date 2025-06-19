@@ -31,7 +31,6 @@ def listar_alunos():
     alunos, erro = buscar_lista_aluno()
     if erro:
         return jsonify({"erro": erro}), 404
-    logger.debug("Retorno lista de alunos: ", alunos)
     return jsonify(alunos)
 
 

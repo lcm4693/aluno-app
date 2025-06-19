@@ -11,8 +11,8 @@ def login():
     senha = data.get("senha")
 
     if email == "diego@gmail.com" and senha == "1234":
-        usuario = {"sub": 1, "nome": "Admin", "admin": True}
-        token = create_access_token(identity=usuario)
+        usuario = {"nome": "Admin", "admin": True}
+        token = create_access_token(identity="1", additional_claims=usuario)
         return jsonify({"token": token}), 200
 
     return jsonify({"erro": "Credenciais inválidas"}), 401
