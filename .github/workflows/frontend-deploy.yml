@@ -9,6 +9,10 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: frontend/aluno-front
+
     steps:
       - name: Checkout do código
         uses: actions/checkout@v3
