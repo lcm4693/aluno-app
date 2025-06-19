@@ -21,14 +21,14 @@ export class UserStoreService {
         email: decoded.email,
       };
       this.usuarioSubject.next(usuario);
-      localStorage.setItem('token', token);
+      localStorage.setItem('token-aluno-app', token);
     } catch (e) {
       this.clear();
     }
   }
 
   clear() {
-    localStorage.removeItem('token');
+    localStorage.removeItem('token-aluno-app');
     this.usuarioSubject.next(null);
   }
 
@@ -37,6 +37,6 @@ export class UserStoreService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return localStorage.getItem('token-aluno-app');
   }
 }

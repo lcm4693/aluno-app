@@ -13,7 +13,7 @@ import { UserStoreService } from './auth/services/user-store.service';
 })
 export class AppComponent implements OnInit {
   constructor(private userStorage: UserStoreService) {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token-aluno-app');
     if (token) {
       this.userStorage.setUsuarioFromToken(token);
     }
