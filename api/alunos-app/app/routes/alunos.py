@@ -22,12 +22,6 @@ alunos_bp = Blueprint("alunos", __name__, url_prefix="/api/alunos")
 @handle_errors
 @jwt_required()
 def listar_alunos():
-    headers = request.headers
-
-    # Imprime todos os cabeçalhos
-    for key, value in headers.items():
-        print(f"{key}: {value}")
-
     alunos, erro = buscar_lista_aluno()
     if erro:
         return jsonify({"erro": erro}), 404

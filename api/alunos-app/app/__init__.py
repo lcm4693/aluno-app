@@ -17,7 +17,16 @@ def create_app():
 
     jwt = JWTManager(app)
 
-    CORS(app)
+    CORS(
+        app,
+        resources={
+            r"/api/*": {
+                "origins": Config.CORS_ORIGINS,
+                "allow_headers": ["Authorization", "Content-Type"],
+                "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            }
+        },
+    )
 
     # Registro dos blueprints
     app.register_blueprint(alunos_bp)
