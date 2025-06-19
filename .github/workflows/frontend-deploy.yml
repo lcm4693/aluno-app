@@ -2,10 +2,21 @@ name: Deploy Frontend
 
 on:
   workflow_dispatch: # 👈 permite rodar manualmente pelo GitHub
+    inputs:
+      alvo:
+        description: "Qual parte deseja publicar?"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - frontend
+          - backend
 
 jobs:
   deploy-frontend:
     runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.alvo == 'frontend' || github.event.inputs.alvo == 'all' }}
 
     defaults:
       run:
@@ -49,6 +60,9 @@ jobs:
   deploy-backend:
     runs-on: ubuntu-latest
     # needs: deploy-frontend # só roda depois do frontend (opcional)
+
+    if: ${{ github.event.inputs.alvo == 'backend' || github.event.inputs.alvo == 'all' }}
+
     defaults:
       run:
         working-directory: api/alunos-app
