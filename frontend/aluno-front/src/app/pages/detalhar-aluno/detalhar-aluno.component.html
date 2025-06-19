@@ -4,13 +4,20 @@
       class="flex flex-column md:flex-row align-items-start gap-4"
       *ngIf="aluno"
     >
-      <!-- Foto -->
-      <img
-        [src]="aluno.fotoUrl"
-        alt="Foto do aluno"
-        class="img-detalhe-aluno"
-      />
-
+      <div class="flex flex-column align-items-center">
+        <!-- Foto -->
+        <img
+          [src]="aluno.fotoUrl"
+          alt="Foto do aluno"
+          class="img-detalhe-aluno"
+          style="width: 9rem"
+        />
+        <!-- Data de início -->
+        <span class="mt-2 text-sm text-color-secondary">
+          Desde xx/xx/xxxx
+          <!-- desde {{ aluno.dataCadastro | date : "dd/MM/yyyy" }} -->
+        </span>
+      </div>
       <!-- Informações -->
       <div class="flex flex-column gap-3 w-full">
         <!-- Nome -->

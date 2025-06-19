@@ -1,0 +1,74 @@
+<div class="flex justify-content-center align-items-center min-h-screen">
+  <div class="surface-card p-5 shadow-2 border-round w-full max-w-md">
+    <h2 class="text-center mb-4">Login</h2>
+    <form
+      [formGroup]="form"
+      autocomplete="off"
+      (ngSubmit)="submit()"
+      class="text-center"
+    >
+      <div class="field mb-4">
+        <label for="email">Email</label>
+        <input
+          pInputText
+          type="email"
+          id="email"
+          formControlName="email"
+          class="ml-4"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              form.get('email')?.invalid && form.get('email')?.touched
+          }"
+        />
+        <!-- <small
+          class="p-error"
+          *ngIf="
+            form.get('email')?.hasError('required') &&
+            form.get('email')?.touched
+          "
+        >
+          O email é obrigatório
+        </small>
+         -->
+        <small
+          class="p-error"
+          *ngIf="
+            form.get('email')?.hasError('email') && form.get('email')?.touched
+          "
+        >
+          O email é inválido
+        </small>
+      </div>
+      <div class="field mb-5">
+        <label>Senha</label>
+        <input
+          pPassword
+          id="senha"
+          type="password"
+          formControlName="senha"
+          class="ml-4"
+          autocomplete="new-password"
+        />
+        <!-- [ngClass]="{
+            'ng-invalid ng-dirty':
+              form.get('senha')?.invalid && form.get('senha')?.touched
+          }"
+        <small
+          *ngIf="
+            form.get('senha')?.hasError('invalid') && form.get('senha')?.touched
+          "
+        >
+          A senha é obrigatória
+        </small> -->
+      </div>
+      <button
+        pButton
+        type="submit"
+        class="p-button-primary mt-5"
+        [label]="loading ? 'Entrando...' : 'Entrar'"
+        [disabled]="loading"
+        [icon]="loading ? 'pi pi-spin pi-spinner' : 'pi pi-sign-in'"
+      ></button>
+    </form>
+  </div>
+</div>

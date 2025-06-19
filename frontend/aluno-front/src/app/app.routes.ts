@@ -3,10 +3,28 @@ import { ListarAlunosComponent } from './pages/listar-alunos/listar-alunos.compo
 import { CadastrarAlunoComponent } from './pages/cadastrar-aluno/cadastrar-aluno.component';
 import { DetalharAlunoComponent } from './pages/detalhar-aluno/detalhar-aluno.component';
 import { HomeComponent } from './pages/home/home.component';
+import { LoginComponent } from './auth/login/login.component';
+import { authGuard } from './auth/guard/auth.guard';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'listar', component: ListarAlunosComponent },
-  { path: 'alunos/cadastrar', component: CadastrarAlunoComponent },
-  { path: 'alunos/:id', component: DetalharAlunoComponent },
+  {
+    path: 'login',
+    component: LoginComponent,
+  },
+  { path: '', component: HomeComponent, canActivate: [authGuard] },
+  {
+    path: 'listar',
+    component: ListarAlunosComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'alunos/cadastrar',
+    component: CadastrarAlunoComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'alunos/:id',
+    component: DetalharAlunoComponent,
+    canActivate: [authGuard],
+  },
 ];

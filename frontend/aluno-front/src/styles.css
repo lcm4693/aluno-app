@@ -168,50 +168,9 @@ tr {
   white-space: nowrap; /* evita quebra de linha no label */
 }
 
-/* .botoes {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.botaoAcao {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-} */
-
-/* Estiliza todos os tooltips do PrimeNG */
 .p-tooltip .p-tooltip-text {
   font-size: 0.85rem;
-  /* padding: 4px 8px !important; */
-  /* max-width: 200px; */
-  /* white-space: nowrap; */
-  /* text-align: center; */
 }
-
-/* .p-dialog .p-dialog-content {
-  padding: 0 1.5rem 0.1rem 1.5rem;
-} */
-
-/* .p-fieldset .p-fieldset-legend {
-  border: 0 !important;
-  background: #f1f0f0 !important;
-  padding: 0.75rem !important;
-  font-size: 1rem !important;
-}
-
-.p-fieldset.p-fieldset-toggleable .p-fieldset-legend a {
-  padding-bottom: 0.1rem !important;
-  padding: 0 !important;
-}
-
-.p-fieldset .p-fieldset-content {
-  padding-top: 0 !important;
-  padding-bottom: 0.75rem !important;
-  padding-left: 0.75rem !important;
-  padding-right: 0.75rem !important;
-} */
 
 .p-button {
   font-size: 1.25rem;
@@ -262,18 +221,7 @@ tr {
   white-space: normal;
 }
 
-/* .p-dialog .p-dialog-header {
-  background: #e1e1e1 !important;
-  padding: 0.6rem !important;
+.p-error {
+  display: block;
+  margin-top: 4px;
 }
-
-.p-confirm-dialog .p-dialog-footer {
-  justify-content: center !important;
-}
-
-.p-confirm-dialog .p-dialog-footer {
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: center !important;
-  gap: 1rem;
-} */
