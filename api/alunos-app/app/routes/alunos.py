@@ -20,7 +20,7 @@ alunos_bp = Blueprint("alunos", __name__, url_prefix="/api/alunos")
 
 @alunos_bp.route("/", methods=["GET"])
 @handle_errors
-# @jwt_required()
+@jwt_required()
 def listar_alunos():
     headers = request.headers
 
