@@ -11,8 +11,6 @@ import { UserStoreService } from '../services/user-store.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  // private userStore: UserStoreService = inject(UserStoreService);
-
   constructor(private userStore: UserStoreService) {}
 
   intercept(
@@ -20,14 +18,30 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const token = this.userStore.getToken();
+
     if (!token) {
       return next.handle(req);
     }
+
+    // Para o interceptador funcionar com o proxy, é necessário uma barra no fim da URL,
+    //porém nã podemos usar isso para imagens e outros recursos.
+    const shouldAppendSlash =
+      req.method === 'GET' &&
+      !req.url.endsWith('/') &&
+      !req.url.includes('.') && // evita imagens, .pdf etc.
+      !req.url.includes('?');
+
+    const url = shouldAppendSlash ? req.url + '/' : req.url;
+
     const authReq = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
+      url,
+      setHeaders: token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : {},
     });
+
     return next.handle(authReq);
   }
 }
