@@ -4,12 +4,15 @@ import os
 from flask import Blueprint, send_from_directory, abort
 from app.config import Config
 from app.utils.error_handler import handle_errors
+from flask_jwt_extended import jwt_required
+
 
 fotos_bp = Blueprint("fotos", __name__, url_prefix="/api/fotos")
 
 
 @fotos_bp.route("/<filename>")
 @handle_errors
+@jwt_required()
 def serve_foto(filename):
     try:
         if not filename or filename == "null":

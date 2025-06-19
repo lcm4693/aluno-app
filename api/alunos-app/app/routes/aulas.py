@@ -4,12 +4,14 @@ from flask import Blueprint, request, jsonify
 from app.database import get_db_connection
 from app.services.aula_service import listar_aulas_do_aluno, criar_aula_para_aluno
 from app.utils.error_handler import handle_errors
+from flask_jwt_extended import jwt_required
 
 aulas_bp = Blueprint("aulas", __name__, url_prefix="/api/aulas")
 
 
 @aulas_bp.route("/<int:aluno_id>", methods=["POST"])
 @handle_errors
+@jwt_required()
 def criar_aula(aluno_id):
     dados = request.get_json()
 
@@ -51,6 +53,7 @@ def criar_aula(aluno_id):
 
 @aulas_bp.route("/<int:aluno_id>", methods=["GET"])
 @handle_errors
+@jwt_required()
 def listar_aulas_do_aluno(aluno_id):
     try:
         conn = get_db_connection()
@@ -94,6 +97,7 @@ def listar_aulas_do_aluno(aluno_id):
 
 @aulas_bp.route("/<int:aluno_id>", methods=["GET"])
 @handle_errors
+@jwt_required()
 def get_aulas(aluno_id):
     aulas, erro = listar_aulas_do_aluno(aluno_id)
     if erro:
@@ -103,6 +107,7 @@ def get_aulas(aluno_id):
 
 @aulas_bp.route("/<int:aluno_id>", methods=["POST"])
 @handle_errors
+@jwt_required()
 def post_aula(aluno_id):
     dados = request.get_json()
     aula_id, erro = criar_aula_para_aluno(aluno_id, dados)

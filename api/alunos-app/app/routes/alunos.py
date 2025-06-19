@@ -30,6 +30,7 @@ def listar_alunos():
 
 @alunos_bp.route("/incluir", methods=["POST"])
 @handle_errors
+@jwt_required()
 def criar_aluno_com_foto():
     form = request.form
     # dados = {
@@ -84,6 +85,7 @@ def criar_aluno_com_foto():
 
 @alunos_bp.route("/<int:aluno_id>", methods=["GET"])
 @handle_errors
+@jwt_required()
 def get_aluno(aluno_id):
     aluno, erro = buscar_aluno_completo(aluno_id)
     if erro:
@@ -93,6 +95,7 @@ def get_aluno(aluno_id):
 
 @alunos_bp.route("/informacoes-basicas/<int:aluno_id>", methods=["PUT"])
 @handle_errors
+@jwt_required()
 def put_aluno_basico(aluno_id):
     dados = request.get_json()
     erro, status = atualizar_informacoes_basicas(aluno_id, dados)
@@ -105,6 +108,7 @@ def put_aluno_basico(aluno_id):
 
 @alunos_bp.route("/<int:aluno_id>", methods=["DELETE"])
 @handle_errors
+@jwt_required()
 def deletar_aluno(aluno_id):
     erro, status = excluir_aluno(aluno_id)
 

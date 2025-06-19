@@ -2,12 +2,14 @@ from flask import Blueprint, request, jsonify, make_response
 from app.database import get_db_connection
 from app.utils.helpers import remover_acentos
 from app.utils.error_handler import handle_errors
+from flask_jwt_extended import jwt_required
 
 idiomas_bp = Blueprint("idiomas", __name__, url_prefix="/api/idiomas")
 
 
 @idiomas_bp.route("/", methods=["GET"])
 @handle_errors
+@jwt_required()
 def listar_idiomas():
     conn = get_db_connection()
     conn.create_function("sem_acento", 1, remover_acentos)
@@ -23,6 +25,7 @@ def listar_idiomas():
 
 @idiomas_bp.route("/<int:aluno_id>", methods=["PUT"])
 @handle_errors
+@jwt_required()
 def atualizar_idiomas(aluno_id):
     dados = request.get_json()
 
