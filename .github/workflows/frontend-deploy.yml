@@ -4,7 +4,7 @@ on:
   workflow_dispatch: # 👈 permite rodar manualmente pelo GitHub
 
 jobs:
-  build-and-deploy:
+  deploy-frontend:
     runs-on: ubuntu-latest
 
     defaults:
@@ -45,3 +45,34 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           CLOUDFRONT_DIST_ID: ${{ secrets.CLOUDFRONT_DIST_ID }}
+
+  deploy-backend:
+    runs-on: ubuntu-latest
+    # needs: deploy-frontend # só roda depois do frontend (opcional)
+    defaults:
+      run:
+        working-directory: api/alunos-app
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Instalar chave SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Enviar arquivos para a EC2
+        run: |
+          rsync -avz --delete ./backend/ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.EC2_PATH }}
+
+      - name: Instalar dependências e reiniciar serviço
+        run: |
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          cd ${{ secrets.EC2_PATH }}
+          source venv/bin/activate
+          pip install -r requirements.txt
+          sudo systemctl restart aluno-app
+          EOF
