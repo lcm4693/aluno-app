@@ -35,7 +35,6 @@ export class DetalharAulaComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      console.log('foco');
       this.topoRef?.nativeElement?.focus();
     }, 0);
   }

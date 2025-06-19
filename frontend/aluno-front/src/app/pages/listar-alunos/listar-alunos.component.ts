@@ -49,10 +49,6 @@ export class ListarAlunosComponent {
           // this.buscarFotoAluno(nomeFoto, aluno);
         });
       },
-      error: (err) => {
-        console.error(err);
-        alert('Erro ao carregar alunos.');
-      },
       complete: () => {},
     });
   }

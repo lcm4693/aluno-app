@@ -14,6 +14,7 @@ import {
 } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { AuthInterceptor } from './auth/interceptors/auth.interceptor';
+import { ErrosHttp } from './interceptors/erros-http.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -29,6 +30,11 @@ export const appConfig: ApplicationConfig = {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrosHttp,
       multi: true,
     },
   ],
