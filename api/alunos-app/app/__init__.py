@@ -17,6 +17,7 @@ def create_app():
 
     jwt = JWTManager(app)
 
+    print("CORS:", Config.CORS_ORIGINS)
     CORS(
         app,
         resources={
