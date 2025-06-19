@@ -80,7 +80,7 @@ jobs:
 
       - name: Enviar arquivos para a EC2
         run: |
-          rsync -avz --delete ./api/alunos-app ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.EC2_PATH }}
+          rsync -avz --delete . ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.EC2_PATH }}
 
       - name: Instalar dependências e reiniciar serviço
         run: |
