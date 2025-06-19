@@ -14,7 +14,7 @@ export class AlunoService {
   constructor(private http: HttpClient) {}
 
   getAlunos(): Observable<Aluno[]> {
-    return this.http.get<Aluno[]>(`${this.baseUrl}`);
+    return this.http.get<Aluno[]>(`${this.baseUrl}` + '/');
   }
 
   incluirAluno(formData: FormData): Observable<any> {
