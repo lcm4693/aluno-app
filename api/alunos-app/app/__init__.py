@@ -9,6 +9,10 @@ from .routes.aulas import aulas_bp
 from .routes.fotos import fotos_bp
 from .routes.authentication import auth_bp
 from flask_jwt_extended import JWTManager
+from app.utils.logger_config import configurar_logger
+
+
+logger = configurar_logger(__name__)
 
 
 def create_app():
@@ -17,7 +21,8 @@ def create_app():
 
     jwt = JWTManager(app)
 
-    print("CORS:", Config.CORS_ORIGINS)
+    logger.info(f"CORS: {Config.CORS_ORIGINS}")
+
     CORS(
         app,
         resources={
