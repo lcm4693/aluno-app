@@ -22,7 +22,7 @@ def create_app():
 
     jwt = JWTManager(app)
 
-    logger.info(f"CORS: {Config.CORS_ORIGINS}")
+    # logger.info(f"CORS: {Config.CORS_ORIGINS}")
 
     CORS(
         app,
