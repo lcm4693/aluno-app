@@ -22,7 +22,7 @@ jobs:
         run: npm install
 
       - name: Build do Angular
-        run: npm run build
+        run: npm run build -- --configuration=production
 
       - name: Instalar AWS CLI
         run: |
@@ -36,14 +36,16 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
 
       - name: Invalidar cache do CloudFront (opcional)
-        if: ${{ secrets.CLOUDFRONT_DIST_ID != '' }}
+        if: env.CLOUDFRONT_DIST_ID != ''
         run: |
           aws cloudfront create-invalidation \
-            --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID }} \
+            --distribution-id $CLOUDFRONT_DIST_ID \
             --paths "/*"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
+          CLOUDFRONT_DIST_ID: ${{ secrets.CLOUDFRONT_DIST_ID }}
