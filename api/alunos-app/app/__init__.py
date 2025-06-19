@@ -7,11 +7,16 @@ from .routes.alunos import alunos_bp
 from .routes.idiomas import idiomas_bp
 from .routes.aulas import aulas_bp
 from .routes.fotos import fotos_bp
+from .routes.authentication import auth_bp
+from flask_jwt_extended import JWTManager
 
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+
+    jwt = JWTManager(app)
+
     CORS(app)
 
     # Registro dos blueprints
@@ -19,6 +24,7 @@ def create_app():
     app.register_blueprint(idiomas_bp)
     app.register_blueprint(aulas_bp)
     app.register_blueprint(fotos_bp)
+    app.register_blueprint(auth_bp)
 
     # ERROS GLOBAIS
     @app.errorhandler(404)

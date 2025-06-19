@@ -61,7 +61,6 @@ def buscar_lista_aluno():
     lista = [dict(aluno) for aluno in alunos]
     # Adiciona a URL da foto para cada aluno
     lista = [alterar_nome_foto_para_url_foto(a) for a in lista]
-    print("PÓS:", lista)
 
     return lista, None
 

@@ -11,6 +11,7 @@ from app.services.aluno_service import excluir_aluno
 from app.utils.error_handler import handle_errors
 from app.utils.validators import AlunoInputDTO
 from app.utils.logger_config import configurar_logger
+from flask_jwt_extended import jwt_required
 
 logger = configurar_logger(__name__)
 
@@ -19,7 +20,14 @@ alunos_bp = Blueprint("alunos", __name__, url_prefix="/api/alunos")
 
 @alunos_bp.route("/", methods=["GET"])
 @handle_errors
+# @jwt_required()
 def listar_alunos():
+    headers = request.headers
+
+    # Imprime todos os cabeçalhos
+    for key, value in headers.items():
+        print(f"{key}: {value}")
+
     alunos, erro = buscar_lista_aluno()
     if erro:
         return jsonify({"erro": erro}), 404

@@ -3,6 +3,7 @@
 from functools import wraps
 from flask import jsonify
 from pydantic import ValidationError
+from flask_jwt_extended.exceptions import NoAuthorizationError
 import logging
 
 from app.utils.logger_config import configurar_logger
@@ -44,6 +45,10 @@ def handle_errors(f):
         except FileNotFoundError as fe:
             logger.warning(f"FileNotFoundError: {fe}")
             return jsonify({"erro": "Arquivo não encontrado"}), 404
+
+        except NoAuthorizationError as e:
+            logger.error("Usuário não autorizado ao recurso")
+            return jsonify({"erro": "Usuário não autorizado"}), 403
 
         except Exception as e:
             logger.error(e)
