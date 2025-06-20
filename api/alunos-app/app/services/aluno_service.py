@@ -5,7 +5,7 @@ from app.utils.helpers import aluno_dict
 from flask import url_for
 
 
-def inserir_aluno(dados, foto_filename, idiomas_ids):
+def inserir_aluno(dados, foto_filename, idiomas_ids, id_usuario):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -14,8 +14,8 @@ def inserir_aluno(dados, foto_filename, idiomas_ids):
             """
             INSERT INTO alunos (
                 nome, mora, cidade_natal, familia, profissao,
-                nivel, hobbies, idade, pontos, link_perfil, foto
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                nivel, hobbies, idade, pontos, link_perfil, foto, id_usuario
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 dados["nome"],
@@ -29,6 +29,7 @@ def inserir_aluno(dados, foto_filename, idiomas_ids):
                 dados["pontos"],
                 dados["link_perfil"],
                 foto_filename,
+                id_usuario,
             ),
         )
 
@@ -51,10 +52,11 @@ def inserir_aluno(dados, foto_filename, idiomas_ids):
         conn.close()
 
 
-def buscar_lista_aluno():
+def buscar_lista_aluno(id_usuario=None):
     conn = get_db_connection()
     alunos = conn.execute(
-        "SELECT * FROM alunos WHERE deletado = 0 ORDER BY nome"
+        "SELECT * FROM alunos WHERE deletado = 0 AND id_usuario = ? ORDER BY nome",
+        (id_usuario,),
     ).fetchall()
     conn.close()
 
@@ -65,11 +67,17 @@ def buscar_lista_aluno():
     return lista, None
 
 
-def buscar_aluno_completo(aluno_id):
+def buscar_aluno_completo(aluno_id, id_usuario=None):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM alunos WHERE id = ? AND deletado = 0", (aluno_id,))
+    cursor.execute(
+        "SELECT * FROM alunos WHERE id = ? AND id_usuario = ? AND deletado = 0",
+        (
+            aluno_id,
+            id_usuario,
+        ),
+    )
     row = cursor.fetchone()
 
     if not row:
@@ -128,7 +136,7 @@ def alterar_nome_foto_para_url_foto(aluno):
     return aluno
 
 
-def atualizar_informacoes_basicas(aluno_id, dados):
+def atualizar_informacoes_basicas(aluno_id, dados, id_usuario=None):
     campos = [
         "mora",
         "cidadeNatal",
@@ -138,6 +146,7 @@ def atualizar_informacoes_basicas(aluno_id, dados):
         "idade",
         "pontos",
         "linkPerfil",
+        "id_usuario",
     ]
 
     valores = [dados.get(c) for c in campos]
@@ -148,7 +157,11 @@ def atualizar_informacoes_basicas(aluno_id, dados):
 
         # Verifica se o aluno existe
         cursor.execute(
-            "SELECT id FROM alunos WHERE id = ? AND deletado = 0", (aluno_id,)
+            "SELECT id FROM alunos WHERE id = ? AND id_usuario = ? AND deletado = 0",
+            (
+                aluno_id,
+                id_usuario,
+            ),
         )
         if not cursor.fetchone():
             return "Aluno não encontrado", 404
@@ -174,20 +187,30 @@ def atualizar_informacoes_basicas(aluno_id, dados):
         conn.close()
 
 
-def excluir_aluno(aluno_id):
+def excluir_aluno(aluno_id, id_usuario=None):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
 
         # Verifica se o aluno existe
         cursor.execute(
-            "SELECT * FROM alunos WHERE id = ? AND deletado = 0", (aluno_id,)
+            "SELECT * FROM alunos WHERE id = ? AND id_usuario = ? AND deletado = 0",
+            (
+                aluno_id,
+                id_usuario,
+            ),
         )
         if not cursor.fetchone():
             return "Aluno não encontrado", 404
 
         # Marca como deletado
-        cursor.execute("UPDATE alunos SET deletado = 1 WHERE id = ?", (aluno_id,))
+        cursor.execute(
+            "UPDATE alunos SET deletado = 1 WHERE id = ? AND id_usuario = ?",
+            (
+                aluno_id,
+                id_usuario,
+            ),
+        )
         conn.commit()
 
         return None, 200

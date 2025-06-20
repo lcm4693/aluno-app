@@ -28,6 +28,10 @@ export class ErrosHttp implements HttpInterceptor {
           );
         } else {
           switch (codigoErro) {
+            case 401:
+              console.log('Credenciais do usuário inválidas');
+              this.toastService.error('Acesso negado', err.error?.erro);
+              break;
             case 403:
               console.log('Recurso solicitado não foi autorizado');
               this.toastService.error(

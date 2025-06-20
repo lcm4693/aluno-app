@@ -93,4 +93,31 @@ def init_db():
         """
         )
 
+        c.execute(
+            """
+            CREATE TABLE IF NOT EXISTS usuarios (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                nome TEXT NOT NULL,
+                dataCadastro DATE NOT NULL DEFAULT (DATE('now')),
+                senha TEXT NOT NULL,
+                email TEXT NOT NULL UNIQUE,
+                admin INTEGER NOT NULL DEFAULT 1,
+                ativado INTEGER NOT NULL DEFAULT 1)
+                ;
+        """
+        )
+
+        # Verifica se há usuarios
+        c.execute("SELECT COUNT(*) FROM usuarios")
+        total = c.fetchone()[0]
+
+        if total == 0:
+            c.execute(
+                """
+                INSERT INTO usuarios (id, nome, senha, email)
+                    VALUES (1, 'Diego Serpa', '1234@', 'diegos.java@gmail.com');
+
+                """
+            )
+
         conn.commit()

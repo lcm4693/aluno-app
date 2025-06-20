@@ -20,6 +20,7 @@ import { Idioma } from '../../models/idioma';
 import { IdiomaService } from '../../services/idioma.service';
 import { AlunoBasico } from './informacoes-basicas/dto/aluno-informacoes-basicas';
 import { DetalharAulaComponent } from './detalhar-aula/detalhar-aula.component';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   standalone: true,
@@ -58,7 +59,8 @@ export class DetalharAlunoComponent implements OnInit {
     private router: Router,
     private alunoService: AlunoService,
     private aulaService: AulaService,
-    private idiomaService: IdiomaService
+    private idiomaService: IdiomaService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -156,9 +158,7 @@ export class DetalharAlunoComponent implements OnInit {
       .subscribe({
         next: (res) => {
           this.aluno!.idiomas = idiomas;
-        },
-        error: (err) => {
-          console.error('Erro ao atualizar aluno:', err);
+          this.toastService.success(res.mensagem);
         },
         complete: () => {},
       });

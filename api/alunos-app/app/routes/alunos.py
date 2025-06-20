@@ -11,7 +11,7 @@ from app.services.aluno_service import excluir_aluno
 from app.utils.error_handler import handle_errors
 from app.utils.validators import AlunoInputDTO
 from app.utils.logger_config import configurar_logger
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 logger = configurar_logger(__name__)
 
@@ -22,7 +22,9 @@ alunos_bp = Blueprint("alunos", __name__, url_prefix="/api/alunos")
 @handle_errors
 @jwt_required()
 def listar_alunos():
-    alunos, erro = buscar_lista_aluno()
+    idUsuario = get_jwt_identity()
+
+    alunos, erro = buscar_lista_aluno(id_usuario=idUsuario)
     if erro:
         return jsonify({"erro": erro}), 404
     return jsonify(alunos)
@@ -32,24 +34,7 @@ def listar_alunos():
 @handle_errors
 @jwt_required()
 def criar_aluno_com_foto():
-    form = request.form
-    # dados = {
-    #     "nome": form.get("nome"),
-    #     "mora": form.get("mora"),
-    #     "cidade_natal": form.get("cidadeNatal"),
-    #     "familia": form.get("familia"),
-    #     "profissao": form.get("profissao"),
-    #     "nivel": form.get("nivel"),
-    #     "hobbies": form.get("hobbies"),
-    #     "idade": (
-    #         int(form.get("idade"))
-    #         if form.get("idade") and form.get("idade").isdigit()
-    #         else None
-    #     ),
-    #     "pontos": form.get("pontos"),
-    #     "link_perfil": form.get("linkPerfil"),
-    # }
-
+    idUsuario = get_jwt_identity()
     form = request.form.to_dict()
 
     # ✅ Converte idade (se vier preenchida)
@@ -77,7 +62,7 @@ def criar_aluno_com_foto():
         logger.error("Formato de imagem não suportado")
         return jsonify({"error": "Formato de imagem não suportado"}), 400
 
-    aluno_id = inserir_aluno(form, foto_filename, idiomas_ids)
+    aluno_id = inserir_aluno(form, foto_filename, idiomas_ids, id_usuario=idUsuario)
     logger.info(f"Aluno criado com sucesso: ID {aluno_id}")
 
     return jsonify({"id": aluno_id, "foto": foto_filename}), 201
@@ -87,7 +72,8 @@ def criar_aluno_com_foto():
 @handle_errors
 @jwt_required()
 def get_aluno(aluno_id):
-    aluno, erro = buscar_aluno_completo(aluno_id)
+    idUsuario = get_jwt_identity()
+    aluno, erro = buscar_aluno_completo(aluno_id, id_usuario=idUsuario)
     if erro:
         return jsonify({"erro": erro}), 404
     return jsonify(aluno)
@@ -97,8 +83,10 @@ def get_aluno(aluno_id):
 @handle_errors
 @jwt_required()
 def put_aluno_basico(aluno_id):
+    idUsuario = get_jwt_identity()
+
     dados = request.get_json()
-    erro, status = atualizar_informacoes_basicas(aluno_id, dados)
+    erro, status = atualizar_informacoes_basicas(aluno_id, dados, id_usuario=idUsuario)
 
     if erro:
         return jsonify({"erro": erro}), status
@@ -110,7 +98,9 @@ def put_aluno_basico(aluno_id):
 @handle_errors
 @jwt_required()
 def deletar_aluno(aluno_id):
-    erro, status = excluir_aluno(aluno_id)
+    idUsuario = get_jwt_identity()
+
+    erro, status = excluir_aluno(aluno_id, id_usuario=idUsuario)
 
     if erro:
         return jsonify({"erro": erro}), status

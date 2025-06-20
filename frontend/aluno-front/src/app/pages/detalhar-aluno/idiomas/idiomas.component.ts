@@ -27,9 +27,6 @@ export class IdiomasComponent implements OnInit {
       next: (res) => {
         this.idiomasDisponiveis = res;
       },
-      error: (err) => {
-        console.error(err);
-      },
       complete: () => {},
     });
   }

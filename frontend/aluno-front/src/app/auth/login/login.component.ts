@@ -48,6 +48,7 @@ export class LoginComponent {
   submit() {
     if (this.form.invalid) {
       this.toast.error('Preencha todos os campos corretamente');
+      return;
     }
 
     this.loading = true;
@@ -66,7 +67,6 @@ export class LoginComponent {
           // });
         },
         error: () => {
-          this.toast.success('Email ou senha inválidos');
           this.loading = false;
         },
         complete: () => {
