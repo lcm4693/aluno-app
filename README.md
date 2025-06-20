@@ -21,11 +21,16 @@ Organize informações pessoais, registre aulas, anotações, níveis de idioma 
 
 ## 📁 Estrutura
 
+```
 aluno-app/
-├── frontend/ # Aplicação Angular
-├── backend/ # API Flask
+├── .github/ # Workflows do GitHub Actions
+├── api/
+│ └── alunos-app/ # Backend Flask (Python)
+├── frontend/
+│ └── aluno-front/ # Frontend Angular 17
 ├── .gitignore
 └── README.md
+```
 
 ---
 
