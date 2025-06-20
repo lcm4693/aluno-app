@@ -1,69 +1,86 @@
-# AlunoApp
+# 🧑‍🏫 AlunoApp
 
 ![Deploy Frontend](https://github.com/lcm4693/aluno-app/actions/workflows/deploy-frontend.yml/badge.svg)
 ![Deploy Backend](https://github.com/lcm4693/aluno-app/actions/workflows/deploy-backend.yml/badge.svg)
 ![Deploy Completo](https://github.com/lcm4693/aluno-app/actions/workflows/deploy-full.yml/badge.svg)
 
-Sistema de gerenciamento de alunos estrangeiros em aulas de português.  
-Organize informações pessoais, registre aulas, anotações, níveis de idioma e muito mais.
+**AlunoApp** é um sistema para professores de português registrarem e organizarem informações sobre alunos estrangeiros de forma prática.  
+Com ele, você pode cadastrar alunos, acompanhar suas aulas, anotações, níveis de idioma, fotos e mais.
 
 ---
 
-## 🧩 Tecnologias
+## ⚙️ Tecnologias
 
-- 🔥 **Frontend**: Angular 17 (standalone, PrimeNG, PrimeFlex)
-- 🐍 **Backend**: Python (Flask + SQLite)
-- 🧠 **Validação**: Pydantic
-- ☁️ Preparado para deploy AWS (EC2, S3, Route 53)
-- 📦 CI/CD planejado com GitLab
+- 🔥 **Frontend:** Angular 17 (standalone, PrimeNG, PrimeFlex)
+- 🐍 **Backend:** Python (Flask + SQLite)
+- 🧠 **Validação:** Pydantic
+- ☁️ **Deploy:** AWS (EC2, S3, Route 53)
+- ⚙️ **CI/CD:** GitHub Actions
 
 ---
 
-## 📁 Estrutura
+## 📁 Estrutura de Pastas
 
 ```
 aluno-app/
-├── .github/ # Workflows do GitHub Actions
+├── .github/           # Workflows do GitHub Actions
 ├── api/
-│ └── alunos-app/ # Backend Flask (Python)
+│   └── alunos-app/    # Backend Flask
 ├── frontend/
-│ └── aluno-front/ # Frontend Angular 17
+│   └── aluno-front/   # Frontend Angular
 ├── .gitignore
 └── README.md
 ```
 
 ---
 
-## 🚀 Como rodar o projeto
+## 🚀 Como Rodar o Projeto Localmente
 
-### 🔥 Frontend (Angular)
+### 🔸 Frontend (Angular)
 
 ```bash
-cd frontend
+cd frontend/aluno-front
 npm install
 ng serve
-
-Acesse: http://localhost:4200
 ```
 
-### 🐍 Backend (Flask)
+> Acesse: [http://localhost:4200](http://localhost:4200)
+
+---
+
+### 🔸 Backend (Flask)
 
 ```bash
-cd backend
+cd api/alunos-app
 python -m venv venv
 source venv/bin/activate  # ou venv\Scripts\activate no Windows
 pip install -r requirements.txt
 python app.py
 ```
 
-## Funcionalidades
+---
 
-- Cadastro e visualização de alunos
+## ✨ Funcionalidades
 
-- Registro de aulas, observações e pontuações
+- ✅ Cadastro e visualização de alunos
+- 📆 Registro de aulas, observações e pontuações
+- 🖼️ Upload e visualização de fotos
+- 🔄 Alternância entre modo visualização e edição
+- 🧠 UX otimizada com tooltips e ícones
 
-- Upload de fotos
+---
 
-- Alternância entre modo de visualização e edição
+## 📸 Imagens do sistema (em breve)
 
-- Tooltips, ícones, UX otimizada para professores
+<!-- Você pode adicionar prints ou GIFs aqui -->
+<!-- Exemplo:
+![Tela de Aluno](docs/screenshot-aluno.png)
+-->
+
+---
+
+## 📌 TODO / Melhorias Futuras
+
+- 🔄 Filtro de alunos por idioma
+- 📊 Painel estatístico de evolução
+- 🗃️ Integração com bancos de dados externos (Mongo, PostgreSQL)
