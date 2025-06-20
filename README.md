@@ -1,8 +1,8 @@
 # AlunoApp
 
-![Deploy Frontend](https://github.com/diegoserpa/aluno-app/actions/workflows/deploy-frontend.yml/badge.svg)
-![Deploy Backend](https://github.com/diegoserpa/aluno-app/actions/workflows/deploy-backend.yml/badge.svg)
-![Deploy Completo](https://github.com/diegoserpa/aluno-app/actions/workflows/deploy-full.yml/badge.svg)
+![Deploy Frontend](https://github.com/lcm4693/aluno-app/actions/workflows/deploy-frontend.yml/badge.svg)
+![Deploy Backend](https://github.com/lcm4693/aluno-app/actions/workflows/deploy-backend.yml/badge.svg)
+![Deploy Completo](https://github.com/lcm4693/aluno-app/actions/workflows/deploy-full.yml/badge.svg)
 
 Sistema de gerenciamento de alunos estrangeiros em aulas de português.  
 Organize informações pessoais, registre aulas, anotações, níveis de idioma e muito mais.
