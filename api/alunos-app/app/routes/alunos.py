@@ -91,7 +91,7 @@ def put_aluno_basico(aluno_id):
     if erro:
         return jsonify({"erro": erro}), status
 
-    return jsonify({"mensagem": "Aluno atualizado com sucesso"}), 200
+    return jsonify({"mensagem": "Informações básicas atualizadas com sucesso"}), 200
 
 
 @alunos_bp.route("/<int:aluno_id>", methods=["DELETE"])

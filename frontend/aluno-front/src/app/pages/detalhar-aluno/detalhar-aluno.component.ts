@@ -144,9 +144,7 @@ export class DetalharAlunoComponent implements OnInit {
           ...this.aluno!, // mantém os dados já existentes (inclusive listas)
           ...alunoEditado, // sobrescreve apenas os campos do AlunoBasico
         };
-      },
-      error: (err) => {
-        console.error('Erro ao atualizar aluno:', err);
+        this.toastService.success(res.mensagem);
       },
       complete: () => {},
     });

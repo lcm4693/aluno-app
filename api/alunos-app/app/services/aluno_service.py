@@ -146,7 +146,6 @@ def atualizar_informacoes_basicas(aluno_id, dados, id_usuario=None):
         "idade",
         "pontos",
         "linkPerfil",
-        "id_usuario",
     ]
 
     valores = [dados.get(c) for c in campos]
@@ -163,6 +162,7 @@ def atualizar_informacoes_basicas(aluno_id, dados, id_usuario=None):
                 id_usuario,
             ),
         )
+
         if not cursor.fetchone():
             return "Aluno não encontrado", 404
 
@@ -173,7 +173,7 @@ def atualizar_informacoes_basicas(aluno_id, dados, id_usuario=None):
                 mora = ?, cidade_natal = ?, familia = ?, profissao = ?,
                 hobbies = ?, idade = ?, pontos = ?, link_perfil = ?
             WHERE id = ?
-        """,
+            """,
             valores + [aluno_id],
         )
 
@@ -181,6 +181,7 @@ def atualizar_informacoes_basicas(aluno_id, dados, id_usuario=None):
         return None, 200
 
     except Exception as e:
+        print(e)
         return str(e), 500
 
     finally:
