@@ -2,8 +2,18 @@ name: Deploy Frontend
 
 on:
   workflow_dispatch:
-  workflow_call: {}
-
+  workflow_call:
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      AWS_REGION:
+        required: true
+      S3_BUCKET_NAME:
+        required: true
+      CLOUDFRONT_DIST_ID:
+        required: true
 jobs:
   deploy-frontend:
     runs-on: ubuntu-latest

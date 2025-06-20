@@ -6,7 +6,17 @@ on:
 jobs:
   deploy-frontend:
     uses: ./.github/workflows/deploy-frontend.yml
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+      CLOUDFRONT_DIST_ID: ${{ secrets.CLOUDFRONT_DIST_ID }}
 
   deploy-backend:
-    needs: deploy-frontend
     uses: ./.github/workflows/deploy-backend.yml
+    secrets:
+      EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+      EC2_HOST: ${{ secrets.EC2_HOST }}
+      EC2_USER: ${{ secrets.EC2_USER }}
+      EC2_PATH: ${{ secrets.EC2_PATH }}

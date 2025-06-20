@@ -2,7 +2,16 @@ name: Deploy Backend
 
 on:
   workflow_dispatch:
-  workflow_call: {}
+  workflow_call:
+    secrets:
+      EC2_SSH_KEY:
+        required: true
+      EC2_HOST:
+        required: true
+      EC2_USER:
+        required: true
+      EC2_PATH:
+        required: true
 
 jobs:
   deploy-backend:
