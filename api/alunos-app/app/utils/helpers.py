@@ -33,5 +33,7 @@ def aluno_dict(row):
         "pontos",
         "linkPerfil",
         "foto",
+        "id_pais_mora",
+        "id_pais_natal",
     ]
     return dict(zip(keys, row))

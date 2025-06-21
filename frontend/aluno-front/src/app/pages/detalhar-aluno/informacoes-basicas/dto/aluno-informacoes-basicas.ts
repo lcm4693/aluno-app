@@ -1,3 +1,5 @@
+import { Pais } from '../../../../models/pais';
+
 export interface AlunoBasico {
   mora: string;
   idade: number;
@@ -7,4 +9,6 @@ export interface AlunoBasico {
   hobbies: string;
   linkPerfil: string;
   pontos: string;
+  paisMora: Pais | undefined;
+  paisNatal: Pais | undefined;
 }

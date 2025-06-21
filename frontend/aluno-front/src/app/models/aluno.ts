@@ -1,5 +1,6 @@
 import { Aula } from './aula';
 import { Idioma } from './idioma';
+import { Pais } from './pais';
 
 export class Aluno {
   constructor(
@@ -19,6 +20,8 @@ export class Aluno {
     public fotoUrl: string,
     public recomendacoes: string[],
     public notas: string[],
-    public aulas: Aula[]
+    public aulas: Aula[],
+    public paisMora: Pais | undefined,
+    public paisNatal: Pais | undefined
   ) {}
 }

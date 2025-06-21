@@ -1,5 +1,5 @@
 <div class="surface-100 p-4 min-h-screen flex justify-content-center">
-  <p-card class="w-full md:w-10 lg:w-8">
+  <p-card class="w-full md:w-10">
     <div
       class="flex flex-column md:flex-row align-items-start gap-4"
       *ngIf="aluno"
@@ -27,6 +27,8 @@
         >
           {{ aluno.nome }} - {{ aluno.nivel }}
         </h2>
+
+        <!-- {{ aluno | json }} -->
 
         <!-- Grid das infos -->
         <div class="grid">

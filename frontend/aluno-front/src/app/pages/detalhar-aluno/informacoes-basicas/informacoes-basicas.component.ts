@@ -8,16 +8,17 @@ import {
   Output,
 } from '@angular/core';
 import { FieldsetModule } from 'primeng/fieldset';
-import { Aluno } from '../../../models/aluno';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
-import { Idioma } from '../../../models/idioma';
-import { HttpClient } from '@angular/common/http';
-import { IdiomaService } from '../../../services/idioma.service';
 import { AlunoBasico } from './dto/aluno-informacoes-basicas';
+import { Pais } from '../../../models/pais';
+import { PaisService } from '../../../services/pais.service';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { CidadePaisSpanComponent } from '../../../shared/cidade-pais-span/cidade-pais-span.component';
+import { CidadePaisInputComponent } from '../../../shared/cidade-pais-input/cidade-pais-input.component';
 
 @Component({
   selector: 'app-informacoes-basicas',
@@ -30,21 +31,44 @@ import { AlunoBasico } from './dto/aluno-informacoes-basicas';
     InputTextareaModule,
     TooltipModule,
     CheckboxModule,
+    AutoCompleteModule,
+    CidadePaisSpanComponent,
+    CidadePaisInputComponent,
   ],
   templateUrl: './informacoes-basicas.component.html',
   styleUrl: './informacoes-basicas.component.css',
 })
-export class InformacoesBasicasComponent {
+export class InformacoesBasicasComponent implements OnInit {
   modoEdicao: boolean = false;
   @Input()
-  alunoEditado!: AlunoBasico | null;
+  alunoEditado!: AlunoBasico;
   @Output() editarInformacoesBasicas = new EventEmitter<AlunoBasico>();
 
-  constructor() {}
+  paises: Pais[] = [];
+  paisesFiltradosPaisMora: any[] = [];
+  paisesFiltradosPaisNatal: any[] = [];
+
+  paisNatalObj: Pais | undefined = undefined;
+  paisMoraObj: Pais | undefined = undefined;
+
+  constructor(private paisService: PaisService) {}
+
+  ngOnInit(): void {
+    this.paisNatalObj = this.alunoEditado.paisNatal;
+    this.paisMoraObj = this.alunoEditado.paisMora;
+
+    this.paisService.getPaises().subscribe({
+      next: (res) => {
+        this.paises = res;
+      },
+    });
+  }
 
   executarAcaoEdicao() {
     if (this.modoEdicao) {
-      console.log('Aluno Editado comp:', this.alunoEditado);
+      this.alunoEditado.paisNatal = this.paisNatalObj;
+      this.alunoEditado.paisMora = this.paisMoraObj;
+
       this.editarInformacoesBasicas.emit(this.alunoEditado!);
     }
 
@@ -53,5 +77,19 @@ export class InformacoesBasicasComponent {
 
   cancelarEdicao() {
     this.modoEdicao = false;
+  }
+
+  filtrarPaisMora(query: string) {
+    query = query.toLowerCase();
+    this.paisesFiltradosPaisMora = this.paises.filter((pais) =>
+      pais.nome.toLowerCase().includes(query)
+    );
+  }
+
+  filtrarPaisNatal(query: string) {
+    query = query.toLowerCase();
+    this.paisesFiltradosPaisNatal = this.paises.filter((pais) =>
+      pais.nome.toLowerCase().includes(query)
+    );
   }
 }

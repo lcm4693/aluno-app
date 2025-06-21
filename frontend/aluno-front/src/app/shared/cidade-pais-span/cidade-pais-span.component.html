@@ -1,0 +1,4 @@
+<span *ngIf="cidade" class="ml-1">{{
+  cidade + (pais ? " - " + pais : "")
+}}</span>
+<span *ngIf="!cidade && pais" class="ml-1">{{ pais }}</span>

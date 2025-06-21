@@ -7,6 +7,7 @@ from .routes.alunos import alunos_bp
 from .routes.idiomas import idiomas_bp
 from .routes.aulas import aulas_bp
 from .routes.fotos import fotos_bp
+from .routes.paises import paises_bp
 from .routes.authentication import auth_bp
 from flask_jwt_extended import JWTManager
 from app.utils.logger_config import configurar_logger
@@ -41,6 +42,7 @@ def create_app():
     app.register_blueprint(aulas_bp)
     app.register_blueprint(fotos_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(paises_bp)
 
     # ERROS GLOBAIS
     @app.errorhandler(404)

@@ -1,5 +1,5 @@
 # app/database.py
-
+import json
 import sqlite3
 from .config import Config
 
@@ -107,17 +107,30 @@ def init_db():
         """
         )
 
+        c.execute(
+            """
+            CREATE TABLE IF NOT EXISTS paises (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                nome TEXT NOT NULL);
+            """
+        )
+
         # Verifica se há usuarios
-        c.execute("SELECT COUNT(*) FROM usuarios")
+        c.execute("SELECT COUNT(*) FROM paises")
         total = c.fetchone()[0]
 
         if total == 0:
-            c.execute(
-                """
-                INSERT INTO usuarios (id, nome, senha, email)
-                    VALUES (1, 'Diego Serpa', '1234@', 'diegos.java@gmail.com');
+            with open("paises.json", "r", encoding="utf-8") as f:
+                dados = json.load(f)
+                nomes = [pais["nomePais"] for pais in dados]
+                for nome in nomes:
+                    c.execute(
+                        """
+                        INSERT INTO paises (nome)
+                            VALUES (?);
 
-                """
-            )
+                        """,
+                        (nome,),
+                    )
 
         conn.commit()

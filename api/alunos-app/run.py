@@ -12,9 +12,7 @@ app = create_app()
 if __name__ == "__main__":
     init_db()  # ← aqui é onde o banco será criado se não existir
     # executar_e_imprimir("SELECT * FROM usuarios")
-    # executar_e_imprimir("UPDATE alunos SET id_usuario = 1")
-    executar_e_imprimir("SELECT * FROM alunos")
-    # executar_e_imprimir("DROP TABLE usuarios")
+    # executar_e_imprimir("SELECT * FROM alunos")
     # senha = generate_password_hash("visitante")
     # try:
     #     conn = get_db_connection()

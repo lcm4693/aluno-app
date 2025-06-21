@@ -36,7 +36,7 @@ def listar_alunos():
 def criar_aluno_com_foto():
     idUsuario = get_jwt_identity()
     form = request.form.to_dict()
-
+    print(form)
     # ✅ Converte idade (se vier preenchida)
     idade_raw = form.get("idade", "").strip()
     form["idade"] = int(idade_raw) if idade_raw.isdigit() else None

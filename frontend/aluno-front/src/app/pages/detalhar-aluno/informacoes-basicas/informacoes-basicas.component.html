@@ -31,18 +31,24 @@
             >📍</span
           >
           <ng-container *ngIf="!modoEdicao; else edicaoCampoMora">
-            <span class="ml-1">{{ alunoEditado!.mora }}</span>
+            <app-cidade-pais-span
+              [cidade]="alunoEditado.mora"
+              [pais]="alunoEditado!.paisMora?.nome"
+            />
           </ng-container>
           <ng-template #edicaoCampoMora>
-            <input
+            <!-- <input
               pInputText
               #moraRef="ngModel"
               [(ngModel)]="alunoEditado!.mora"
               class="ml-1"
+            /> -->
+            <app-cidade-pais-input
+              [(cidade)]="alunoEditado!.mora"
+              [(pais)]="paisMoraObj"
+              [paisesFiltrados]="paisesFiltradosPaisMora"
+              (buscarPaises)="filtrarPaisMora($event)"
             />
-            <!-- <small class="p-error" *ngIf="moraRef.invalid && moraRef.touched">
-            Campo obrigatório.
-          </small> -->
           </ng-template>
         </div>
         <div class="col-12 md:col-4">
@@ -73,26 +79,41 @@
               [(ngModel)]="alunoEditado!.familia"
               class="ml-2"
             />
-            <!-- <small
-            class="p-error"
-            *ngIf="familiaRef.invalid && familiaRef.touched"
-          >
-            Campo obrigatório.
-          </small> -->
           </ng-template>
         </div>
         <div class="col-12 md:col-4">
           <span class="icone" pTooltip="Nasceu" tooltipPosition="top">🏠</span>
           <ng-container *ngIf="!modoEdicao; else edicaoCampoCidadeNatal">
-            <span class="ml-1">{{ alunoEditado!.cidadeNatal }}</span>
-          </ng-container>
-          <ng-template #edicaoCampoCidadeNatal>
-            <input
-              pInputText
-              #moraRef="ngModel"
-              [(ngModel)]="alunoEditado!.cidadeNatal"
-              class="ml-1"
+            <app-cidade-pais-span
+              [cidade]="alunoEditado.cidadeNatal"
+              [pais]="alunoEditado.paisNatal?.nome"
             />
+          </ng-container>
+
+          <ng-template #edicaoCampoCidadeNatal>
+            <app-cidade-pais-input
+              [(cidade)]="alunoEditado!.cidadeNatal"
+              [(pais)]="paisNatalObj"
+              [paisesFiltrados]="paisesFiltradosPaisNatal"
+              (buscarPaises)="filtrarPaisNatal($event)"
+            />
+            <!-- <input
+                pInputText
+                #moraRef="ngModel"
+                [(ngModel)]="alunoEditado!.cidadeNatal"
+                class="ml-1 mb-2"
+                style="width: 10rem"
+              />
+              <p-autoComplete
+                id="paisNatal"
+                placeholder="Escolha o país"
+                [(ngModel)]="paisNatalObj"
+                [suggestions]="paisesFiltradosPaisNatal"
+                (completeMethod)="filtrarPaisNatal($event)"
+                optionLabel="nome"
+                [field]="'nome'"
+                class="p-autocomplete-input-inf-basicas"
+              /> -->
           </ng-template>
         </div>
         <div class="col-12 md:col-4">

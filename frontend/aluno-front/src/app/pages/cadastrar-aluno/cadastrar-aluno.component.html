@@ -28,17 +28,53 @@
       </small>
     </div>
     <div class="field col-3 md:col-3">
-      <label for="mora">Mora:</label>
-      <input pInputText id="mora" type="text" formControlName="mora" />
+      <div class="flex gap-2 align-items-end">
+        <div class="field w-full">
+          <label for="mora">Mora:</label>
+          <input pInputText id="mora" type="text" formControlName="mora" />
+        </div>
+        <div class="field w-full">
+          <label for="mora">País:</label>
+          <!-- <input
+            pInputText
+            id="paisMora"
+            type="text"
+            formControlName="moraPais"
+          /> -->
+          <p-autoComplete
+            id="paisMora"
+            formControlName="moraPaisObj"
+            [suggestions]="paisesFiltradosMoraPais"
+            (completeMethod)="filtrarPaisMora($event)"
+            optionLabel="nome"
+            [field]="'nome'"
+          />
+        </div>
+      </div>
     </div>
     <div class="field col-3 md:col-3">
-      <label for="cidadeNatal">Cidade Natal:</label>
-      <input
-        pInputText
-        id="cidadeNatal"
-        type="text"
-        formControlName="cidadeNatal"
-      />
+      <div class="flex gap-2 align-items-end">
+        <div class="field w-full">
+          <label for="cidadeNatal">Cidade Natal:</label>
+          <input
+            pInputText
+            id="cidadeNatal"
+            type="text"
+            formControlName="cidadeNatal"
+          />
+        </div>
+        <div class="field w-full">
+          <label for="mora">País Natal:</label>
+          <p-autoComplete
+            id="paisNatal"
+            formControlName="paisNatalObj"
+            [suggestions]="paisesFiltradosPaisNatal"
+            (completeMethod)="filtrarPaisNatal($event)"
+            optionLabel="nome"
+            [field]="'nome'"
+          />
+        </div>
+      </div>
     </div>
     <div class="field col-3 md:col-3">
       <label for="familia">Família:</label>

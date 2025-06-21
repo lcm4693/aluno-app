@@ -3,6 +3,8 @@
 from app.database import get_db_connection
 from app.utils.helpers import aluno_dict
 from flask import url_for
+from app.services.pais_service import buscar_pais
+from app.services.idioma_service import buscar_idiomas_aluno
 
 
 def inserir_aluno(dados, foto_filename, idiomas_ids, id_usuario):
@@ -14,8 +16,8 @@ def inserir_aluno(dados, foto_filename, idiomas_ids, id_usuario):
             """
             INSERT INTO alunos (
                 nome, mora, cidade_natal, familia, profissao,
-                nivel, hobbies, idade, pontos, link_perfil, foto, id_usuario
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                nivel, hobbies, idade, pontos, link_perfil, foto, id_usuario, id_pais_mora, id_pais_natal
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 dados["nome"],
@@ -30,6 +32,8 @@ def inserir_aluno(dados, foto_filename, idiomas_ids, id_usuario):
                 dados["link_perfil"],
                 foto_filename,
                 id_usuario,
+                dados["moraPais"],
+                dados["paisNatal"],
             ),
         )
 
@@ -72,7 +76,7 @@ def buscar_aluno_completo(aluno_id, id_usuario=None):
     cursor = conn.cursor()
 
     cursor.execute(
-        "SELECT * FROM alunos WHERE id = ? AND id_usuario = ? AND deletado = 0",
+        "SELECT id, nome, mora, cidade_natal, familia, profissao, nivel, hobbies, idade, pontos, link_perfil, foto, id_pais_mora, id_pais_natal FROM alunos WHERE id = ? AND id_usuario = ? AND deletado = 0 ",
         (
             aluno_id,
             id_usuario,
@@ -87,6 +91,16 @@ def buscar_aluno_completo(aluno_id, id_usuario=None):
     aluno = aluno_dict(row)
     aluno["cidadeNatal"] = aluno["cidade_natal"]
     aluno.pop("cidade_natal")
+
+    if aluno["id_pais_mora"]:
+        paisMora = buscar_pais(aluno["id_pais_mora"])
+        aluno["paisMora"] = paisMora
+        aluno.pop("id_pais_mora")
+
+    if aluno["id_pais_natal"]:
+        paisNatal = buscar_pais(aluno["id_pais_natal"])
+        aluno["paisNatal"] = paisNatal
+        aluno.pop("id_pais_natal")
 
     # Buscar aulas do aluno
     cursor.execute(
@@ -110,10 +124,7 @@ def buscar_aluno_completo(aluno_id, id_usuario=None):
         for aula in aulas
     ]
 
-    # Buscar idiomas
-    cursor.execute("SELECT idioma_id FROM aluno_idioma WHERE aluno_id = ?", (aluno_id,))
-    idiomas = cursor.fetchall()
-    aluno["idiomas"] = [row["idioma_id"] for row in idiomas]
+    aluno["idiomas"] = buscar_idiomas_aluno(aluno_id)
 
     conn.close()
 
@@ -137,6 +148,7 @@ def alterar_nome_foto_para_url_foto(aluno):
 
 
 def atualizar_informacoes_basicas(aluno_id, dados, id_usuario=None):
+    print(dados)
     campos = [
         "mora",
         "cidadeNatal",
@@ -149,6 +161,15 @@ def atualizar_informacoes_basicas(aluno_id, dados, id_usuario=None):
     ]
 
     valores = [dados.get(c) for c in campos]
+    if dados.get("paisNatal"):
+        valores.append(dados.get("paisNatal").get("id"))
+    else:
+        valores.append(None)
+
+    if dados.get("paisMora"):
+        valores.append(dados.get("paisMora").get("id"))
+    else:
+        valores.append(None)
 
     try:
         conn = get_db_connection()
@@ -171,7 +192,7 @@ def atualizar_informacoes_basicas(aluno_id, dados, id_usuario=None):
             """
             UPDATE alunos SET
                 mora = ?, cidade_natal = ?, familia = ?, profissao = ?,
-                hobbies = ?, idade = ?, pontos = ?, link_perfil = ?
+                hobbies = ?, idade = ?, pontos = ?, link_perfil = ?, id_pais_natal = ?, id_pais_mora = ?
             WHERE id = ?
             """,
             valores + [aluno_id],

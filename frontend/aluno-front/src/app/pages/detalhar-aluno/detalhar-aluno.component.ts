@@ -76,19 +76,7 @@ export class DetalharAlunoComponent implements OnInit {
             }));
           }
           this.aluno = res;
-
           this.alunoBasico = this.extrairAlunoBasicoInformacoesBasicas();
-
-          // this.alunoService.buscarFotoAlunoPorNome(`${res.foto}`).subscribe({
-          //   next: (res) => {
-          //     const objectURL = URL.createObjectURL(res);
-          //     this.aluno!.imagemFoto = objectURL; // Atribui a URL do objeto à propriedade imagemFoto do aluno
-          //   },
-          //   error: (err) => {
-          //     console.error('Erro ao buscar foto do aluno:', err);
-          //   },
-          //   complete: () => {},
-          // });
         },
         error: (err) => {
           console.error('Erro ao buscar aluno:', err);
@@ -172,6 +160,8 @@ export class DetalharAlunoComponent implements OnInit {
       hobbies,
       linkPerfil,
       pontos,
+      paisMora,
+      paisNatal,
     } = this.aluno!;
 
     return {
@@ -183,6 +173,8 @@ export class DetalharAlunoComponent implements OnInit {
       hobbies,
       linkPerfil,
       pontos,
+      paisMora,
+      paisNatal,
     } as AlunoBasico;
   }
 

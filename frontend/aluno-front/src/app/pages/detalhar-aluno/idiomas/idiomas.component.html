@@ -25,7 +25,7 @@
       <div class="checkbox-group-horizontal">
         <div class="checkbox-item" *ngFor="let idioma of idiomasDisponiveis">
           <p-checkbox
-            [(ngModel)]="idiomasAluno"
+            [(ngModel)]="idiomasSelecionados"
             [label]="idioma.nome"
             [value]="idioma.id"
             [disabled]="!modoEdicao"

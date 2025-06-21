@@ -2,7 +2,7 @@ html {
   font-family: var(--font-family);
   font-size: 0.875rem;
   color: var(--text-color);
-  line-height: var(--line-height);
+  line-height: 1.5;
 }
 
 body {
@@ -26,6 +26,10 @@ body {
 
 .text-center {
   text-align: center !important;
+}
+
+textarea {
+  line-height: 1.5;
 }
 
 table {
@@ -224,4 +228,9 @@ tr {
 .p-error {
   display: block;
   margin-top: 4px;
+}
+
+.p-autocomplete-input-inf-basicas > div > input {
+  display: block;
+  width: 10rem;
 }

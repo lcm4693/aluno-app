@@ -18,11 +18,14 @@ export class IdiomasComponent implements OnInit {
   modoEdicao: boolean = false;
   idiomasDisponiveis: Idioma[] = [];
   @Input() idiomasAluno!: Idioma[] | null;
+  idiomasSelecionados: number[] = [];
   @Output() editarIdiomas = new EventEmitter<Idioma[]>();
 
   constructor(private idiomaService: IdiomaService) {}
 
   ngOnInit(): void {
+    this.idiomasSelecionados = this.idiomasAluno?.map((i) => i.id) || [];
+
     this.idiomaService.getIdiomas().subscribe({
       next: (res) => {
         this.idiomasDisponiveis = res;
@@ -33,6 +36,9 @@ export class IdiomasComponent implements OnInit {
 
   executarAcaoEdicao() {
     if (this.modoEdicao) {
+      this.idiomasAluno = this.idiomasDisponiveis.filter((idioma) =>
+        this.idiomasSelecionados.includes(idioma.id)
+      );
       this.editarIdiomas.emit(this.idiomasAluno!);
     }
 

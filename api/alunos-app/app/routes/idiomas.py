@@ -25,7 +25,7 @@ def atualizar_idiomas(aluno_id):
 
     if not isinstance(dados, list):
         return make_response(
-            jsonify({"erro": "Dados inválidos. Esperado array de IDs"}), 400
+            jsonify({"erro": "Dados inválidos. Esperado array de idiomas"}), 400
         )
 
     erro, status = atualizar_idiomas_banco(aluno_id, dados, idUsuario)

@@ -20,12 +20,14 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import interact from 'interactjs';
-import { HttpClient } from '@angular/common/http';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { Idioma } from '../../models/idioma';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { IdiomaService } from '../../services/idioma.service';
 import { AlunoService } from '../../services/aluno.service';
 import { ToastService } from '../../services/toast.service';
+import { PaisService } from '../../services/pais.service';
+import { Pais } from '../../models/pais';
 
 @Component({
   standalone: true,
@@ -39,6 +41,7 @@ import { ToastService } from '../../services/toast.service';
     ButtonModule,
     CardModule,
     InputTextareaModule,
+    AutoCompleteModule,
   ],
   templateUrl: './cadastrar-aluno.component.html',
   styleUrl: './cadastrar-aluno.component.css',
@@ -63,17 +66,26 @@ export class CadastrarAlunoComponent implements AfterViewInit, OnInit {
     { label: 'C2', value: 'C2' },
   ];
 
+  paises: Pais[] = [];
+  paisesFiltradosMoraPais: any[] = [];
+  paisesFiltradosPaisNatal: any[] = [];
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private idiomaService: IdiomaService,
+    private paisService: PaisService,
     private alunoService: AlunoService,
     private toast: ToastService
   ) {
     this.form = this.fb.group({
       nome: ['', Validators.required],
       mora: [''],
+      moraPaisObj: [''],
+      moraPais: [''],
+      paisNatalObj: [''],
       cidadeNatal: [''],
+      paisNatal: [''],
       familia: [''],
       profissao: [''],
       nivel: [null, Validators.required],
@@ -154,6 +166,12 @@ export class CadastrarAlunoComponent implements AfterViewInit, OnInit {
       },
       complete: () => {},
     });
+
+    this.paisService.getPaises().subscribe({
+      next: (res) => {
+        this.paises = res;
+      },
+    });
   }
 
   voltarInicio(): void {
@@ -217,6 +235,16 @@ export class CadastrarAlunoComponent implements AfterViewInit, OnInit {
             formData.append('idiomas', idioma);
           });
           continue;
+        } else if (campo === 'moraPaisObj') {
+          if (aluno.moraPaisObj != null && aluno.moraPaisObj.id != null) {
+            formData.append('moraPais', aluno.moraPaisObj.id);
+          }
+          continue;
+        } else if (campo === 'paisNatalObj') {
+          if (aluno.paisNatalObj != null && aluno.paisNatalObj.id != null) {
+            formData.append('paisNatal', aluno.paisNatalObj.id);
+          }
+          continue;
         }
         formData.append(campo, aluno[campo]);
       }
@@ -251,5 +279,19 @@ export class CadastrarAlunoComponent implements AfterViewInit, OnInit {
 
   cancelar(): void {
     this.router.navigateByUrl('/');
+  }
+
+  filtrarPaisMora(event: { query: string }) {
+    const query = event.query.toLowerCase();
+    this.paisesFiltradosMoraPais = this.paises.filter((pais) =>
+      pais.nome.toLowerCase().includes(query)
+    );
+  }
+
+  filtrarPaisNatal(event: { query: string }) {
+    const query = event.query.toLowerCase();
+    this.paisesFiltradosPaisNatal = this.paises.filter((pais) =>
+      pais.nome.toLowerCase().includes(query)
+    );
   }
 }
