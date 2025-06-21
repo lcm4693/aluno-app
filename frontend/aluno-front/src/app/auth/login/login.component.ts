@@ -55,24 +55,22 @@ export class LoginComponent {
 
     const { email, senha } = this.form.value;
 
-    setTimeout(() => {
-      this.authService.login({ email, senha }).subscribe({
-        next: (res) => {
-          this.userStore.setUsuarioFromToken(res.token);
-          this.toast.success('Login realizado com sucesso');
-          this.router.navigate(['/']);
-          // const usuario = this.userStore.getUsuario();
-          // this.userStore.usuario$.subscribe((user) => {
-          //   this.mostrarMenuAdmin = user?.is_admin ?? false;
-          // });
-        },
-        error: () => {
-          this.loading = false;
-        },
-        complete: () => {
-          this.loading = false;
-        },
-      });
-    }, 1000);
+    this.authService.login({ email, senha }).subscribe({
+      next: (res) => {
+        this.userStore.setUsuarioFromToken(res.token);
+        this.toast.success('Login realizado com sucesso');
+        this.router.navigate(['/']);
+        // const usuario = this.userStore.getUsuario();
+        // this.userStore.usuario$.subscribe((user) => {
+        //   this.mostrarMenuAdmin = user?.is_admin ?? false;
+        // });
+      },
+      error: () => {
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 }

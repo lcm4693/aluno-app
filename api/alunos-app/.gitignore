@@ -42,3 +42,6 @@ env/
 # Arquivos do sistema (Windows)
 Thumbs.db
 desktop.ini
+
+
+*.sql

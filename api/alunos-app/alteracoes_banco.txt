@@ -1,2 +1,0 @@
-ALTER TABLE alunos ADD COLUMN id_pais_mora INTEGER; //referência com a tabela país
-ALTER TABLE alunos ADD COLUMN id_pais_natal INTEGER; //referência com a tabela país

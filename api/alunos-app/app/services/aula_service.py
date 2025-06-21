@@ -1,74 +1,62 @@
 # app/services/aula_service.py
 
-from app.database import get_db_connection
+from app.database import get_session
+from app.services.shared_service import buscar_aluno_basico
+from app.models.aula import Aula
+from datetime import datetime
 
 
-def listar_aulas_do_aluno(aluno_id):
-    conn = get_db_connection()
-    cursor = conn.cursor()
+def listar_aulas_do_aluno(aluno_id, id_usuario):
+    with get_session() as session:
+        # Verifica se o aluno existe e não está deletado
+        aluno = buscar_aluno_basico(aluno_id, id_usuario)
+        if not aluno:
+            return "Aluno não encontrado", 404
 
-    # Verifica se o aluno existe
-    cursor.execute("SELECT id FROM alunos WHERE id = ? AND deletado = 0", (aluno_id,))
-    if not cursor.fetchone():
-        conn.close()
-        return None, "Aluno não encontrado"
+        # Busca as aulas do aluno
+        aulas = (
+            session.query(Aula)
+            .filter(Aula.aluno_id == aluno_id)
+            .order_by(Aula.data.desc())
+            .all()
+        )
 
-    # Busca as aulas
-    cursor.execute(
-        """
-        SELECT id, data, anotacoes, comentarios, proxima_aula
-        FROM aula
-        WHERE aluno_id = ?
-        ORDER BY data DESC
-    """,
-        (aluno_id,),
-    )
-    aulas = cursor.fetchall()
-    conn.close()
-
-    return [
-        {
-            "id": aula["id"],
-            "dataAula": aula["data"],
-            "anotacoes": aula["anotacoes"],
-            "comentarios": aula["comentarios"],
-            "proxima_aula": aula["proxima_aula"],
-        }
-        for aula in aulas
-    ], None
+        return [
+            {
+                "id": aula.id,
+                "dataAula": aula.data,
+                "anotacoes": aula.anotacoes,
+                "comentarios": aula.comentarios,
+                "proxima_aula": aula.proxima_aula,
+            }
+            for aula in aulas
+        ], None
 
 
-def criar_aula_para_aluno(aluno_id, dados):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
+def criar_aula_para_aluno(aluno_id, dados, usuario_id):
     try:
-        cursor.execute(
-            "SELECT id FROM alunos WHERE id = ? AND deletado = 0", (aluno_id,)
-        )
-        if not cursor.fetchone():
-            return None, "Aluno não encontrado"
+        with get_session() as session:
+            # Verifica se o aluno pertence ao usuário e não está deletado
+            aluno = buscar_aluno_basico(aluno_id, usuario_id)
+            if not aluno:
+                return None, "Aluno não encontrado"
 
-        cursor.execute(
-            """
-            INSERT INTO aula (data, anotacoes, comentarios, proxima_aula, aluno_id)
-            VALUES (?, ?, ?, ?, ?)
-        """,
-            (
-                dados.get("dataAula"),
-                dados.get("anotacoes"),
-                dados.get("comentarios"),
-                dados.get("proximaAula"),
-                aluno_id,
-            ),
-        )
+            data_convertida = datetime.fromisoformat(
+                dados.get("dataAula").replace("Z", "+00:00")
+            ).date()
 
-        conn.commit()
-        return cursor.lastrowid, None
+            nova_aula = Aula(
+                data=data_convertida,
+                anotacoes=dados.get("anotacoes"),
+                comentarios=dados.get("comentarios"),
+                proxima_aula=dados.get("proximaAula"),
+                aluno_id=aluno_id,
+            )
+
+            session.add(nova_aula)
+            session.flush()  # Garante que nova_aula.id esteja disponível
+
+            return nova_aula.id, None
 
     except Exception as e:
-        conn.rollback()
         return None, str(e)
-
-    finally:
-        conn.close()

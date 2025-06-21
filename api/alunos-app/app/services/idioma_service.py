@@ -1,84 +1,48 @@
-from app.database import get_db_connection
-from flask import jsonify, make_response
-from app.utils.helpers import remover_acentos
+# from flask import jsonify, make_response
+# from app.utils.helpers import remover_acentos
+from app.models.idioma import Idioma
+from app.models.aluno_idioma import AlunoIdioma
+from app.database import get_session
+from sqlalchemy.exc import SQLAlchemyError
+from app.services.shared_service import buscar_aluno_basico
 
 
 def buscar_todos_idiomas():
-    conn = get_db_connection()
-    conn.create_function("sem_acento", 1, remover_acentos)
-
-    idiomas = conn.execute(
-        "SELECT id, nome FROM idiomas ORDER BY sem_acento(nome) COLLATE NOCASE"
-    ).fetchall()
-
-    conn.close()
-
-    return [{"id": row["id"], "nome": row["nome"]} for row in idiomas]
+    with get_session() as session:
+        idiomas = session.query(Idioma).order_by(Idioma.nome.asc()).all()
+        return [{"id": i.id, "nome": i.nome} for i in idiomas]
 
 
 def buscar_idiomas_aluno(aluno_id):
-    conn = get_db_connection()
-    conn.create_function("sem_acento", 1, remover_acentos)
+    with get_session() as session:
+        resultados = (
+            session.query(Idioma)
+            .join(AlunoIdioma, Idioma.id == AlunoIdioma.idioma_id)
+            .filter(AlunoIdioma.aluno_id == aluno_id)
+            .order_by(Idioma.nome.asc())
+            .all()
+        )
 
-    idsIdiomas = [
-        row[0]
-        for row in conn.execute(
-            "SELECT idioma_id FROM aluno_idioma WHERE aluno_id = ?",
-            (aluno_id,),
-        ).fetchall()
-    ]
-
-    # Se a lista estiver vazia, evitar erro
-    if not idsIdiomas:
-        conn.close()
-        return []
-
-    placeholders = ", ".join("?" for _ in idsIdiomas)
-    idiomas = conn.execute(
-        f"""
-        SELECT id, nome 
-        FROM idiomas 
-        WHERE id IN ({placeholders}) 
-        ORDER BY sem_acento(nome) COLLATE NOCASE
-        """,
-        idsIdiomas,  # ✅ aqui está o ponto principal
-    ).fetchall()
-
-    conn.close()
-
-    return [{"id": row["id"], "nome": row["nome"]} for row in idiomas]
+        return [{"id": i.id, "nome": i.nome} for i in resultados]
 
 
 def atualizar_idiomas_banco(aluno_id, dados, id_usuario):
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute(
-            "SELECT id FROM alunos WHERE id = ? AND id_usuario = ? AND deletado = 0",
-            (
-                aluno_id,
-                id_usuario,
-            ),
-        )
-        if not cursor.fetchone():
-            return make_response(jsonify({"erro": "Aluno não encontrado"}), 404)
+        with get_session() as session:
+            aluno = buscar_aluno_basico(aluno_id, id_usuario)
 
-        # Remove idiomas antigos
-        cursor.execute("DELETE FROM aluno_idioma WHERE aluno_id = ?", (aluno_id,))
+            if not aluno:
+                return {"erro": "Aluno não encontrado"}, 404
 
-        # Adiciona os novos
-        for idioma in dados:
-            cursor.execute(
-                "INSERT INTO aluno_idioma (aluno_id, idioma_id) VALUES (?, ?)",
-                (aluno_id, idioma["id"]),
-            )
-        conn.commit()
+            # Remove os idiomas antigos
+            session.query(AlunoIdioma).filter(AlunoIdioma.aluno_id == aluno_id).delete()
 
-        return None, 200
+            # Insere os novos idiomas
+            for idioma in dados:
+                novo = AlunoIdioma(aluno_id=aluno_id, idioma_id=idioma["id"])
+                session.add(novo)
 
-    except Exception as e:
-        conn.rollback()
-        return make_response(jsonify({"erro": str(e)}), 500)
+            return None, 200
 
-    finally:
-        conn.close()
+    except SQLAlchemyError as e:
+        return {"erro": str(e)}, 500

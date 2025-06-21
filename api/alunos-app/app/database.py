@@ -1,136 +1,57 @@
 # app/database.py
-import json
-import sqlite3
+import os
+from dotenv import load_dotenv
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
 from .config import Config
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
+from contextlib import contextmanager
+
+# ✅ 1. Carregamento do .env (apenas em ambiente de desenvolvimento)
+APP_ENV = os.getenv("APP_ENV", "dev").lower()
+if APP_ENV == "dev":
+    load_dotenv()
 
 
-def get_db_connection():
-    conn = sqlite3.connect(Config.DB_PATH)
-    conn.row_factory = sqlite3.Row  # Retorna dados como dicionário
-    return conn
-
-
-def init_db():
-    with get_db_connection() as conn:
-        c = conn.cursor()
-
-        c.execute(
-            """
-            CREATE TABLE IF NOT EXISTS alunos (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nome TEXT,
-                mora TEXT,
-                cidade_natal TEXT,
-                familia TEXT,
-                profissao TEXT,
-                nivel TEXT CHECK(nivel IN ('A1','A2','B1','B2','C1')),
-                hobbies TEXT,
-                idade INTEGER,
-                pontos TEXT,
-                link_perfil TEXT,
-                foto TEXT,
-                deletado INTEGER DEFAULT 0
-            )
-        """
+# ✅ 2. Validação de variáveis de ambiente obrigatórias
+def validar_variaveis():
+    REQUIRED_ENV_VARS = [
+        "DB_HOST",
+        "DB_PORT",
+        "DB_USER",
+        "DB_PASS",
+        "DB_NAME",
+    ]
+    missing = [var for var in REQUIRED_ENV_VARS if not os.getenv(var)]
+    if missing:
+        raise EnvironmentError(
+            f"⚠️ Variáveis de ambiente faltando: {', '.join(missing)}"
         )
 
-        c.execute(
-            """
-            CREATE TABLE IF NOT EXISTS idiomas (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nome TEXT
-            )
-        """
-        )
 
-        # Verifica se há idiomas
-        c.execute("SELECT COUNT(*) FROM idiomas")
-        total = c.fetchone()[0]
+# ✅ 3. Montagem da URL de conexão com o banco
+DATABASE_URL = (
+    f"mysql+mysqlconnector://{Config.DB_USER}:{Config.DB_PASS}"
+    f"@{Config.DB_HOST}:{Config.DB_PORT}/{Config.DB_NAME}?charset=utf8mb4"
+)
 
-        if total == 0:
-            c.execute(
-                """
-            INSERT INTO idiomas (nome) VALUES
-              ('Inglês'),
-              ('Espanhol'),
-              ('Francês'),
-              ('Alemão'),
-              ('Italiano'),
-              ('Chinês'),
-              ('Japonês'),
-              ('Russo'),
-              ('Coreano'),
-              ('Polonês'),
-              ('Urdu'),
-              ('Árabe');
-            """
-            )
 
-        c.execute(
-            """
-            CREATE TABLE IF NOT EXISTS aluno_idioma (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                aluno_id INTEGER NOT NULL,
-                idioma_id INTEGER NOT NULL,
-                FOREIGN KEY (aluno_id) REFERENCES alunos(id),
-                FOREIGN KEY (idioma_id) REFERENCES idiomas(id),
-                UNIQUE(aluno_id, idioma_id)
-            )
-        """
-        )
+# ✅ 4. Engine e Session do SQLAlchemy
+engine = create_engine(DATABASE_URL, echo=False, pool_pre_ping=True)
+SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+Base = declarative_base()
 
-        c.execute(
-            """
-            CREATE TABLE IF NOT EXISTS aula (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                data DATE NOT NULL,
-                anotacoes TEXT NOT NULL,
-                comentarios TEXT,
-                proxima_aula TEXT,
-                aluno_id INTEGER NOT NULL,
-                FOREIGN KEY (aluno_id) REFERENCES alunos(id) ON DELETE CASCADE
-            )
-        """
-        )
 
-        c.execute(
-            """
-            CREATE TABLE IF NOT EXISTS usuarios (
-                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                nome TEXT NOT NULL,
-                dataCadastro DATE NOT NULL DEFAULT (DATE('now')),
-                senha TEXT NOT NULL,
-                email TEXT NOT NULL UNIQUE,
-                admin INTEGER NOT NULL DEFAULT 1,
-                ativado INTEGER NOT NULL DEFAULT 1)
-                ;
-        """
-        )
-
-        c.execute(
-            """
-            CREATE TABLE IF NOT EXISTS paises (
-                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                nome TEXT NOT NULL);
-            """
-        )
-
-        # Verifica se há usuarios
-        c.execute("SELECT COUNT(*) FROM paises")
-        total = c.fetchone()[0]
-
-        if total == 0:
-            with open("paises.json", "r", encoding="utf-8") as f:
-                dados = json.load(f)
-                nomes = [pais["nomePais"] for pais in dados]
-                for nome in nomes:
-                    c.execute(
-                        """
-                        INSERT INTO paises (nome)
-                            VALUES (?);
-
-                        """,
-                        (nome,),
-                    )
-
-        conn.commit()
+# ✅ 5. Context manager seguro para sessões com o banco
+@contextmanager
+def get_session():
+    session = SessionLocal()
+    try:
+        yield session
+        session.commit()
+    except:
+        session.rollback()
+        raise
+    finally:
+        session.close()

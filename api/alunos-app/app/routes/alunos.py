@@ -1,7 +1,8 @@
 # app/routes/alunos.py
 
 from flask import Blueprint, request, jsonify
-from app.database import get_db_connection
+
+# from app.database_old import get_db_connection
 from app.utils.file_utils import salvar_foto
 from app.services.aluno_service import inserir_aluno
 from app.services.aluno_service import buscar_aluno_completo

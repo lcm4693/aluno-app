@@ -12,6 +12,13 @@ from .routes.authentication import auth_bp
 from flask_jwt_extended import JWTManager
 from app.utils.logger_config import configurar_logger
 
+from .models.aluno import Aluno
+from .models.pais import Pais
+from .models.idioma import Idioma
+from .models.usuario import Usuario
+from .models.aula import Aula
+from .models.aluno_idioma import AlunoIdioma
+
 
 logger = configurar_logger(__name__)
 
@@ -22,8 +29,6 @@ def create_app():
     app.url_map.strict_slashes = False
 
     jwt = JWTManager(app)
-
-    # logger.info(f"CORS: {Config.CORS_ORIGINS}")
 
     CORS(
         app,
