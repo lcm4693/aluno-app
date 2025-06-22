@@ -1,7 +1,6 @@
 # app/routes/aulas.py
 
 from flask import Blueprint, request, jsonify
-from app.database_old import get_db_connection
 from app.services.aula_service import listar_aulas_do_aluno, criar_aula_para_aluno
 from app.utils.error_handler import handle_errors
 from flask_jwt_extended import jwt_required, get_jwt_identity

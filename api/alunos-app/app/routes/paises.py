@@ -2,7 +2,6 @@ from flask import Blueprint, jsonify
 from app.utils.logger_config import configurar_logger
 from app.utils.error_handler import handle_errors
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from app.database_old import get_db_connection
 from app.services.pais_service import buscar_pais, buscar_paises
 
 logger = configurar_logger(__name__)

@@ -1,4 +1,3 @@
-# from app.database_old import get_db_connection
 from app.models.pais import Pais
 from app.database import get_session
 
