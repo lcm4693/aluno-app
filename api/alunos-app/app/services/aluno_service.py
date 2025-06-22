@@ -67,7 +67,7 @@ def buscar_lista_aluno(id_usuario=None):
         session.close()
 
 
-def buscar_aluno_completo(aluno_id, id_usuario=None):
+def buscar_aluno_completo(aluno_id, id_usuario):
     with get_session() as session:
         aluno = (
             session.query(Aluno)
@@ -100,6 +100,7 @@ def buscar_aluno_completo(aluno_id, id_usuario=None):
             "idade": aluno.idade,
             "pontos": aluno.pontos,
             "link_perfil": aluno.link_perfil,
+            "foto": aluno.foto,
             "paisMora": (
                 {"id": aluno.pais_mora.id, "nome": aluno.pais_mora.nome}
                 if aluno.pais_mora

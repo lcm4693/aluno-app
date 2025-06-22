@@ -36,9 +36,6 @@ DATABASE_URL = (
     f"@{Config.DB_HOST}:{Config.DB_PORT}/{Config.DB_NAME}?charset=utf8mb4"
 )
 
-print("DATABASE_URL:", DATABASE_URL)
-
-
 # ✅ 4. Engine e Session do SQLAlchemy
 engine = create_engine(DATABASE_URL, echo=False, pool_pre_ping=True)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
