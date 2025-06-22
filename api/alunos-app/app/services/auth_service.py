@@ -26,6 +26,6 @@ def autenticar_usuario(email: str, senha: str):
         token = create_access_token(
             identity=str(usuario.id),
             additional_claims=claims,
-            expires_delta=timedelta(Config.JWT_ACCESS_TOKEN_EXPIRES),
+            expires_delta=Config.JWT_ACCESS_TOKEN_EXPIRES,
         )
         return token

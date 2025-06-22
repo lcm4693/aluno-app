@@ -26,8 +26,10 @@ def inserir_aluno(dados, foto_filename, idiomas_ids, id_usuario):
                 link_perfil=dados.get("link_perfil"),
                 foto=foto_filename,
                 id_usuario=id_usuario,
-                id_pais_mora=dados.get("moraPais"),
-                id_pais_natal=dados.get("paisNatal"),
+                id_pais_mora=dados.get("moraPais") if dados.get("moraPais") else None,
+                id_pais_natal=(
+                    dados.get("paisNatal") if dados.get("paisNatal") else None
+                ),
             )
 
             session.add(aluno)
