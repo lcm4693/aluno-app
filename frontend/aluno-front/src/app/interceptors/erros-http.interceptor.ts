@@ -9,10 +9,11 @@ import {
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { ToastService } from '../services/toast.service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class ErrosHttp implements HttpInterceptor {
-  constructor(private toastService: ToastService) {}
+  constructor(private toastService: ToastService, private router: Router) {}
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
@@ -29,8 +30,9 @@ export class ErrosHttp implements HttpInterceptor {
         } else {
           switch (codigoErro) {
             case 401:
-              console.log('Credenciais do usuário inválidas');
+              console.log('Usuário não possui um token válido');
               this.toastService.error('Acesso negado', err.error?.erro);
+              this.router.navigate(['/login']);
               break;
             case 403:
               console.log('Recurso solicitado não foi autorizado');

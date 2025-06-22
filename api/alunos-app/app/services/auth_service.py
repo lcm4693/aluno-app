@@ -3,6 +3,7 @@ from werkzeug.security import check_password_hash
 from flask_jwt_extended import create_access_token
 from datetime import timedelta
 from app.database import get_session
+from app.config import Config
 
 
 def autenticar_usuario(email: str, senha: str):
@@ -25,6 +26,6 @@ def autenticar_usuario(email: str, senha: str):
         token = create_access_token(
             identity=str(usuario.id),
             additional_claims=claims,
-            expires_delta=timedelta(hours=1),
+            expires_delta=timedelta(Config.JWT_ACCESS_TOKEN_EXPIRES),
         )
         return token

@@ -4,7 +4,7 @@ from functools import wraps
 from flask import jsonify
 from pydantic import ValidationError
 from flask_jwt_extended.exceptions import NoAuthorizationError
-from jwt.exceptions import InvalidSignatureError
+from jwt.exceptions import InvalidSignatureError, ExpiredSignatureError
 
 import logging
 
@@ -54,6 +54,9 @@ def handle_errors(f):
         except InvalidSignatureError as e:
             logger.error("Token inválido")
             return jsonify({"erro": "Usuário não autorizado"}), 403
+        except ExpiredSignatureError as e:
+            logger.error("Token expirado")
+            return jsonify({"erro": "Token expirado"}), 401
         except Exception as e:
             logger.error(e)
             logger.exception("Erro interno não tratado")
