@@ -101,7 +101,7 @@ def buscar_aluno_completo(aluno_id, id_usuario):
             "hobbies": aluno.hobbies,
             "idade": aluno.idade,
             "pontos": aluno.pontos,
-            "link_perfil": aluno.link_perfil,
+            "linkPerfil": aluno.link_perfil,
             "foto": aluno.foto,
             "paisMora": (
                 {"id": aluno.pais_mora.id, "nome": aluno.pais_mora.nome}
@@ -161,7 +161,6 @@ def atualizar_informacoes_basicas(aluno_id, dados, id_usuario):
         aluno.idade = dados.get("idade")
         aluno.pontos = dados.get("pontos")
         aluno.link_perfil = dados.get("linkPerfil")
-
         # Relacionamentos com países
         aluno.id_pais_natal = (
             dados.get("paisNatal", {}).get("id") if dados.get("paisNatal") else None
