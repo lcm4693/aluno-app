@@ -38,7 +38,6 @@ def criar_aula(aluno_id):
     logger.debug("Entrada:", dados)
     aula_id, erro = criar_aula_para_aluno(aluno_id, dados, id_usuario)
     if erro:
-        logger.info("Erro:", erro)
         return jsonify({"erro": erro}), 500 if aula_id is None else 404
 
     return jsonify({"id": aula_id, "mensagem": "Aula criada com sucesso"}), 201

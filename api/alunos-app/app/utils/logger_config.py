@@ -1,14 +1,24 @@
 import logging
+import os
 
 
 def configurar_logger(nome_logger=None):
     logger = logging.getLogger(nome_logger)
-    logger.setLevel(logging.DEBUG)  # Nível mínimo global
+
+    logLevelEnv = os.getenv("LOG_LEVEL")
+    logLevel = logging.INFO
+
+    if logLevelEnv == "ERROR":
+        logLevel = logging.ERROR
+    elif logLevelEnv == "DEBUG":
+        logLevel = logging.DEBUG
+
+    logger.setLevel(logLevel)  # Nível mínimo global
 
     if not logger.handlers:
         # Handler para console
         ch = logging.StreamHandler()
-        ch.setLevel(logging.DEBUG)
+        ch.setLevel(logLevel)
 
         # Formatação
         formatter = logging.Formatter(
