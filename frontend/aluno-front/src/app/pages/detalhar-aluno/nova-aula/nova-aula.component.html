@@ -51,7 +51,8 @@
       <small
         class="p-error"
         *ngIf="
-          form.get('date')?.hasError('required') && form.get('date')?.touched
+          form.get('anotacoes')?.hasError('required') &&
+          form.get('anotacoes')?.touched
         "
       >
         O campo Anotações é obrigatório</small
@@ -81,7 +82,7 @@
     </div>
   </div>
   <!-- Botões ao centro -->
-  <div class="flex gap-2 justify-content-start mt-8">
+  <div class="flex justify-content-center gap-4 mt-4">
     <p-button
       label="Salvar"
       icon="pi pi-check"
@@ -91,7 +92,8 @@
     <p-button
       label="Cancelar"
       icon="pi pi-times"
-      class="p-button-secondary"
+      [raised]="true"
+      severity="secondary"
       (onClick)="onCancel()"
     ></p-button>
   </div>

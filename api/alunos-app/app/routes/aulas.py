@@ -1,7 +1,11 @@
 # app/routes/aulas.py
 
 from flask import Blueprint, request, jsonify
-from app.services.aula_service import listar_aulas_do_aluno, criar_aula_para_aluno
+from app.services.aula_service import (
+    listar_aulas_do_aluno,
+    criar_aula_para_aluno,
+    atualizar_aula_para_aluno,
+)
 from app.utils.error_handler import handle_errors
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
@@ -33,3 +37,16 @@ def criar_aula(aluno_id):
         return jsonify({"erro": erro}), 500 if aula_id is None else 404
 
     return jsonify({"id": aula_id, "mensagem": "Aula criada com sucesso"}), 201
+
+
+@aulas_bp.route("/<int:aluno_id>/<int:aula_id>", methods=["PUT"])
+@handle_errors
+@jwt_required()
+def editar_aula(aluno_id, aula_id):
+    id_usuario = get_jwt_identity()
+    dados = request.get_json()
+    aula_id, erro = atualizar_aula_para_aluno(aluno_id, aula_id, id_usuario, dados)
+    if erro:
+        return jsonify({"erro": erro}), 500 if aula_id is None else 404
+
+    return jsonify({"id": aula_id, "mensagem": "Aula atualizada com sucesso"}), 201

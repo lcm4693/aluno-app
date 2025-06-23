@@ -119,7 +119,7 @@ def buscar_aluno_completo(aluno_id, id_usuario):
                     "dataAula": aula.data.isoformat(),
                     "anotacoes": aula.anotacoes,
                     "comentarios": aula.comentarios,
-                    "proxima_aula": aula.proxima_aula,
+                    "proximaAula": aula.proxima_aula,
                 }
                 for aula in aluno.aulas
             ],

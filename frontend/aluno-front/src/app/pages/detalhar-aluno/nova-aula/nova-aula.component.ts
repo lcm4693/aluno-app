@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import {
   FormBuilder,
+  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
@@ -11,6 +12,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { Aula } from '../../../models/aula';
 import { dataNoFuturoValidator } from '../../../validators';
+import { AnotacoesComponent } from '../../../shared/anotacoes/anotacoes.component';
 
 @Component({
   selector: 'app-nova-aula',

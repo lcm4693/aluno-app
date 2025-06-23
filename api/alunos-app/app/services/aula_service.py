@@ -60,3 +60,45 @@ def criar_aula_para_aluno(aluno_id, dados, usuario_id):
 
     except Exception as e:
         return None, str(e)
+
+
+def atualizar_aula_para_aluno(aluno_id, aula_id, usuario_id, dados):
+    try:
+        with get_session() as session:
+            # Verifica se o aluno pertence ao usuário e não está deletado
+            aluno = buscar_aluno_basico(aluno_id, usuario_id)
+            if not aluno:
+                return None, "Aluno não encontrado"
+
+            aula = buscar_aula_aluno(aluno_id, aula_id)
+
+            if not aula:
+                return None, "Aula não encontrada"
+
+            data_convertida = datetime.fromisoformat(
+                dados.get("dataAula").replace("Z", "+00:00")
+            ).date()
+
+            aula.data = data_convertida
+            aula.anotacoes = dados.get("anotacoes")
+            aula.comentarios = dados.get("comentarios")
+            aula.proxima_aula = dados.get("proximaAula")
+
+            session.add(aula)
+            session.flush()  # Garante que nova_aula.id esteja disponível
+
+            return aula.id, None
+
+    except Exception as e:
+        return None, str(e)
+
+
+def buscar_aula_aluno(aluno_id, aula_id):
+    with get_session() as session:
+        aula = (
+            session.query(Aula)
+            .filter(Aula.aluno_id == aluno_id, Aula.id == aula_id)
+            .first()
+        )
+
+        return aula

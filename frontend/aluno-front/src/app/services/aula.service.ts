@@ -15,4 +15,8 @@ export class AulaService {
   incluirAula(aula: Aula, idAluno: number): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/${idAluno}`, aula);
   }
+
+  atualizarAula(idAluno: number, aula: Aula): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/${idAluno}/${aula.id}`, aula);
+  }
 }

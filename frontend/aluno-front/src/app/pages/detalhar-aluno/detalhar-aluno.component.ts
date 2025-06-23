@@ -125,6 +125,21 @@ export class DetalharAlunoComponent implements OnInit {
     this.modalNovaDetalharAulaVisivel = false;
   }
 
+  finalizarEditarModalDetalharAula(aula: Aula): void {
+    this.aulaService.atualizarAula(this.aluno!.id, aula).subscribe({
+      next: (res) => {
+        const index = this.aluno!.aulas.findIndex((a) => a.id === aula.id);
+
+        if (index !== -1) {
+          this.aluno!.aulas[index] = aula;
+        }
+        this.fechaModalDetalharAula();
+        this.toastService.success(res.mensagem);
+      },
+      complete: () => {},
+    });
+  }
+
   onEditarInformacoesBasicas(alunoEditado: AlunoBasico): void {
     this.alunoService.atualizarAluno(this.aluno!.id, alunoEditado).subscribe({
       next: (res) => {

@@ -155,8 +155,11 @@
       *ngIf="modalNovaDetalharAulaVisivel"
       [aula]="aulaSelecionada"
       (fechar)="fechaModalDetalharAula()"
+      (editarAula)="finalizarEditarModalDetalharAula($event)"
     ></app-detalhar-aula>
   </p-dialog>
+
+  <!-- Botões ao centro -->
 
   <footer class="footer-fixo shadow-3">
     <div class="flex gap-3" style="justify-content: center">
