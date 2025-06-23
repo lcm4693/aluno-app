@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { Idioma } from '../models/idioma';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { CacheService } from './cache.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,10 +11,15 @@ import { environment } from '../../environments/environment';
 export class IdiomaService {
   private baseUrl = environment.apiUrl + '/idiomas';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cache: CacheService) {}
 
   getIdiomas(): Observable<Idioma[]> {
-    return this.http.get<Idioma[]>(this.baseUrl + '/');
+    if (this.cache.idiomas) {
+      return of(this.cache.idiomas);
+    }
+    return this.http
+      .get<Idioma[]>(this.baseUrl + '/')
+      .pipe(tap((idiomas) => (this.cache.idiomas = idiomas)));
   }
 
   atualizarIdiomasAluno(idAluno: number, idiomas: Idioma[]): Observable<any> {
