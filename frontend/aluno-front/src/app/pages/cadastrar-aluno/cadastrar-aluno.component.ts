@@ -203,7 +203,7 @@ export class CadastrarAlunoComponent implements AfterViewInit, OnInit {
 
         canvas.toBlob((blob) => {
           if (blob) {
-            console.log('Imagem convertida em Blob com sucesso.');
+            // console.log('Imagem convertida em Blob com sucesso.');
             this.imagemBlob = blob;
             this.enviarFormulario();
           }

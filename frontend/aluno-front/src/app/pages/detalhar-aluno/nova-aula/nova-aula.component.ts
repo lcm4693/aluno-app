@@ -53,12 +53,12 @@ export class NovaAulaComponent {
       });
       return;
     } else {
-      const aula = new Aula(
-        this.form.get('dataAula')?.value,
-        this.form.get('anotacoes')?.value,
-        this.form.get('comentarios')?.value,
-        this.form.get('proximaAula')?.value
-      );
+      const aula = new Aula({
+        dataAula: this.form.get('dataAula')?.value,
+        anotacoes: this.form.get('anotacoes')?.value,
+        comentarios: this.form.get('comentarios')?.value,
+        proximaAula: this.form.get('proximaAula')?.value,
+      });
       this.salvarAula.emit(aula);
     }
   }

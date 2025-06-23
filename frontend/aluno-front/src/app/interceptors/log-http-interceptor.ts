@@ -6,6 +6,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class LogHTTP implements HttpInterceptor {
@@ -14,10 +15,12 @@ export class LogHTTP implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    console.log('URL:', req.urlWithParams);
-    console.log('Método:', req.method);
-    console.log('Body:', req.body);
-    console.log('Headers:', req.headers);
+    if (environment.logHttpRequests) {
+      console.log('URL:', req.urlWithParams);
+      console.log('Método:', req.method);
+      console.log('Body:', req.body);
+      console.log('Headers:', req.headers);
+    }
     return next.handle(req);
   }
 }

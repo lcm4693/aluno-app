@@ -65,8 +65,6 @@ export class DetalharAulaComponent implements AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.aula) {
-      console.log('AULA NO ngOnChanges DETALHAR AULA: ', this.aula);
-
       this.retornarValoresPadraoAula();
     }
   }
@@ -97,7 +95,6 @@ export class DetalharAulaComponent implements AfterViewInit, OnChanges {
       this.aula!.anotacoes = this.form.get('anotacoes')?.value;
       this.aula!.comentarios = this.form.get('comentarios')?.value;
       this.aula!.proximaAula = this.form.get('proximaAula')?.value;
-      // this.editarAula.emit(this.aula!);
       this.editando = false;
       this.editarAula.emit(this.aula!);
     }

@@ -13,7 +13,7 @@ export class AulaService {
   constructor(private http: HttpClient) {}
 
   incluirAula(aula: Aula, idAluno: number): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/${idAluno}`, aula);
+    return this.http.post<any>(`${this.baseUrl}/${idAluno}`, aula.objeto);
   }
 
   atualizarAula(idAluno: number, aula: Aula): Observable<any> {
