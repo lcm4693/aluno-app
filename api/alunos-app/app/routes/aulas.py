@@ -8,7 +8,7 @@ from app.services.aula_service import (
 )
 from app.utils.error_handler import handle_errors
 from flask_jwt_extended import jwt_required, get_jwt_identity
-
+import time
 
 aulas_bp = Blueprint("aulas", __name__, url_prefix="/api/aulas")
 
@@ -43,10 +43,13 @@ def criar_aula(aluno_id):
 @handle_errors
 @jwt_required()
 def editar_aula(aluno_id, aula_id):
+    start = time.time()
     id_usuario = get_jwt_identity()
     dados = request.get_json()
     aula_id, erro = atualizar_aula_para_aluno(aluno_id, aula_id, id_usuario, dados)
     if erro:
         return jsonify({"erro": erro}), 500 if aula_id is None else 404
 
-    return jsonify({"id": aula_id, "mensagem": "Aula atualizada com sucesso"}), 201
+    retorno = jsonify({"id": aula_id, "mensagem": "Aula atualizada com sucesso"})
+    print("Tempo total:", time.time() - start)
+    return retorno, 201
