@@ -20,5 +20,5 @@ class Config:
     DB_PASS = os.getenv("DB_PASS")
     DB_NAME = os.getenv("DB_NAME")
     #### TOKEN JWT
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=30)
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=60)
     # JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=1)
