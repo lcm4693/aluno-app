@@ -1,0 +1,7 @@
+<app-aula-form
+  [aula]="aula"
+  [modo]="modo"
+  (cancelar)="fechar.emit()"
+  *ngIf="modo === 'visualizar'"
+/>
+<app-editar-aula [aula]="aula!" *ngIf="modo === 'editar'" />

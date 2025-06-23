@@ -21,6 +21,8 @@ import { IdiomaService } from '../../services/idioma.service';
 import { AlunoBasico } from './informacoes-basicas/dto/aluno-informacoes-basicas';
 import { DetalharAulaComponent } from './detalhar-aula/detalhar-aula.component';
 import { ToastService } from '../../services/toast.service';
+import { VisualizarAulaComponent } from './aula/components/visualizar-aula/visualizar-aula.component';
+import { CriarAulaComponent } from './aula/components/criar-aula/criar-aula.component';
 
 @Component({
   standalone: true,
@@ -37,6 +39,8 @@ import { ToastService } from '../../services/toast.service';
     TooltipModule,
     InformacoesBasicasComponent,
     IdiomasComponent,
+    VisualizarAulaComponent,
+    CriarAulaComponent,
   ],
   templateUrl: './detalhar-aluno.component.html',
   styleUrl: './detalhar-aluno.component.css',

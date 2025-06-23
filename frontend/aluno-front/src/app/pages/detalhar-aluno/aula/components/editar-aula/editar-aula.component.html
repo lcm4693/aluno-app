@@ -1,0 +1,8 @@
+EDITAR TELA
+
+<app-aula-form
+  [aula]="aula"
+  [modo]="'editar'"
+  (formSubmit)="salvar($event)"
+  (cancelar)="cancelar.emit()"
+/>
