@@ -9,6 +9,9 @@ from app.services.aula_service import (
 from app.utils.error_handler import handle_errors
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import time
+from app.utils.logger_config import configurar_logger
+
+logger = configurar_logger(__name__)
 
 aulas_bp = Blueprint("aulas", __name__, url_prefix="/api/aulas")
 
@@ -51,5 +54,5 @@ def editar_aula(aluno_id, aula_id):
         return jsonify({"erro": erro}), 500 if aula_id is None else 404
 
     retorno = jsonify({"id": aula_id, "mensagem": "Aula atualizada com sucesso"})
-    print("Tempo total:", time.time() - start)
+    logger.info("Tempo total:", time.time() - start)
     return retorno, 201
