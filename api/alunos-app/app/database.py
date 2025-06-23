@@ -7,6 +7,7 @@ from .config import Config
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from contextlib import contextmanager
+from sqlalchemy.pool import QueuePool  # explícito
 
 # ✅ 1. Carregamento do .env (apenas em ambiente de desenvolvimento)
 APP_ENV = os.getenv("APP_ENV", "dev").lower()
@@ -32,12 +33,20 @@ def validar_variaveis():
 
 # ✅ 3. Montagem da URL de conexão com o banco
 DATABASE_URL = (
-    f"mysql+mysqlconnector://{Config.DB_USER}:{Config.DB_PASS}"
+    f"mysql+mysqldb://{Config.DB_USER}:{Config.DB_PASS}"
     f"@{Config.DB_HOST}:{Config.DB_PORT}/{Config.DB_NAME}?charset=utf8mb4"
 )
 
 # ✅ 4. Engine e Session do SQLAlchemy
-engine = create_engine(DATABASE_URL, echo=False, pool_pre_ping=True)
+engine = create_engine(
+    DATABASE_URL,
+    echo=False,
+    pool_pre_ping=True,
+    poolclass=QueuePool,
+    pool_size=5,  # número de conexões persistentes no pool
+    max_overflow=10,  # quantas extras ele pode abrir temporariamente
+    pool_timeout=30,  # tempo em segundos para esperar uma conexão do pool)
+)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 Base = declarative_base()
 

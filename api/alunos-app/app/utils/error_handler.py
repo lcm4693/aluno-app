@@ -6,8 +6,6 @@ from pydantic import ValidationError
 from flask_jwt_extended.exceptions import NoAuthorizationError
 from jwt.exceptions import InvalidSignatureError, ExpiredSignatureError
 
-import logging
-
 from app.utils.logger_config import configurar_logger
 
 logger = configurar_logger(__name__)

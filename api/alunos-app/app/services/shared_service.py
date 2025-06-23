@@ -1,5 +1,6 @@
 from app.database import get_session
 from app.models.aluno import Aluno
+from sqlalchemy.orm import load_only
 
 
 def buscar_aluno_basico(aluno_id: int, id_usuario: int):

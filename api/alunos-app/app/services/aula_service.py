@@ -4,6 +4,10 @@ from app.database import get_session
 from app.services.shared_service import buscar_aluno_basico
 from app.models.aula import Aula
 from datetime import datetime
+import time
+from app.utils.logger_config import configurar_logger
+
+logger = configurar_logger(__name__)
 
 
 def listar_aulas_do_aluno(aluno_id, id_usuario):
@@ -63,15 +67,21 @@ def criar_aula_para_aluno(aluno_id, dados, usuario_id):
 
 
 def atualizar_aula_para_aluno(aluno_id, aula_id, usuario_id, dados):
+    start = time.time()
+
     try:
         with get_session() as session:
             # Verifica se o aluno pertence ao usuário e não está deletado
             aluno = buscar_aluno_basico(aluno_id, usuario_id)
+            logger.info(f"Tempo busca aluno: {time.time() - start:.3f} segundos")
+            start = time.time()
+
             if not aluno:
                 return None, "Aluno não encontrado"
 
             aula = buscar_aula_aluno(aluno_id, aula_id)
-
+            logger.info(f"Tempo busca aula: {time.time() - start:.3f} segundos")
+            start = time.time()
             if not aula:
                 return None, "Aula não encontrada"
 
@@ -84,8 +94,13 @@ def atualizar_aula_para_aluno(aluno_id, aula_id, usuario_id, dados):
             aula.comentarios = dados.get("comentarios")
             aula.proxima_aula = dados.get("proximaAula")
 
+            logger.info(f"Tempo conversão: {time.time() - start:.3f} segundos")
+            start = time.time()
             session.add(aula)
+            logger.info(f"Tempo add: {time.time() - start:.3f} segundos")
+            start = time.time()
             session.flush()  # Garante que nova_aula.id esteja disponível
+            logger.info(f"Tempo flush: {time.time() - start:.3f} segundos")
 
             return aula.id, None
 
