@@ -54,5 +54,5 @@ def editar_aula(aluno_id, aula_id):
         return jsonify({"erro": erro}), 500 if aula_id is None else 404
 
     retorno = jsonify({"id": aula_id, "mensagem": "Aula atualizada com sucesso"})
-    logger.info("Tempo total:", time.time() - start)
+    logger.info(f"Tempo total: {time.time() - start:.3f} segundos")
     return retorno, 201
