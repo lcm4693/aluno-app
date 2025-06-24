@@ -6,7 +6,7 @@ from sqlalchemy.orm import load_only
 def retornar_id_aluno_banco(aluno_id: int, id_usuario: int):
     with get_session() as session:
         aluno = (
-            session.query(Aluno.id)
+            session.query(Aluno)
             .filter(
                 Aluno.id == aluno_id,
                 Aluno.id_usuario == id_usuario,
