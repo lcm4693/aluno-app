@@ -236,5 +236,6 @@ tr {
 }
 
 .p-dialog .p-dialog-header {
-  background: #ececec;
+  color: #58595b;
+  background-color: #e0e2e3;
 }

@@ -40,8 +40,8 @@ export class LoginComponent {
     private router: Router
   ) {
     this.form = this.fb.group({
-      email: ['', [Validators.email]],
-      senha: [''],
+      email: ['', [Validators.email, Validators.required]],
+      senha: ['', [Validators.required]],
     });
   }
 
@@ -67,6 +67,7 @@ export class LoginComponent {
       },
       error: () => {
         this.loading = false;
+        this.toast.error('Credenciais inválidas');
       },
       complete: () => {
         this.loading = false;

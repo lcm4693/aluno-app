@@ -59,7 +59,8 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError((error) => {
         if (
           error instanceof HttpErrorResponse &&
-          (error.status === 401 || error.status === 403)
+          (error.status === 401 || error.status === 403) &&
+          this.userStore.getToken()
         ) {
           return this.userStore.refreshAccessToken().pipe(
             switchMap((success) => {
@@ -83,7 +84,6 @@ export class AuthInterceptor implements HttpInterceptor {
             })
           );
         }
-
         return throwError(() => error);
       })
     );
