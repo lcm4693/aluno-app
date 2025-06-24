@@ -4,7 +4,7 @@ from app.models.idioma import Idioma
 from app.models.aluno_idioma import AlunoIdioma
 from app.database import get_session
 from sqlalchemy.exc import SQLAlchemyError
-from app.services.shared_service import buscar_aluno_basico
+from app.services.shared_service import retornar_id_aluno_banco
 
 
 def buscar_todos_idiomas():
@@ -29,7 +29,7 @@ def buscar_idiomas_aluno(aluno_id):
 def atualizar_idiomas_banco(aluno_id, dados, id_usuario):
     try:
         with get_session() as session:
-            aluno = buscar_aluno_basico(aluno_id, id_usuario)
+            aluno = retornar_id_aluno_banco(aluno_id, id_usuario)
 
             if not aluno:
                 return {"erro": "Aluno não encontrado"}, 404

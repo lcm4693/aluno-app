@@ -6,7 +6,7 @@ from flask import url_for
 from app.services.idioma_service import buscar_idiomas_aluno
 from sqlalchemy.orm import joinedload
 from app.database import get_session
-from app.services.shared_service import buscar_aluno_basico
+from app.services.shared_service import retornar_id_aluno_banco
 from app.models.aluno_idioma import AlunoIdioma
 from datetime import datetime, timezone, time
 
@@ -150,7 +150,7 @@ def alterar_nome_foto_para_url_foto(aluno):
 
 def atualizar_informacoes_basicas(aluno_id, dados, id_usuario):
     with get_session() as session:
-        aluno = buscar_aluno_basico(aluno_id, id_usuario)
+        aluno = retornar_id_aluno_banco(aluno_id, id_usuario)
 
         if not aluno:
             return "Aluno não encontrado", 404
@@ -180,7 +180,7 @@ def atualizar_informacoes_basicas(aluno_id, dados, id_usuario):
 
 def excluir_aluno(aluno_id, id_usuario=None):
     with get_session() as session:
-        aluno = buscar_aluno_basico(aluno_id, id_usuario)
+        aluno = retornar_id_aluno_banco(aluno_id, id_usuario)
 
         if not aluno:
             return "Aluno não encontrado", 404

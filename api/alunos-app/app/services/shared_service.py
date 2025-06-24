@@ -3,10 +3,10 @@ from app.models.aluno import Aluno
 from sqlalchemy.orm import load_only
 
 
-def buscar_aluno_basico(aluno_id: int, id_usuario: int):
+def retornar_id_aluno_banco(aluno_id: int, id_usuario: int):
     with get_session() as session:
         aluno = (
-            session.query(Aluno)
+            session.query(Aluno.id)
             .filter(
                 Aluno.id == aluno_id,
                 Aluno.id_usuario == id_usuario,

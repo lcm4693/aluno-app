@@ -1,7 +1,7 @@
 # app/services/aula_service.py
 
 from app.database import get_session
-from app.services.shared_service import buscar_aluno_basico
+from app.services.shared_service import retornar_id_aluno_banco
 from app.models.aula import Aula
 from datetime import datetime
 import time
@@ -13,7 +13,7 @@ logger = configurar_logger(__name__)
 def listar_aulas_do_aluno(aluno_id, id_usuario):
     with get_session() as session:
         # Verifica se o aluno existe e não está deletado
-        aluno = buscar_aluno_basico(aluno_id, id_usuario)
+        aluno = retornar_id_aluno_banco(aluno_id, id_usuario)
         if not aluno:
             return "Aluno não encontrado", 404
 
@@ -41,7 +41,7 @@ def criar_aula_para_aluno(aluno_id, dados, usuario_id):
     try:
         with get_session() as session:
             # Verifica se o aluno pertence ao usuário e não está deletado
-            aluno = buscar_aluno_basico(aluno_id, usuario_id)
+            aluno = retornar_id_aluno_banco(aluno_id, usuario_id)
             if not aluno:
                 return None, "Aluno não encontrado"
 
@@ -72,7 +72,7 @@ def atualizar_aula_para_aluno(aluno_id, aula_id, usuario_id, dados):
     try:
         with get_session() as session:
             # Verifica se o aluno pertence ao usuário e não está deletado
-            aluno = buscar_aluno_basico(aluno_id, usuario_id)
+            aluno = retornar_id_aluno_banco(aluno_id, usuario_id)
             logger.debug(f"Tempo busca aluno: {time.time() - start:.3f} segundos")
             start = time.time()
 
