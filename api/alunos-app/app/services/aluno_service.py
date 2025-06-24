@@ -8,6 +8,7 @@ from sqlalchemy.orm import joinedload
 from app.database import get_session
 from app.services.shared_service import buscar_aluno_basico
 from app.models.aluno_idioma import AlunoIdioma
+from datetime import datetime, timezone, time
 
 
 def inserir_aluno(dados, foto_filename, idiomas_ids, id_usuario):
@@ -116,7 +117,9 @@ def buscar_aluno_completo(aluno_id, id_usuario):
             "aulas": [
                 {
                     "id": aula.id,
-                    "dataAula": aula.data.isoformat(),
+                    "dataAula": (datetime.combine(aula.data, time.max)).replace(
+                        tzinfo=timezone.utc
+                    ),
                     "anotacoes": aula.anotacoes,
                     "comentarios": aula.comentarios,
                     "proximaAula": aula.proxima_aula,

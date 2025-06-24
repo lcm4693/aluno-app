@@ -76,7 +76,9 @@ def get_aluno(aluno_id):
     aluno, erro = buscar_aluno_completo(aluno_id, id_usuario=idUsuario)
     if erro:
         return jsonify({"erro": erro}), 404
-    return jsonify(aluno)
+
+    logger.debug("get_aluno: " + str(aluno_id) + ": %", aluno)
+    return jsonify(aluno), 200
 
 
 @alunos_bp.route("/informacoes-basicas/<int:aluno_id>", methods=["PUT"])
