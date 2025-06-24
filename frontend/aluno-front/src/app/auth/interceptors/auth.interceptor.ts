@@ -10,12 +10,14 @@ import { inject, Injectable } from '@angular/core';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { UserStoreService } from '../services/user-store.service';
 import { ToastService } from '../../services/toast.service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(
     private userStore: UserStoreService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private router: Router
   ) {}
 
   intercept(
@@ -62,6 +64,8 @@ export class AuthInterceptor implements HttpInterceptor {
           return this.userStore.refreshAccessToken().pipe(
             switchMap((success) => {
               if (!success) {
+                this.userStore.clear();
+                this.router.navigate(['/login']);
                 return throwError(() => error);
               }
               this.toastService.success('Token renovado');

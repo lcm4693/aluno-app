@@ -34,7 +34,7 @@ export class UserStoreService {
 
   clear() {
     localStorage.removeItem('token-aluno-app');
-    localStorage.removeItem('refresh-token-aluno-app');
+    localStorage.removeItem('refresh-aluno-app');
     this.usuarioSubject.next(null);
   }
 
