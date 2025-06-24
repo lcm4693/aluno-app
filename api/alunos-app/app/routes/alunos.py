@@ -65,7 +65,16 @@ def criar_aluno_com_foto():
     aluno_id = inserir_aluno(form, foto_filename, idiomas_ids, id_usuario=idUsuario)
     logger.info(f"Aluno criado com sucesso: ID {aluno_id}")
 
-    return jsonify({"id": aluno_id, "foto": foto_filename}), 201
+    return (
+        jsonify(
+            {
+                "id": aluno_id,
+                "foto": foto_filename,
+                "mensagem": "Aluno cadastrado com sucesso",
+            }
+        ),
+        201,
+    )
 
 
 @alunos_bp.route("/<int:aluno_id>", methods=["GET"])

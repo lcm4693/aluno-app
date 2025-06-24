@@ -11,6 +11,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { AlunoService } from '../../services/aluno.service';
 import { Aluno } from '../../models/aluno';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   standalone: true,
@@ -36,7 +37,8 @@ export class ListarAlunosComponent {
     private router: Router,
     private http: HttpClient,
     private confirmationService: ConfirmationService,
-    private alunoService: AlunoService // Se você tiver um serviço específico para alunos, pode injetá-lo aqui
+    private alunoService: AlunoService, // Se você tiver um serviço específico para alunos, pode injetá-lo aqui
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -52,19 +54,6 @@ export class ListarAlunosComponent {
       complete: () => {},
     });
   }
-
-  // buscarFotoAluno(nomeFoto: string, aluno: any): void {
-  //   this.alunoService.buscarFotoAlunoPorNome(nomeFoto).subscribe({
-  //     next: (res) => {
-  //       const objectURL = URL.createObjectURL(res);
-  //       aluno.imagemFoto = objectURL; // Atribui a URL do objeto à propriedade imagemFoto do aluno
-  //     },
-  //     error: (err) => {
-  //       console.error('Erro ao buscar foto do aluno:', err);
-  //     },
-  //     complete: () => {},
-  //   });
-  // }
 
   voltarInicio(): void {
     this.router.navigateByUrl('');
@@ -85,10 +74,11 @@ export class ListarAlunosComponent {
             this.alunos = this.alunos.filter(
               (a) => a.id !== alunoParaExcluir.id
             );
+            this.toastService.success(res.mensagem);
           },
           error: (err) => {
             console.error('Erro ao excluir:', err);
-            alert(err.error?.erro || 'Erro ao excluir aluno.');
+            this.toastService.error(err.erro);
           },
           complete: () => {},
         });

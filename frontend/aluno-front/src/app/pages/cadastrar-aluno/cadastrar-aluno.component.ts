@@ -255,8 +255,9 @@ export class CadastrarAlunoComponent implements AfterViewInit, OnInit {
     }
 
     this.alunoService.incluirAluno(formData).subscribe({
-      next: () => {
+      next: (res) => {
         this.router.navigateByUrl('/listar');
+        this.toast.success(res.mensagem);
       },
       error: (err) => {
         console.log('Erro back:', err);
