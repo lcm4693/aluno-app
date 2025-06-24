@@ -20,7 +20,7 @@ from .models.aula import Aula
 from .models.aluno_idioma import AlunoIdioma
 
 
-logger = configurar_logger(__name__)
+# logger = configurar_logger(__name__)
 
 
 def create_app():
