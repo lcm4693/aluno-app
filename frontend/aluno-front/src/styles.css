@@ -234,3 +234,7 @@ tr {
   display: block;
   width: 10rem;
 }
+
+.p-dialog .p-dialog-header {
+  background: #ececec;
+}

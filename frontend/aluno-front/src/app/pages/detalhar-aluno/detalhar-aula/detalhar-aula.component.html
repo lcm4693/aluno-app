@@ -2,10 +2,11 @@
 <span #topo tabindex="-10000"></span>
 <form [formGroup]="form" class="p-fluid p-3">
   <div class="p-fluid p-3">
-    <!-- Linha 1: Data -->
-    <div class="flex flex-wrap mt-4 mb-4">
-      <div class="basis-1/6 md:basis-1/6 pr-3">
-        <label>Data da aula:</label>
+    <!-- Linha com FLEX -->
+    <div class="flex flex-wrap align-items-end gap-4 mb-3">
+      <!-- Coluna com o calendário (ocupa 25%) -->
+      <div class="w-full md:w-2">
+        <label class="block mb-1">Data da aula:</label>
         <p-calendar
           formControlName="dataAula"
           dateFormat="dd/mm/yy"
@@ -14,6 +15,38 @@
           [readonlyInput]="true"
           [maxDate]="hoje"
         ></p-calendar>
+      </div>
+
+      <!-- Coluna com botões (ocupa 75%) -->
+      <div class="w-full md:w-8 flex justify-content-center gap-3">
+        <ng-container *ngIf="editando; else visualizar">
+          <p-button
+            label="Salvar"
+            icon="pi pi-check"
+            class="p-button-primary"
+            (onClick)="salvar()"
+          ></p-button>
+          <p-button
+            label="Cancelar"
+            icon="pi pi-times"
+            severity="secondary"
+            (onClick)="onCancel()"
+          ></p-button>
+        </ng-container>
+
+        <ng-template #visualizar>
+          <p-button
+            label="Editar"
+            icon="pi pi-pencil"
+            (onClick)="alterarFlagEdicao()"
+          ></p-button>
+          <p-button
+            label="Fechar"
+            icon="pi pi-times"
+            severity="secondary"
+            (onClick)="fechar.emit()"
+          ></p-button>
+        </ng-template>
       </div>
     </div>
 
@@ -56,7 +89,7 @@
           pInputTextarea
           id="comentarios"
           formControlName="comentarios"
-          rows="5"
+          rows="10"
           class="w-full"
         ></textarea>
       </div>
@@ -73,7 +106,7 @@
           pInputTextarea
           id="proxima-aula"
           formControlName="proximaAula"
-          rows="5"
+          rows="10"
           class="w-full"
         ></textarea>
       </div>
@@ -84,38 +117,6 @@
           </div>
         </p-panel>
       </div>
-    </div>
-
-    <div class="flex justify-content-center gap-4 mt-4" *ngIf="editando">
-      <p-button
-        label="Salvar"
-        icon="pi pi-check"
-        class="p-button-primary"
-        (onClick)="salvar()"
-      ></p-button>
-      <p-button
-        label="Cancelar"
-        icon="pi pi-times"
-        [raised]="true"
-        severity="secondary"
-        (onClick)="onCancel()"
-      ></p-button>
-    </div>
-
-    <div class="flex justify-content-center gap-4 mt-4" *ngIf="!editando">
-      <p-button
-        label="Editar"
-        icon="pi pi-pencil"
-        severity="primary"
-        (onClick)="alterarFlagEdicao()"
-      ></p-button>
-      <p-button
-        label="Fechar"
-        icon="pi pi-times"
-        [raised]="true"
-        severity="secondary"
-        (onClick)="fechar.emit()"
-      ></p-button>
     </div>
   </div>
 </form>
