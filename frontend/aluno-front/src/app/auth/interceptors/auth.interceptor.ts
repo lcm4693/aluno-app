@@ -1,4 +1,5 @@
 import {
+  HttpErrorResponse,
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
@@ -6,12 +7,16 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { UserStoreService } from '../services/user-store.service';
+import { ToastService } from '../../services/toast.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private userStore: UserStoreService) {}
+  constructor(
+    private userStore: UserStoreService,
+    private toastService: ToastService
+  ) {}
 
   intercept(
     req: HttpRequest<any>,
@@ -19,9 +24,9 @@ export class AuthInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     const token = this.userStore.getToken();
 
-    if (!token) {
-      return next.handle(req);
-    }
+    // if (!token) {
+    //   return next.handle(req);
+    // }
 
     // Para o interceptador funcionar com o proxy, é necessário uma barra no fim da URL,
     //porém nã podemos usar isso para imagens e outros recursos.
@@ -33,6 +38,12 @@ export class AuthInterceptor implements HttpInterceptor {
 
     const url = shouldAppendSlash ? req.url + '/' : req.url;
 
+    // ❗ Ignorar a rota de refresh para evitar loop infinito
+    const isRefreshRequest = req.url.includes('/auth/refresh');
+    if (isRefreshRequest) {
+      return next.handle(req);
+    }
+
     const authReq = req.clone({
       url,
       setHeaders: token
@@ -42,6 +53,35 @@ export class AuthInterceptor implements HttpInterceptor {
         : {},
     });
 
-    return next.handle(authReq);
+    return next.handle(authReq).pipe(
+      catchError((error) => {
+        if (
+          error instanceof HttpErrorResponse &&
+          (error.status === 401 || error.status === 403)
+        ) {
+          return this.userStore.refreshAccessToken().pipe(
+            switchMap((success) => {
+              if (!success) {
+                return throwError(() => error);
+              }
+              this.toastService.success('Token renovado');
+              console.log('Token renovado');
+
+              const newToken = this.userStore.getToken();
+              const retryReq = req.clone({
+                url,
+                setHeaders: {
+                  Authorization: `Bearer ${newToken}`,
+                },
+              });
+
+              return next.handle(retryReq);
+            })
+          );
+        }
+
+        return throwError(() => error);
+      })
+    );
   }
 }

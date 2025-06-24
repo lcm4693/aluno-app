@@ -3,6 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { UserStoreService } from '../services/user-store.service';
 import { jwtDecode } from 'jwt-decode';
 import { JwtPayload } from '../jwtpayload';
+import { map } from 'rxjs';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const userStore = inject(UserStoreService);
@@ -20,9 +21,16 @@ export const authGuard: CanActivateFn = (route, state) => {
     const expired = decoded.exp * 1000 < Date.now();
 
     if (expired) {
-      userStore.clear();
-      router.navigate(['/login']);
-      return false;
+      // Tentar refresh
+      userStore.refreshAccessToken().pipe(
+        map((success) => {
+          if (!success) {
+            router.navigate(['/login']);
+            return false;
+          }
+          return true;
+        })
+      );
     }
   } catch (e) {
     // Token malformado ou inválido
@@ -37,7 +45,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   }
 
   // Token válido, mas store não foi preenchida ainda
-  userStore.setUsuarioFromToken(token);
+  userStore.setUsuarioFromToken(token, userStore.getRefreshToken()!);
 
   return true;
 };

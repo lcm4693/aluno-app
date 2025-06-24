@@ -57,7 +57,7 @@ export class LoginComponent {
 
     this.authService.login({ email, senha }).subscribe({
       next: (res) => {
-        this.userStore.setUsuarioFromToken(res.token);
+        this.userStore.setUsuarioFromToken(res.access_token, res.refresh_token);
         this.toast.success('Login realizado com sucesso');
         this.router.navigate(['/']);
         // const usuario = this.userStore.getUsuario();

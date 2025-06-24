@@ -78,9 +78,6 @@ export class DetalharAlunoComponent implements OnInit {
           this.aluno = res;
           this.alunoBasico = this.extrairAlunoBasicoInformacoesBasicas();
         },
-        error: (err) => {
-          console.error('Erro ao buscar aluno:', err);
-        },
         complete: () => {},
       });
     }
@@ -107,9 +104,6 @@ export class DetalharAlunoComponent implements OnInit {
         this.aluno!.aulas.push(aula);
         this.reordenarAulasPorData();
         this.fechaModalNovaAula();
-      },
-      error: (err) => {
-        console.error('Erro ao salvar aula:', err);
       },
       complete: () => {},
     });

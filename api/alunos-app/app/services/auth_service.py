@@ -1,6 +1,6 @@
 from app.models.usuario import Usuario
 from werkzeug.security import check_password_hash
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, create_refresh_token
 from datetime import timedelta
 from app.database import get_session
 from app.config import Config
@@ -23,9 +23,12 @@ def autenticar_usuario(email: str, senha: str):
             "admin": usuario.admin,  # se quiser
         }
 
-        token = create_access_token(
+        access_token = create_access_token(
             identity=str(usuario.id),
             additional_claims=claims,
             expires_delta=Config.JWT_ACCESS_TOKEN_EXPIRES,
         )
-        return token
+
+        refresh_token = create_refresh_token(identity=str(usuario.id))
+
+        return {"access_token": access_token, "refresh_token": refresh_token}

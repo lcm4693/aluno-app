@@ -7,7 +7,7 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, EMPTY, Observable, throwError } from 'rxjs';
 import { ToastService } from '../services/toast.service';
 import { Router } from '@angular/router';
 
@@ -30,17 +30,19 @@ export class ErrosHttp implements HttpInterceptor {
         } else {
           switch (codigoErro) {
             case 401:
-              console.log('Usuário não possui um token válido');
-              this.toastService.error('Acesso negado', err.error?.erro);
-              this.router.navigate(['/login']);
-              break;
-            case 403:
-              console.log('Recurso solicitado não foi autorizado');
-              this.toastService.error(
-                'Acesso negado',
-                'Você não tem permissão para essa ação'
+              console.log(
+                'Usuário não possui um token válido e será tentado o refresh'
               );
+              // this.toastService.error('Acesso negado', err.error?.erro);
+              // this.router.navigate(['/login']);
               break;
+            // case 403:
+            //   console.log('Recurso solicitado não foi autorizado');
+            //   this.toastService.error(
+            //     'Acesso negado',
+            //     'Você não tem permissão para essa ação'
+            //   );
+            //   break;
             case 404:
               console.log('Recurso solicitado não foi localizado');
               this.toastService.error('Recurso solicitado não foi localizado');
@@ -53,11 +55,13 @@ export class ErrosHttp implements HttpInterceptor {
               break;
             default:
               console.log('Erro ' + codigoErro);
-              this.toastService.error(err.message);
+              this.toastService.error('Erro não identificado:' + err.message);
               break;
           }
         }
-        console.error('Erro HTTP:', err);
+        if (codigoErro != 401) {
+          console.error('Erro HTTP:', err);
+        }
         return throwError(() => err);
       })
     );

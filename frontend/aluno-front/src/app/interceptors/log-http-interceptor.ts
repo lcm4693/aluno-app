@@ -17,6 +17,12 @@ export class LogHTTP implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    //Não logar o refresh e response do refresh
+    const isRefreshRequest = req.url.includes('/auth/refresh');
+    if (isRefreshRequest) {
+      return next.handle(req);
+    }
+
     if (environment.logHttpRequests) {
       console.log('🔵 REQUEST');
       console.log('URL:', req.urlWithParams);
@@ -39,7 +45,7 @@ export class LogHTTP implements HttpInterceptor {
           }
         },
         error: (error: any) => {
-          if (environment.logHttpRequests) {
+          if (environment.logHttpRequests && error.status != 401) {
             console.error('🔴 ERROR RESPONSE');
             if (error instanceof HttpErrorResponse) {
               console.error('Status:', error.status);

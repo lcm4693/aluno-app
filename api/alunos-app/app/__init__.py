@@ -12,14 +12,6 @@ from .routes.authentication import auth_bp
 from flask_jwt_extended import JWTManager
 from app.utils.logger_config import configurar_logger
 
-from .models.aluno import Aluno
-from .models.pais import Pais
-from .models.idioma import Idioma
-from .models.usuario import Usuario
-from .models.aula import Aula
-from .models.aluno_idioma import AlunoIdioma
-
-
 # logger = configurar_logger(__name__)
 
 
