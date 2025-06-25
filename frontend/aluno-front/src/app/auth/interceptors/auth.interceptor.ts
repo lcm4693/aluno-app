@@ -69,8 +69,8 @@ export class AuthInterceptor implements HttpInterceptor {
                 this.router.navigate(['/login']);
                 return throwError(() => error);
               }
-              this.toastService.success('Token renovado');
-              console.log('Token renovado');
+              // this.toastService.success('Token renovado');
+              // console.log('Token renovado');
 
               const newToken = this.userStore.getToken();
               const retryReq = req.clone({
