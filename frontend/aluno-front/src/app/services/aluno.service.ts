@@ -35,10 +35,4 @@ export class AlunoService {
   excluirAluno(idAluno: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${idAluno}`);
   }
-
-  buscarFotoAlunoPorNome(nomeFoto: string): Observable<Blob> {
-    return this.http.get(`api/fotos/${nomeFoto}`, {
-      responseType: 'blob',
-    });
-  }
 }

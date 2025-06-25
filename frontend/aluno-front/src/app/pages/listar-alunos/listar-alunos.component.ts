@@ -45,11 +45,6 @@ export class ListarAlunosComponent {
     this.alunoService.getAlunos().subscribe({
       next: (res) => {
         this.alunos = res;
-        // Para cada aluno, buscar a imagem correspondente
-        this.alunos.forEach((aluno: Aluno) => {
-          const nomeFoto = aluno.fotoUrl; // ou o campo correspondente
-          // this.buscarFotoAluno(nomeFoto, aluno);
-        });
       },
       complete: () => {},
     });

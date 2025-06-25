@@ -15,22 +15,6 @@ if APP_ENV == "dev":
     load_dotenv()
 
 
-# ✅ 2. Validação de variáveis de ambiente obrigatórias
-def validar_variaveis():
-    REQUIRED_ENV_VARS = [
-        "DB_HOST",
-        "DB_PORT",
-        "DB_USER",
-        "DB_PASS",
-        "DB_NAME",
-    ]
-    missing = [var for var in REQUIRED_ENV_VARS if not os.getenv(var)]
-    if missing:
-        raise EnvironmentError(
-            f"⚠️ Variáveis de ambiente faltando: {', '.join(missing)}"
-        )
-
-
 # ✅ 3. Montagem da URL de conexão com o banco
 DATABASE_URL = (
     f"mysql+mysqldb://{Config.DB_USER}:{Config.DB_PASS}"
@@ -40,7 +24,7 @@ DATABASE_URL = (
 # ✅ 4. Engine e Session do SQLAlchemy
 engine = create_engine(
     DATABASE_URL,
-    echo=False,
+    echo=True,  # imprime as queries executadas
     pool_pre_ping=True,
     poolclass=QueuePool,
     pool_size=5,  # número de conexões persistentes no pool

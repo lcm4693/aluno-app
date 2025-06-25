@@ -1,11 +1,11 @@
 import logging
-import os
+from app.config import Config
 
 
 def configurar_logger(nome_logger=None):
     logger = logging.getLogger(nome_logger)
 
-    logLevelEnv = os.getenv("LOG_LEVEL")
+    logLevelEnv = Config.LOG_LEVEL
     logLevel = logging.INFO
 
     if logLevelEnv == "ERROR":

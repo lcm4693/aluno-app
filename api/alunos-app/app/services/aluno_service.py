@@ -1,7 +1,6 @@
 # app/services/aluno_service.py
 
 from app.models.aluno import Aluno
-from app.models.aula import Aula
 from flask import url_for
 from app.services.idioma_service import buscar_idiomas_aluno
 from sqlalchemy.orm import joinedload
@@ -9,6 +8,7 @@ from app.database import get_session
 from app.services.shared_service import retornar_id_aluno_banco
 from app.models.aluno_idioma import AlunoIdioma
 from datetime import datetime, timezone, time
+from app.config import Config
 
 
 def inserir_aluno(dados, foto_filename, idiomas_ids, id_usuario):
@@ -137,12 +137,12 @@ def buscar_aluno_completo(aluno_id, id_usuario):
 def alterar_nome_foto_para_url_foto(aluno):
     foto_nome = aluno.get("foto")
     if foto_nome:
-        aluno["fotoUrl"] = url_for(
-            "fotos.serve_foto", filename=foto_nome, _external=True
+        aluno["fotoUrl"] = (
+            f"https://{Config.AWS_S3_BUCKET}.s3.{Config.AWS_S3_REGION}.amazonaws.com/{foto_nome}"
         )
     else:
-        aluno["fotoUrl"] = url_for(
-            "fotos.serve_foto", filename="foto0.png", _external=True
+        aluno["fotoUrl"] = (
+            f"https://{Config.AWS_S3_BUCKET}.s3.{Config.AWS_S3_REGION}.amazonaws.com/{Config.AWS_S3_PASTA}foto0.png"
         )
     aluno.pop("foto", None)
     return aluno

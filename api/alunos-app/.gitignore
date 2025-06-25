@@ -36,9 +36,6 @@ env/
 # Arquivos temporários
 *.tmp
 
-# Imagens de upload (opcional — se quiser ignorar fotos locais)
-# static/fotos/
-
 # Arquivos do sistema (Windows)
 Thumbs.db
 desktop.ini

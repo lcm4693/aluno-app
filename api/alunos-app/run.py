@@ -1,12 +1,11 @@
 # run.py
 
-from app.database import validar_variaveis  # ⬅️ Executa só uma vez
+from app import create_app
+from app.config import validar_variaveis
+from werkzeug.security import generate_password_hash
+
 
 validar_variaveis()
-
-from app import create_app
-
-from werkzeug.security import generate_password_hash
 
 app = create_app()
 

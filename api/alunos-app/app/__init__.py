@@ -6,13 +6,9 @@ from .config import Config
 from .routes.alunos import alunos_bp
 from .routes.idiomas import idiomas_bp
 from .routes.aulas import aulas_bp
-from .routes.fotos import fotos_bp
 from .routes.paises import paises_bp
 from .routes.authentication import auth_bp
 from flask_jwt_extended import JWTManager
-from app.utils.logger_config import configurar_logger
-
-# logger = configurar_logger(__name__)
 
 
 def create_app():
@@ -37,7 +33,6 @@ def create_app():
     app.register_blueprint(alunos_bp)
     app.register_blueprint(idiomas_bp)
     app.register_blueprint(aulas_bp)
-    app.register_blueprint(fotos_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(paises_bp)
 

@@ -2,7 +2,7 @@
 
 from flask import Blueprint, request, jsonify
 
-from app.utils.file_utils import salvar_foto
+from app.utils.foto_utils import salvar_foto
 from app.services.aluno_service import inserir_aluno
 from app.services.aluno_service import buscar_aluno_completo
 from app.services.aluno_service import buscar_lista_aluno
