@@ -12,4 +12,22 @@ import { TooltipModule } from 'primeng/tooltip';
 export class CidadePaisSpanComponent {
   @Input() cidade?: string;
   @Input() pais?: string;
+
+  retornarUrlMaps() {
+    const arrayCidade: string[] = this.cidade ? this.cidade?.split(',') : [];
+    if (this.pais) {
+      arrayCidade[arrayCidade.length] = this.pais;
+    }
+
+    let retorno = 'https://www.google.com/maps/place/';
+
+    let acumulador = '';
+    arrayCidade.forEach((place) => {
+      acumulador += '+' + place + ',';
+    });
+
+    acumulador = acumulador.replace('+', '');
+
+    return acumulador != null ? retorno + acumulador : null;
+  }
 }

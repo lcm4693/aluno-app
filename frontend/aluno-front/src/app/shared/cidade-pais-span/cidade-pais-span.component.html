@@ -2,3 +2,11 @@
   cidade + (pais ? " - " + pais : "")
 }}</span>
 <span *ngIf="!cidade && pais" class="ml-1">{{ pais }}</span>
+<a
+  pTooltip="Abrir Google maps"
+  *ngIf="cidade || pais"
+  [href]="retornarUrlMaps()"
+  target="_blank"
+  class="ml-3 link-icone"
+  >🗺️</a
+>

@@ -121,6 +121,12 @@ tr {
   cursor: pointer;
 }
 
+.link-icone {
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 1.3rem;
+}
+
 .white-space-pre-line {
   white-space: pre-line !important;
 }
