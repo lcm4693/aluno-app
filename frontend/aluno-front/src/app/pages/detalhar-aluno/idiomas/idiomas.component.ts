@@ -6,11 +6,20 @@ import { Idioma } from '../../../models/idioma';
 import { HttpClient } from '@angular/common/http';
 import { IdiomaService } from '../../../services/idioma.service';
 import { FormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-idiomas',
   standalone: true,
-  imports: [CommonModule, FieldsetModule, CheckboxModule, FormsModule],
+  imports: [
+    CommonModule,
+    FieldsetModule,
+    CheckboxModule,
+    FormsModule,
+    ButtonModule,
+    TooltipModule,
+  ],
   templateUrl: './idiomas.component.html',
   styleUrl: './idiomas.component.css',
 })
