@@ -86,7 +86,7 @@ def get_aluno(aluno_id):
     if erro:
         return jsonify({"erro": erro}), 404
 
-    logger.debug("get_aluno: " + str(aluno_id) + ": %", aluno)
+    logger.debug(f"get_aluno: {aluno_id} - {aluno}")
     return jsonify(aluno), 200
 
 

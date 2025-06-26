@@ -24,7 +24,7 @@ DATABASE_URL = (
 # ✅ 4. Engine e Session do SQLAlchemy
 engine = create_engine(
     DATABASE_URL,
-    echo=True,  # imprime as queries executadas
+    echo=False,  # imprime as queries executadas
     pool_pre_ping=True,
     poolclass=QueuePool,
     pool_size=5,  # número de conexões persistentes no pool

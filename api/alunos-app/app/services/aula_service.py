@@ -3,11 +3,39 @@
 from app.database import get_session
 from app.services.shared_service import retornar_id_aluno_banco
 from app.models.aula import Aula
+from app.models.aluno import Aluno
 from datetime import datetime
 import time
 from app.utils.logger_config import configurar_logger
+from datetime import datetime, timezone, time
 
 logger = configurar_logger(__name__)
+
+
+def listar_aulas_do_usuario(id_usuario):
+    with get_session() as session:
+        # Busca as aulas do usuario
+        aulas = (
+            session.query(
+                Aula.id, Aula.data, Aula.aluno_id, Aluno.nome.label("nomeAluno")
+            )
+            .join(Aluno)
+            .filter(Aluno.id_usuario == id_usuario, Aluno.deletado == False)
+            .order_by(Aula.data.desc())
+            .all()
+        )
+
+        return [
+            {
+                "id": aula.id,
+                "dataAula": (datetime.combine(aula.data, time.max)).replace(
+                    tzinfo=timezone.utc
+                ),
+                "aluno_id": aula.aluno_id,
+                "nomeAluno": aula.nomeAluno,
+            }
+            for aula in aulas
+        ], None
 
 
 def listar_aulas_do_aluno(aluno_id, id_usuario):

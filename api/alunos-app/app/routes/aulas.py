@@ -5,6 +5,7 @@ from app.services.aula_service import (
     listar_aulas_do_aluno,
     criar_aula_para_aluno,
     atualizar_aula_para_aluno,
+    listar_aulas_do_usuario,
 )
 from app.utils.error_handler import handle_errors
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -14,6 +15,19 @@ from app.utils.logger_config import configurar_logger
 logger = configurar_logger(__name__)
 
 aulas_bp = Blueprint("aulas", __name__, url_prefix="/api/aulas")
+
+
+@aulas_bp.route("/", methods=["GET"])
+@handle_errors
+@jwt_required()
+def buscar_aulas_do_usuario():
+    id_usuario = get_jwt_identity()
+    resultado, erro = listar_aulas_do_usuario(id_usuario)
+
+    if erro:
+        return jsonify({"erro": erro}), 404
+
+    return jsonify(resultado), 200
 
 
 @aulas_bp.route("/<int:aluno_id>", methods=["GET"])
