@@ -4,7 +4,7 @@
       class="flex flex-column md:flex-row align-items-start gap-4"
       *ngIf="aluno"
     >
-      <div class="flex flex-column align-items-center">
+      <div class="flex flex-column align-items-center w-2">
         <!-- Foto -->
         <img
           [src]="aluno.fotoUrl"
@@ -13,10 +13,49 @@
           style="width: 9rem"
         />
         <!-- Data de início -->
-        <span class="mt-2 text-sm text-color-secondary">
-          Desde xx/xx/xxxx
+        <div class="mt-2 text-sm text-color-secondary text-center">
+          <span *ngIf="!editandoAlunoDesde">Aluno desde dd/MM/yyyy</span>
           <!-- desde {{ aluno.dataCadastro | date : "dd/MM/yyyy" }} -->
-        </span>
+          <span *ngIf="editandoAlunoDesde">Aluno desde</span>
+          <!-- <input
+            pInputText
+            id="alunoDesde"
+            style="width: 6.5rem"
+            *ngIf="editandoAlunoDesde"
+          /> -->
+
+          <p-calendar
+            *ngIf="editandoAlunoDesde"
+            dateFormat="dd/mm/yy"
+            [showIcon]="true"
+            styleClass="calendario-pequeno"
+            appendTo="body"
+          ></p-calendar>
+
+          <!-- #idadeRef="ngModel"
+            [(ngModel)]="alunoEditado!.idade" -->
+        </div>
+        <div>
+          <!-- Botão cancelar (só aparece no modo de edição) -->
+          <button
+            *ngIf="editandoAlunoDesde"
+            class="botao-cancelar"
+            pTooltip="Cancelar edição"
+            tooltipPosition="left"
+            (click)="cancelarEdicaoDesde()"
+          >
+            <i class="pi pi-times"></i>
+          </button>
+          <button
+            class="botao-editar"
+            tooltipPosition="right"
+            (click)="executarEdicaoAlunoDesde()"
+          >
+            <i
+              class="pi {{ !editandoAlunoDesde ? 'pi-pencil' : 'pi-check' }}"
+            ></i>
+          </button>
+        </div>
       </div>
       <!-- Informações -->
       <div class="flex flex-column gap-3 w-full">

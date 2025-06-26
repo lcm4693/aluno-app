@@ -21,6 +21,7 @@ import { IdiomaService } from '../../services/idioma.service';
 import { AlunoBasico } from './informacoes-basicas/dto/aluno-informacoes-basicas';
 import { DetalharAulaComponent } from './detalhar-aula/detalhar-aula.component';
 import { ToastService } from '../../services/toast.service';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   standalone: true,
@@ -37,6 +38,7 @@ import { ToastService } from '../../services/toast.service';
     TooltipModule,
     InformacoesBasicasComponent,
     IdiomasComponent,
+    InputTextModule,
   ],
   templateUrl: './detalhar-aluno.component.html',
   styleUrl: './detalhar-aluno.component.css',
@@ -53,6 +55,7 @@ export class DetalharAlunoComponent implements OnInit {
   modalNovaDetalharAulaVisivel = false;
 
   fotoAlunoUrl: SafeUrl | null = null;
+  editandoAlunoDesde: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -191,5 +194,17 @@ export class DetalharAlunoComponent implements OnInit {
     this.aluno!.aulas.sort((a, b) => {
       return new Date(b.dataAula).getTime() - new Date(a.dataAula).getTime();
     });
+  }
+
+  cancelarEdicaoDesde() {
+    this.editandoAlunoDesde = false;
+  }
+
+  executarEdicaoAlunoDesde() {
+    if (this.editandoAlunoDesde) {
+      console.log('atualizar o campo');
+    }
+
+    this.editandoAlunoDesde = !this.editandoAlunoDesde;
   }
 }

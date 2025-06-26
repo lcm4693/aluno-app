@@ -6,6 +6,7 @@
       class="botao-cancelar"
       pTooltip="Cancelar edição"
       tooltipPosition="left"
+      style="position: absolute; top: -0.4rem; right: 2rem"
       (click)="cancelarEdicao()"
     >
       <i class="pi pi-times"></i>
@@ -16,6 +17,7 @@
       pTooltip="Editar idiomas"
       tooltipPosition="left"
       (click)="executarAcaoEdicao()"
+      style="position: absolute; top: -0.4rem; right: 0.5rem"
     >
       <i class="pi {{ !modoEdicao ? 'pi-pencil' : 'pi-check' }}"></i>
     </button>

@@ -6,6 +6,7 @@
       class="botao-cancelar"
       pTooltip="Cancelar edição"
       tooltipPosition="left"
+      style="position: absolute; top: -0.4rem; right: 2rem"
       (click)="cancelarEdicao()"
     >
       <i class="pi pi-times"></i>
@@ -16,6 +17,7 @@
       pTooltip="Editar informações pessoais"
       tooltipPosition="left"
       (click)="executarAcaoEdicao()"
+      style="position: absolute; top: -0.4rem; right: 0.5rem"
     >
       <i class="pi {{ !modoEdicao ? 'pi-pencil' : 'pi-check' }}"></i>
     </button>
@@ -51,8 +53,8 @@
             />
           </ng-template>
         </div>
-        <div class="col-12 md:col-4">
-          <span class="icone" pTooltip="Idade" tooltipPosition="top">🎂</span>
+        <div class="col-6 md:col-2">
+          <span class="icone" pTooltip="Idade" tooltipPosition="top">🕰️</span>
           <ng-container *ngIf="!modoEdicao; else edicaoCampoIdade">
             <span class="ml-1">{{ alunoEditado!.idade }}</span>
           </ng-container>
@@ -64,7 +66,26 @@
               #idadeRef="ngModel"
               [(ngModel)]="alunoEditado!.idade"
               class="ml-1"
+              style="width: 7rem"
             />
+          </ng-template>
+        </div>
+        <div class="col-6 md:col-2">
+          <span class="icone" pTooltip="Aniversário" tooltipPosition="top"
+            >🎂</span
+          >
+          <ng-container *ngIf="!modoEdicao; else edicaoCampoAniversario">
+            <span class="ml-1">dd/MM/yyyy</span>
+          </ng-container>
+          <ng-template #edicaoCampoAniversario>
+            <input
+              pInputText
+              id="aniversario"
+              class="ml-1"
+              style="width: 7rem"
+            />
+            <!-- #aniversarioRef="ngModel"
+              [(ngModel)]="alunoEditado!.aniversario" -->
           </ng-template>
         </div>
         <div class="col-12 md:col-4">
@@ -97,23 +118,6 @@
               [paisesFiltrados]="paisesFiltradosPaisNatal"
               (buscarPaises)="filtrarPaisNatal($event)"
             />
-            <!-- <input
-                pInputText
-                #moraRef="ngModel"
-                [(ngModel)]="alunoEditado!.cidadeNatal"
-                class="ml-1 mb-2"
-                style="width: 10rem"
-              />
-              <p-autoComplete
-                id="paisNatal"
-                placeholder="Escolha o país"
-                [(ngModel)]="paisNatalObj"
-                [suggestions]="paisesFiltradosPaisNatal"
-                (completeMethod)="filtrarPaisNatal($event)"
-                optionLabel="nome"
-                [field]="'nome'"
-                class="p-autocomplete-input-inf-basicas"
-              /> -->
           </ng-template>
         </div>
         <div class="col-12 md:col-4">
@@ -128,7 +132,7 @@
               pInputText
               #moraRef="ngModel"
               [(ngModel)]="alunoEditado!.profissao"
-              class="ml-1"
+              class="ml-1 w-10"
             />
           </ng-template>
         </div>
