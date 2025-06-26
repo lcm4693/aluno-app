@@ -7,7 +7,7 @@ from app.models.aluno import Aluno
 from datetime import datetime
 import time
 from app.utils.logger_config import configurar_logger
-from datetime import datetime, timezone, time
+from datetime import datetime, timezone
 
 logger = configurar_logger(__name__)
 
