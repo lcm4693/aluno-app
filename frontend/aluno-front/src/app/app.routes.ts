@@ -5,6 +5,7 @@ import { DetalharAlunoComponent } from './pages/detalhar-aluno/detalhar-aluno.co
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './auth/login/login.component';
 import { authGuard } from './auth/guard/auth.guard';
+import { CalendarioAulasComponent } from './pages/calendario-aulas/calendario-aulas.component';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,11 @@ export const routes: Routes = [
   {
     path: 'alunos/:id',
     component: DetalharAlunoComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'calendario-aulas',
+    component: CalendarioAulasComponent,
     canActivate: [authGuard],
   },
 ];
