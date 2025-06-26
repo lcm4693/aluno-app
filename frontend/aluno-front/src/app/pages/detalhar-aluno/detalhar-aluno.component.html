@@ -1,5 +1,5 @@
 <div class="surface-100 p-4 min-h-screen flex justify-content-center">
-  <p-card class="w-full md:w-10">
+  <p-card class="w-full md:w-full">
     <div
       class="flex flex-column md:flex-row align-items-start gap-4"
       *ngIf="aluno"
@@ -14,23 +14,19 @@
         />
         <!-- Data de início -->
         <div class="mt-2 text-sm text-color-secondary text-center">
-          <span *ngIf="!editandoAlunoDesde">Aluno desde dd/MM/yyyy</span>
-          <!-- desde {{ aluno.dataCadastro | date : "dd/MM/yyyy" }} -->
-          <span *ngIf="editandoAlunoDesde">Aluno desde</span>
-          <!-- <input
-            pInputText
-            id="alunoDesde"
-            style="width: 6.5rem"
-            *ngIf="editandoAlunoDesde"
-          /> -->
+          <span>Aluno desde</span>
 
-          <p-calendar
-            *ngIf="editandoAlunoDesde"
-            dateFormat="dd/mm/yy"
-            [showIcon]="true"
-            styleClass="calendario-pequeno"
-            appendTo="body"
-          ></p-calendar>
+          <div class="flex flex-column">
+            <span *ngIf="!editandoAlunoDesde">dd/MM/yyyy</span>
+            <!-- desde {{ aluno.dataCadastro | date : "dd/MM/yyyy" }} -->
+            <p-calendar
+              *ngIf="editandoAlunoDesde"
+              dateFormat="dd/mm/yy"
+              [showIcon]="true"
+              styleClass="calendario-pequeno"
+              appendTo="body"
+            ></p-calendar>
+          </div>
 
           <!-- #idadeRef="ngModel"
             [(ngModel)]="alunoEditado!.idade" -->
