@@ -16,6 +16,7 @@ import { MessageService } from 'primeng/api';
 import { AuthInterceptor } from './auth/interceptors/auth.interceptor';
 import { ErrosHttp } from './interceptors/erros-http.interceptor';
 import { LogHTTP } from './interceptors/log-http-interceptor';
+import { LoadingInterceptor } from './interceptors/loading.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,6 +29,11 @@ export const appConfig: ApplicationConfig = {
       routes,
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })
     ), // 👈 essa linha garante que o scroll volta pro topo),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoadingInterceptor,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

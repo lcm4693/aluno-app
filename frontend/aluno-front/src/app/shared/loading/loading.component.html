@@ -1,0 +1,14 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [closable]="false"
+  [dismissableMask]="false"
+  [showHeader]="false"
+  [style]="{ width: 'auto' }"
+  [styleClass]="'p-dialog-loading'"
+>
+  <div class="flex flex-column align-items-center p-4">
+    <p-progressSpinner strokeWidth="4"></p-progressSpinner>
+    <p class="mt-3">Carregando...</p>
+  </div>
+</p-dialog>

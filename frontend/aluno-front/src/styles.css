@@ -249,6 +249,11 @@ tr {
   background-color: #e0e2e3;
 }
 
+.p-dialog-loading .p-dialog-content {
+  background: transparent;
+  box-shadow: none;
+}
+
 .fc-event-title-container {
   text-align: center;
 }
