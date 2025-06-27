@@ -135,12 +135,20 @@ tr {
   font-size: 1.3rem;
 }
 
+.botao-nova-aula .span {
+  font-size: 1.15rem;
+}
+
 .botao-editar {
   background: none;
   border: none;
   color: var(--primary-color, #007ad9);
   cursor: pointer;
   font-size: 1.2rem;
+}
+
+.botao-editar .pi {
+  font-size: 1.15rem;
 }
 
 .botao-editar:hover {
