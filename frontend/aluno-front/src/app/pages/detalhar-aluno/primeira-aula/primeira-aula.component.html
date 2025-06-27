@@ -1,0 +1,47 @@
+<form [formGroup]="form">
+  <!-- Data de início -->
+  <div class="mt-2 text-sm text-color-secondary text-center">
+    <span>Aluno desde</span>
+
+    <div class="flex flex-column">
+      <span *ngIf="!editandoAlunoDesde">{{
+        aluno.dataPrimeiraAula
+          ? (aluno.dataPrimeiraAula | date : "dd/MM/yyyy")
+          : "-"
+      }}</span>
+      <p-calendar
+        *ngIf="editandoAlunoDesde"
+        formControlName="dataPrimeiraAula"
+        dateFormat="dd/mm/yy"
+        [showIcon]="true"
+        styleClass="calendario-pequeno"
+        appendTo="body"
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+            form.get('dataPrimeiraAula')?.invalid &&
+            form.get('dataPrimeiraAula')?.touched
+        }"
+        [maxDate]="hoje"
+      ></p-calendar>
+      <!--class="w-full"
+              [maxDate]="hoje" -->
+    </div>
+    <!-- Botão cancelar (só aparece no modo de edição) -->
+    <button
+      *ngIf="editandoAlunoDesde"
+      class="botao-cancelar"
+      pTooltip="Cancelar edição"
+      tooltipPosition="left"
+      (click)="cancelarEdicaoDesde()"
+    >
+      <i class="pi pi-times"></i>
+    </button>
+    <button
+      class="botao-editar"
+      tooltipPosition="right"
+      (click)="executarEdicaoAlunoDesde()"
+    >
+      <i class="pi {{ !editandoAlunoDesde ? 'pi-pencil' : 'pi-check' }}"></i>
+    </button>
+  </div>
+</form>

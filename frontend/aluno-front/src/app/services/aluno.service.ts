@@ -35,4 +35,11 @@ export class AlunoService {
   excluirAluno(idAluno: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${idAluno}`);
   }
+
+  alunoDesde(idAluno: number, dataPrimeiraAula: Date): Observable<any> {
+    return this.http.put(
+      `${this.baseUrl}/primeira-aula/${idAluno}`,
+      dataPrimeiraAula
+    );
+  }
 }

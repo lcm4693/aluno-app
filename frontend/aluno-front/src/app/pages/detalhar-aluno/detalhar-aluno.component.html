@@ -12,47 +12,10 @@
           class="img-detalhe-aluno"
           style="width: 9rem"
         />
-        <!-- Data de início -->
-        <div class="mt-2 text-sm text-color-secondary text-center">
-          <span>Aluno desde</span>
 
-          <div class="flex flex-column">
-            <span *ngIf="!editandoAlunoDesde">dd/MM/yyyy</span>
-            <!-- desde {{ aluno.dataCadastro | date : "dd/MM/yyyy" }} -->
-            <p-calendar
-              *ngIf="editandoAlunoDesde"
-              dateFormat="dd/mm/yy"
-              [showIcon]="true"
-              styleClass="calendario-pequeno"
-              appendTo="body"
-            ></p-calendar>
-          </div>
-
-          <!-- #idadeRef="ngModel"
-            [(ngModel)]="alunoEditado!.idade" -->
-        </div>
-        <div>
-          <!-- Botão cancelar (só aparece no modo de edição) -->
-          <button
-            *ngIf="editandoAlunoDesde"
-            class="botao-cancelar"
-            pTooltip="Cancelar edição"
-            tooltipPosition="left"
-            (click)="cancelarEdicaoDesde()"
-          >
-            <i class="pi pi-times"></i>
-          </button>
-          <button
-            class="botao-editar"
-            tooltipPosition="right"
-            (click)="executarEdicaoAlunoDesde()"
-          >
-            <i
-              class="pi {{ !editandoAlunoDesde ? 'pi-pencil' : 'pi-check' }}"
-            ></i>
-          </button>
-        </div>
+        <app-primeira-aula [aluno]="aluno" *ngIf="aluno" />
       </div>
+
       <!-- Informações -->
       <div class="flex flex-column gap-3 w-full">
         <!-- Nome -->

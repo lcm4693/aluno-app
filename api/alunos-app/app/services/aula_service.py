@@ -7,7 +7,8 @@ from app.models.aluno import Aluno
 from datetime import datetime
 import time
 from app.utils.logger_config import configurar_logger
-from datetime import datetime, timezone
+from datetime import datetime, timezone, time as time_date_time
+from app.utils.date_utils import converter_data_para_front, converter_data_para_banco
 
 logger = configurar_logger(__name__)
 
@@ -28,9 +29,7 @@ def listar_aulas_do_usuario(id_usuario):
         return [
             {
                 "id": aula.id,
-                "dataAula": (datetime.combine(aula.data, time.max)).replace(
-                    tzinfo=timezone.utc
-                ),
+                "dataAula": converter_data_para_front(aula.data),
                 "aluno_id": aula.aluno_id,
                 "nomeAluno": aula.nomeAluno,
             }
@@ -73,12 +72,8 @@ def criar_aula_para_aluno(aluno_id, dados, usuario_id):
             if not aluno:
                 return None, "Aluno não encontrado"
 
-            data_convertida = datetime.fromisoformat(
-                dados.get("dataAula").replace("Z", "+00:00")
-            ).date()
-
             nova_aula = Aula(
-                data=data_convertida,
+                data=converter_data_para_banco(dados.get("dataAula")),
                 anotacoes=dados.get("anotacoes"),
                 comentarios=dados.get("comentarios"),
                 proxima_aula=dados.get("proximaAula"),
@@ -113,11 +108,7 @@ def atualizar_aula_para_aluno(aluno_id, aula_id, usuario_id, dados):
             if not aula:
                 return None, "Aula não encontrada"
 
-            data_convertida = datetime.fromisoformat(
-                dados.get("dataAula").replace("Z", "+00:00")
-            ).date()
-
-            aula.data = data_convertida
+            aula.data = converter_data_para_banco(dados.get("dataAula"))
             aula.anotacoes = dados.get("anotacoes")
             aula.comentarios = dados.get("comentarios")
             aula.proxima_aula = dados.get("proximaAula")

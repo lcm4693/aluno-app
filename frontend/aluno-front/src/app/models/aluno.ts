@@ -20,6 +20,7 @@ export class Aluno {
     public fotoUrl: string,
     public recomendacoes: string[],
     public notas: string[],
+    public dataPrimeiraAula: Date,
     public aulas: Aula[],
     public paisMora: Pais | undefined,
     public paisNatal: Pais | undefined

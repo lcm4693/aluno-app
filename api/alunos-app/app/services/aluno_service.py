@@ -7,8 +7,9 @@ from sqlalchemy.orm import joinedload
 from app.database import get_session
 from app.services.shared_service import retornar_id_aluno_banco
 from app.models.aluno_idioma import AlunoIdioma
-from datetime import datetime, timezone, time
+from datetime import datetime
 from app.config import Config
+from app.utils.date_utils import converter_data_para_front, converter_data_para_banco
 
 
 def inserir_aluno(dados, foto_filename, idiomas_ids, id_usuario):
@@ -90,6 +91,7 @@ def buscar_aluno_completo(aluno_id, id_usuario):
         if not aluno:
             return None, "Aluno não encontrado"
 
+        print("Data:", aluno.data_primeira_aula)
         # Convertendo para dict manualmente (ou use um serializador depois)
         aluno_dict_resultado = {
             "id": aluno.id,
@@ -104,6 +106,7 @@ def buscar_aluno_completo(aluno_id, id_usuario):
             "pontos": aluno.pontos,
             "linkPerfil": aluno.link_perfil,
             "foto": aluno.foto,
+            "dataPrimeiraAula": converter_data_para_front(aluno.data_primeira_aula),
             "paisMora": (
                 {"id": aluno.pais_mora.id, "nome": aluno.pais_mora.nome}
                 if aluno.pais_mora
@@ -117,9 +120,7 @@ def buscar_aluno_completo(aluno_id, id_usuario):
             "aulas": [
                 {
                     "id": aula.id,
-                    "dataAula": (datetime.combine(aula.data, time.max)).replace(
-                        tzinfo=timezone.utc
-                    ),
+                    "dataAula": converter_data_para_front(aula.data),
                     "anotacoes": aula.anotacoes,
                     "comentarios": aula.comentarios,
                     "proximaAula": aula.proxima_aula,
@@ -187,4 +188,19 @@ def excluir_aluno(aluno_id, id_usuario=None):
 
         aluno.deletado = True
         session.add(aluno)  # opcional, mas explícito
+        return None, 200
+
+
+def atualizar_data_primeira_aula(aluno_id, data_primeira_aula, id_usuario):
+    with get_session() as session:
+        aluno = retornar_id_aluno_banco(aluno_id, id_usuario)
+
+        if not aluno:
+            return "Aluno não encontrado", 404
+
+        aluno.data_primeira_aula = converter_data_para_banco(data_primeira_aula)
+
+        session.add(aluno)  # opcional, mas explícito
+        # commit é feito automaticamente no get_session()
+
         return None, 200

@@ -1,5 +1,5 @@
 # app/models/aluno.py
-from sqlalchemy import Column, Integer, String, Text, Enum, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, String, Text, Enum, ForeignKey, Boolean, Date
 from sqlalchemy.orm import relationship
 from app.database import Base
 
@@ -20,6 +20,8 @@ class Aluno(Base):
     link_perfil = Column(Text)
     foto = Column(Text)
     deletado = Column(Boolean, default=False)
+    data_primeira_aula = Column(Date)
+
     id_usuario = Column(Integer, ForeignKey("usuarios.id"))
     id_pais_mora = Column(Integer, ForeignKey("paises.id"))
     id_pais_natal = Column(Integer, ForeignKey("paises.id"))
@@ -48,4 +50,5 @@ class Aluno(Base):
             "id_usuario": self.id_usuario,
             "id_pais_mora": self.id_pais_mora,
             "id_pais_natal": self.id_pais_natal,
+            "data_primeira_aula": self.data_primeira_aula,
         }

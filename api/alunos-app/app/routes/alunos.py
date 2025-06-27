@@ -3,11 +3,14 @@
 from flask import Blueprint, request, jsonify
 
 from app.utils.foto_utils import salvar_foto
-from app.services.aluno_service import inserir_aluno
-from app.services.aluno_service import buscar_aluno_completo
-from app.services.aluno_service import buscar_lista_aluno
-from app.services.aluno_service import atualizar_informacoes_basicas
-from app.services.aluno_service import excluir_aluno
+from app.services.aluno_service import (
+    inserir_aluno,
+    atualizar_informacoes_basicas,
+    buscar_lista_aluno,
+    buscar_aluno_completo,
+    excluir_aluno,
+    atualizar_data_primeira_aula,
+)
 from app.utils.error_handler import handle_errors
 from app.utils.validators import AlunoInputDTO
 from app.utils.logger_config import configurar_logger
@@ -117,3 +120,20 @@ def deletar_aluno(aluno_id):
         return jsonify({"erro": erro}), status
 
     return jsonify({"mensagem": "Aluno excluído com sucesso"}), 200
+
+
+@alunos_bp.route("/primeira-aula/<int:aluno_id>", methods=["PUT"])
+@handle_errors
+@jwt_required()
+def put_aluno_primeira_aula(aluno_id):
+    idUsuario = get_jwt_identity()
+
+    data_primeira_aula = request.get_json()
+    erro, status = atualizar_data_primeira_aula(
+        aluno_id, data_primeira_aula, id_usuario=idUsuario
+    )
+
+    if erro:
+        return jsonify({"erro": erro}), status
+
+    return jsonify({"mensagem": "Informação atualizada com sucesso"}), 200

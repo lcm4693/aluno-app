@@ -1,0 +1,67 @@
+import { CommonModule } from '@angular/common';
+import { AfterContentChecked, Component, Input, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { CalendarModule } from 'primeng/calendar';
+import { Aluno } from '../../../models/aluno';
+import { AlunoService } from '../../../services/aluno.service';
+import { ToastService } from '../../../services/toast.service';
+
+@Component({
+  selector: 'app-primeira-aula',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, CalendarModule],
+  templateUrl: './primeira-aula.component.html',
+  styleUrl: './primeira-aula.component.css',
+})
+export class PrimeiraAulaComponent {
+  editandoAlunoDesde: boolean = false;
+  @Input() aluno!: Aluno;
+
+  form: FormGroup;
+  hoje: Date = new Date();
+
+  constructor(
+    private fb: FormBuilder,
+    private alunoService: AlunoService,
+    private toastService: ToastService
+  ) {
+    this.form = this.fb.group({
+      dataPrimeiraAula: [
+        { value: this.aluno?.dataPrimeiraAula || new Date() },
+        Validators.required,
+      ],
+    });
+  }
+
+  cancelarEdicaoDesde() {
+    this.editandoAlunoDesde = false;
+  }
+
+  executarEdicaoAlunoDesde() {
+    if (this.editandoAlunoDesde) {
+      if (this.form.invalid) {
+        this.form.markAllAsTouched();
+        return;
+      }
+
+      const dataPrimeiraAula = this.form.value.dataPrimeiraAula;
+      this.alunoService.alunoDesde(this.aluno.id, dataPrimeiraAula).subscribe({
+        next: (res) => {
+          this.toastService.success(res.mensagem);
+          this.aluno.dataPrimeiraAula = dataPrimeiraAula;
+        },
+        error: (err) => {
+          console.log('Erro ocorrido');
+          return;
+        },
+        complete: () => {},
+      });
+    }
+    this.editandoAlunoDesde = !this.editandoAlunoDesde;
+  }
+}
