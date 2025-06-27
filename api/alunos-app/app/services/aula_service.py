@@ -7,7 +7,6 @@ from app.models.aluno import Aluno
 from datetime import datetime
 import time
 from app.utils.logger_config import configurar_logger
-from datetime import datetime, timezone, time as time_date_time
 from app.utils.date_utils import converter_data_para_front, converter_data_para_banco
 
 logger = configurar_logger(__name__)
