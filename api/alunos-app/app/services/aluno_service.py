@@ -91,7 +91,6 @@ def buscar_aluno_completo(aluno_id, id_usuario):
         if not aluno:
             return None, "Aluno não encontrado"
 
-        print("Data:", aluno.data_primeira_aula)
         # Convertendo para dict manualmente (ou use um serializador depois)
         aluno_dict_resultado = {
             "id": aluno.id,
