@@ -60,7 +60,7 @@ export class ListarAlunosComponent {
             const t = this.removerAcentos(termo?.toLowerCase().trim() || '');
             this.alunosFiltrados = this.alunos.filter((a) => {
               const alunoTexto = this.removerAcentos(
-                JSON.stringify(a).toLowerCase()
+                Object.values(a).join(' ').toLowerCase()
               );
               return alunoTexto.includes(t);
             });
