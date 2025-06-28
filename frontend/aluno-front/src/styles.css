@@ -176,6 +176,21 @@ tr {
   font-size: 0.85rem;
 }
 
+.calendar-card {
+  overflow-x: auto;
+
+  margin: 2rem auto;
+  padding: 1rem;
+  max-width: 1200px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  background-color: #ffffff;
+}
+
+:host ::ng-deep .fc {
+  padding: 1rem;
+}
+
 .checkbox-group-horizontal {
   display: flex;
   flex-wrap: wrap;
@@ -187,6 +202,34 @@ tr {
   display: flex;
   align-items: center;
   white-space: nowrap; /* evita quebra de linha no label */
+}
+
+@keyframes entradaBusca {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.busca-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 0;
+  animation: entradaBusca 1s ease;
+}
+
+.busca-box {
+  background-color: #e2eef6; /* azul bem claro */
+  border-radius: 6px;
+  padding: 0.3rem 0.7rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  max-width: 500px;
+  width: 100%;
 }
 
 .p-tooltip .p-tooltip-text {
@@ -233,6 +276,10 @@ tr {
   background: #e0e2e3;
 }
 
+.p-datatable .p-sortable-column.p-highlight .p-sortable-column-icon {
+  color: #fff;
+}
+
 .p-table td,
 .p-datatable td,
 .p-datatable .p-column-title,
@@ -264,4 +311,8 @@ tr {
 
 .fc-event-title-container {
   text-align: center;
+}
+
+.p-datatable-tbody > tr:hover {
+  background-color: #c6d9e8 !important;
 }

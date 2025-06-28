@@ -11,11 +11,12 @@ import { AulaService } from '../../services/aula.service';
 import ptBrLocale from '@fullcalendar/core/locales/pt-br';
 import { ButtonModule } from 'primeng/button';
 import { Router } from '@angular/router';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-calendario-aulas',
   standalone: true,
-  imports: [CommonModule, FullCalendarModule, ButtonModule],
+  imports: [CommonModule, FullCalendarModule, ButtonModule, CardModule],
   templateUrl: './calendario-aulas.component.html',
   styleUrl: './calendario-aulas.component.css',
 })

@@ -12,6 +12,9 @@ import { DialogModule } from 'primeng/dialog';
 import { AlunoService } from '../../services/aluno.service';
 import { Aluno } from '../../models/aluno';
 import { ToastService } from '../../services/toast.service';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { debounceTime } from 'rxjs';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   standalone: true,
@@ -25,6 +28,8 @@ import { ToastService } from '../../services/toast.service';
     TooltipModule,
     ConfirmDialogModule,
     DialogModule,
+    ReactiveFormsModule,
+    InputTextModule,
   ],
   providers: [ConfirmationService], // <-- Aqui você fornece o serviço!
   templateUrl: './listar-alunos.component.html',
@@ -32,6 +37,9 @@ import { ToastService } from '../../services/toast.service';
 })
 export class ListarAlunosComponent {
   alunos: any[] = [];
+
+  searchControl = new FormControl('');
+  alunosFiltrados: Aluno[] = [];
 
   constructor(
     private router: Router,
@@ -45,6 +53,18 @@ export class ListarAlunosComponent {
     this.alunoService.getAlunos().subscribe({
       next: (res) => {
         this.alunos = res;
+        this.alunosFiltrados = [...this.alunos]; // lista original
+        this.searchControl.valueChanges
+          .pipe(debounceTime(300))
+          .subscribe((termo: string | null) => {
+            const t = this.removerAcentos(termo?.toLowerCase().trim() || '');
+            this.alunosFiltrados = this.alunos.filter((a) => {
+              const alunoTexto = this.removerAcentos(
+                JSON.stringify(a).toLowerCase()
+              );
+              return alunoTexto.includes(t);
+            });
+          });
       },
       complete: () => {},
     });
@@ -52,6 +72,10 @@ export class ListarAlunosComponent {
 
   voltarInicio(): void {
     this.router.navigateByUrl('');
+  }
+
+  removerAcentos(texto: string): string {
+    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   }
 
   confirmarExclusao(alunoParaExcluir: any) {

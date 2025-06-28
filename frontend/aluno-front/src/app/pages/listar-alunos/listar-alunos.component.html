@@ -7,14 +7,33 @@
     icon="pi pi-exclamation-triangle"
   ></p-confirmDialog>
 
+  <div class="busca-wrapper">
+    <div class="p-inputgroup busca-box">
+      <span class="p-inputgroup-addon"
+        ><i class="pi pi-search" style="font-size: 1.3rem; color: #0d6efd"></i
+      ></span>
+      <input
+        type="text"
+        pInputText
+        placeholder="Pesquise por nome, cidade, profissão..."
+        [formControl]="searchControl"
+        class="width:100%"
+      />
+    </div>
+  </div>
+
   <!-- Tabela -->
   <p-table
-    [value]="alunos"
+    [value]="alunosFiltrados"
+    [responsiveLayout]="'stack'"
     styleClass="p-datatable-gridlines p-datatable-striped text-center"
   >
     <ng-template pTemplate="header">
       <tr>
-        <th class="text-center" style="width: 380px">Nome</th>
+        <th pSortableColumn="nome" class="text-center" style="width: 380px">
+          Nome
+          <p-sortIcon field="nome"></p-sortIcon>
+        </th>
         <th class="text-center">Nível</th>
         <th class="text-center" style="width: 200px">Cidade</th>
         <th class="text-center" style="width: 180px">Profissão</th>
