@@ -23,7 +23,7 @@ export class LogHTTP implements HttpInterceptor {
       return next.handle(req);
     }
 
-    if (environment.logHttpRequests) {
+    if (environment.logDesenv) {
       console.log('🔵 REQUEST');
       console.log('URL:', req.urlWithParams);
       console.log('Método:', req.method);
@@ -36,7 +36,7 @@ export class LogHTTP implements HttpInterceptor {
     return next.handle(req).pipe(
       tap({
         next: (event: any) => {
-          if (event instanceof HttpResponse && environment.logHttpRequests) {
+          if (event instanceof HttpResponse && environment.logDesenv) {
             console.log('🟢 RESPONSE');
             console.log('Status:', event.status);
             console.log('URL:', event.url);
@@ -45,7 +45,7 @@ export class LogHTTP implements HttpInterceptor {
           }
         },
         error: (error: any) => {
-          if (environment.logHttpRequests && error.status != 401) {
+          if (environment.logDesenv && error.status != 401) {
             console.error('🔴 ERROR RESPONSE');
             if (error instanceof HttpErrorResponse) {
               console.error('Status:', error.status);

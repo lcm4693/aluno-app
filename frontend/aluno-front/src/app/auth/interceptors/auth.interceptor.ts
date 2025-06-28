@@ -11,6 +11,7 @@ import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { UserStoreService } from '../services/user-store.service';
 import { ToastService } from '../../services/toast.service';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -69,8 +70,10 @@ export class AuthInterceptor implements HttpInterceptor {
                 this.router.navigate(['/login']);
                 return throwError(() => error);
               }
-              // this.toastService.success('Token renovado');
-              // console.log('Token renovado');
+              if (environment.logDesenv) {
+                console.log('Token renovado');
+                this.toastService.success('Token renovado');
+              }
 
               const newToken = this.userStore.getToken();
               const retryReq = req.clone({
