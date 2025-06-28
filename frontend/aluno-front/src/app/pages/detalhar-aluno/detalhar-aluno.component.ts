@@ -23,6 +23,7 @@ import { DetalharAulaComponent } from './detalhar-aula/detalhar-aula.component';
 import { ToastService } from '../../services/toast.service';
 import { InputTextModule } from 'primeng/inputtext';
 import { PrimeiraAulaComponent } from './primeira-aula/primeira-aula.component';
+import { UploadFotoComponent } from './upload-foto/upload-foto.component';
 
 @Component({
   standalone: true,
@@ -41,6 +42,7 @@ import { PrimeiraAulaComponent } from './primeira-aula/primeira-aula.component';
     IdiomasComponent,
     InputTextModule,
     PrimeiraAulaComponent,
+    UploadFotoComponent,
   ],
   templateUrl: './detalhar-aluno.component.html',
   styleUrl: './detalhar-aluno.component.css',
@@ -53,6 +55,7 @@ export class DetalharAlunoComponent implements OnInit {
 
   aulaSelecionada: Aula | null = null;
 
+  modalAtualizarFotoVisivel = false;
   modalNovaAulaVisivel = false;
   modalNovaDetalharAulaVisivel = false;
 
@@ -195,5 +198,15 @@ export class DetalharAlunoComponent implements OnInit {
     this.aluno!.aulas.sort((a, b) => {
       return new Date(b.dataAula).getTime() - new Date(a.dataAula).getTime();
     });
+  }
+
+  abrirModalAtualizarFoto() {
+    this.modalAtualizarFotoVisivel = true;
+  }
+
+  atualizarFoto(imagem: Blob) {
+    console.log('IMAGEM FINALIZADA NO PAI');
+    console.log(imagem);
+    this.modalAtualizarFotoVisivel = false;
   }
 }

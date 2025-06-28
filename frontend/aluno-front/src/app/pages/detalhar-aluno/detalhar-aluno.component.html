@@ -9,8 +9,9 @@
         <img
           [src]="aluno.fotoUrl"
           alt="Foto do aluno"
-          class="img-detalhe-aluno"
+          class="img-detalhe-aluno cursor-pointer"
           style="width: 9rem"
+          (click)="abrirModalAtualizarFoto()"
         />
 
         <app-primeira-aula [aluno]="aluno" *ngIf="aluno" />
@@ -103,6 +104,16 @@
       </div>
     </div>
   </p-card>
+
+  <p-dialog
+    *ngIf="aluno"
+    [(visible)]="modalAtualizarFotoVisivel"
+    [modal]="true"
+    header="Atualizar Foto do Aluno"
+    [style]="{ width: '500px', maxWidth: '90vw' }"
+  >
+    <app-upload-foto (fotoAtualizada)="atualizarFoto($event)"></app-upload-foto>
+  </p-dialog>
 
   <p-dialog
     header="Nova Aula"

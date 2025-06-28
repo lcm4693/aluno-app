@@ -1,0 +1,48 @@
+<!-- <div class="mb-3">
+  <input type="file" accept="image/*" (change)="carregarImagem($event)" />
+</div> -->
+<div
+  #imageContainer
+  class="border-2 border-dashed surface-border surface-100 p-4 border-round mt-4 mb-4"
+  style="
+    display: flex;
+    background-color: #e1e1e1 !important;
+    justify-content: center;
+  "
+>
+  <image-cropper
+    [imageChangedEvent]="imagemEvento"
+    [maintainAspectRatio]="false"
+    format="jpeg"
+    style="height: 300px; display: block; margin-bottom: 1rem"
+    (imageCropped)="onImageCropped($event)"
+  ></image-cropper>
+</div>
+
+<div class="flex justify-content-between align-items-center w-full mt-4">
+  <div class="flex gap-2 justify-content-center">
+    <button
+      pButton
+      label="Salvar"
+      (click)="salvarFoto()"
+      *ngIf="imagemEvento"
+    ></button>
+
+    <button
+      pButton
+      label="Colar Imagem"
+      (click)="colarImagem()"
+      *ngIf="!imagemEvento"
+    ></button>
+    <button
+      pButton
+      label="Cancelar"
+      (click)="resetarCropper()"
+      *ngIf="imagemEvento"
+    ></button>
+  </div>
+</div>
+
+<!-- <ng-template pTemplate="footer">
+  <button pButton label="Salvar" (click)="salvarFoto()"></button>
+</ng-template> -->
