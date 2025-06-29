@@ -42,4 +42,8 @@ export class AlunoService {
       dataPrimeiraAula
     );
   }
+
+  uploadFoto(idAluno: number, formData: FormData): Observable<any> {
+    return this.http.post(`${this.baseUrl}/upload-foto/${idAluno}`, formData);
+  }
 }

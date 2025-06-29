@@ -10,11 +10,13 @@ from app.services.aluno_service import (
     buscar_aluno_completo,
     excluir_aluno,
     atualizar_data_primeira_aula,
+    alterar_foto_usuario,
 )
 from app.utils.error_handler import handle_errors
 from app.utils.validators import AlunoInputDTO
 from app.utils.logger_config import configurar_logger
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from app.config import Config
 
 logger = configurar_logger(__name__)
 
@@ -137,3 +139,27 @@ def put_aluno_primeira_aula(aluno_id):
         return jsonify({"erro": erro}), status
 
     return jsonify({"mensagem": "Informação atualizada com sucesso"}), 200
+
+
+@alunos_bp.route("/upload-foto/<int:aluno_id>", methods=["POST"])
+@handle_errors
+@jwt_required()
+def incluir_foto(aluno_id):
+    idUsuario = get_jwt_identity()
+    if "foto" not in request.files:
+        return jsonify({"erro": "Nenhum arquivo enviado"}), 400
+
+    foto = request.files["foto"]
+
+    if foto.filename == "":
+        return jsonify({"erro": "Nome do arquivo vazio"}), 400
+
+    foto_filename = alterar_foto_usuario(foto, aluno_id, idUsuario) if foto else None
+
+    if foto and not foto_filename:
+        logger.error("Formato de imagem não suportado")
+        return jsonify({"error": "Formato de imagem não suportado"}), 400
+
+    url = f"https://{Config.AWS_S3_BUCKET}.s3.amazonaws.com/{foto_filename}"
+
+    return jsonify({"url": url}), 200

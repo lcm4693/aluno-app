@@ -22,3 +22,15 @@ def upload_imagem_s3(buffer, extensao, pasta=Config.AWS_S3_PASTA):
 
     # url = f"https://{Config.AWS_S3_BUCKET}.s3.amazonaws.com/{nome_arquivo}"
     return nome_arquivo
+
+
+def mover_imagem_s3_backup(caminho_atual, caminho_destino):
+    # Copia a imagem para o novo local
+    s3.copy_object(
+        Bucket=Config.AWS_S3_BUCKET,
+        CopySource={"Bucket": Config.AWS_S3_BUCKET, "Key": caminho_atual},
+        Key=caminho_destino,
+    )
+
+    # Deleta a original
+    s3.delete_object(Bucket=Config.AWS_S3_BUCKET, Key=caminho_atual)

@@ -112,7 +112,10 @@
     header="Atualizar Foto do Aluno"
     [style]="{ width: '500px', maxWidth: '90vw' }"
   >
-    <app-upload-foto (fotoAtualizada)="atualizarFoto($event)"></app-upload-foto>
+    <app-upload-foto
+      [aluno]="aluno"
+      (fotoAtualizada)="atualizarFoto($event)"
+    ></app-upload-foto>
   </p-dialog>
 
   <p-dialog

@@ -10,6 +10,7 @@ from app.models.aluno_idioma import AlunoIdioma
 from datetime import datetime
 from app.config import Config
 from app.utils.date_utils import converter_data_para_front, converter_data_para_banco
+from app.utils.foto_utils import salvar_foto, mover_foto_para_backup
 
 
 def inserir_aluno(dados, foto_filename, idiomas_ids, id_usuario):
@@ -203,3 +204,26 @@ def atualizar_data_primeira_aula(aluno_id, data_primeira_aula, id_usuario):
         # commit é feito automaticamente no get_session()
 
         return None, 200
+
+
+def alterar_foto_usuario(file, aluno_id: int, id_usuario: int):
+    with get_session() as session:
+        aluno = (
+            session.query(Aluno)
+            .filter(
+                Aluno.id == aluno_id,
+                Aluno.id_usuario == id_usuario,
+                Aluno.deletado == 0,
+            )
+            .first()
+        )
+
+        if not aluno:
+            return None, "Aluno não encontrado"
+
+        mover_foto_para_backup(aluno.foto, id_usuario)
+        final_filename = salvar_foto(file)
+        aluno.foto = final_filename
+        session.add(aluno)
+
+        return final_filename

@@ -12,6 +12,8 @@ import {
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
+import { AlunoService } from '../../../services/aluno.service';
+import { Aluno } from '../../../models/aluno';
 
 @Component({
   selector: 'app-upload-foto',
@@ -21,12 +23,15 @@ import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
   styleUrl: './upload-foto.component.css',
 })
 export class UploadFotoComponent {
-  // @Input() fotoUrl: string = '';
-  @Output() fotoAtualizada = new EventEmitter<Blob>(); // base64 final
+  @Input() aluno!: Aluno;
+  @Output() fotoAtualizada = new EventEmitter<string>(); // base64 final
 
   @Input() reset: any;
 
-  constructor(private cdRef: ChangeDetectorRef) {}
+  constructor(
+    private cdRef: ChangeDetectorRef,
+    private alunoService: AlunoService
+  ) {}
   modalAberta = false;
   imagemEvento: any;
   imagemCortada: Blob | null = null;
@@ -50,8 +55,17 @@ export class UploadFotoComponent {
   salvarFoto() {
     if (this.imagemCortada) {
       const imagemFinal = this.imagemCortada!;
-      this.resetarCropper();
-      this.fotoAtualizada.emit(imagemFinal);
+
+      const formData = new FormData();
+      formData.append('foto', imagemFinal, 'foto.png');
+
+      this.alunoService.uploadFoto(this.aluno.id, formData).subscribe({
+        next: (res) => {
+          console.log('Resposta:', res);
+          this.resetarCropper();
+          this.fotoAtualizada.emit(res.url);
+        },
+      });
     }
   }
 

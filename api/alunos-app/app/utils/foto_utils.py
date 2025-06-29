@@ -6,7 +6,7 @@ from PIL import Image
 from werkzeug.utils import secure_filename
 from app.config import Config
 from io import BytesIO
-from app.services.s3_service import upload_imagem_s3
+from app.services.s3_service import upload_imagem_s3, mover_imagem_s3_backup
 
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
 
@@ -32,3 +32,14 @@ def salvar_foto(file):
     final_filename = upload_imagem_s3(buffer, extensao, Config.AWS_S3_PASTA)
 
     return final_filename
+
+
+def mover_foto_para_backup(caminho_atual: str, id_usuario: int):
+    if not caminho_atual:
+        return
+
+    # Exemplo: fotos/nome.jpg → fotos/backup/1/nome.jpg
+    nome_arquivo = caminho_atual.split("/")[-1]
+    caminho_destino = f"{Config.AWS_S3_PASTA}/antigas/{id_usuario}/{nome_arquivo}"
+
+    mover_imagem_s3_backup(caminho_atual, caminho_destino)

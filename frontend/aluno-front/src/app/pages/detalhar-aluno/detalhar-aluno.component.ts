@@ -204,9 +204,9 @@ export class DetalharAlunoComponent implements OnInit {
     this.modalAtualizarFotoVisivel = true;
   }
 
-  atualizarFoto(imagem: Blob) {
-    console.log('IMAGEM FINALIZADA NO PAI');
-    console.log(imagem);
+  atualizarFoto(urlImagemNova: string) {
+    console.log('URL NOVA:', urlImagemNova);
+    this.aluno!.fotoUrl = urlImagemNova;
     this.modalAtualizarFotoVisivel = false;
   }
 }
