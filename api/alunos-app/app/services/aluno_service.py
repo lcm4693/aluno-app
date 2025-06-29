@@ -143,7 +143,7 @@ def alterar_nome_foto_para_url_foto(aluno):
         )
     else:
         aluno["fotoUrl"] = (
-            f"https://{Config.AWS_S3_BUCKET}.s3.{Config.AWS_S3_REGION}.amazonaws.com/{Config.AWS_S3_PASTA}foto0.png"
+            f"https://{Config.AWS_S3_BUCKET}.s3.{Config.AWS_S3_REGION}.amazonaws.com/{Config.AWS_S3_PASTA}/foto0.png"
         )
     aluno.pop("foto", None)
     return aluno
