@@ -167,26 +167,40 @@
     <!-- Linha 5: Upload de imagem -->
     <div class="field col-12" style="margin-bottom: 0.5rem">
       <label for="foto">Imagem do aluno:</label>
+
       <div
         #imageContainer
-        class="border-2 border-dashed surface-border surface-100 p-4 border-round"
+        class="border-2 border-dashed surface-border surface-100 p-4 border-round mt-4 mb-4"
         style="
           display: flex;
           background-color: #e1e1e1 !important;
           justify-content: center;
         "
-      ></div>
+      >
+        <image-cropper
+          [imageChangedEvent]="imagemEvento"
+          [maintainAspectRatio]="false"
+          format="jpeg"
+          style="display: block; margin-bottom: 1rem"
+          (imageCropped)="onImageCropped($event)"
+        ></image-cropper>
+      </div>
     </div>
     <div class="field col-12">
       <div class="flex justify-content-between align-items-center w-full">
         <!-- Botão à esquerda -->
         <div class="flex gap-2 col-3">
           <button
-            #pasteButton
             pButton
-            type="button"
-            label="Colar imagem"
-            class="p-button"
+            label="Colar Imagem"
+            (click)="colarImagem()"
+            *ngIf="!imagemEvento"
+          ></button>
+          <button
+            pButton
+            label="Cancelar"
+            (click)="resetarCropper()"
+            *ngIf="imagemEvento"
           ></button>
         </div>
 

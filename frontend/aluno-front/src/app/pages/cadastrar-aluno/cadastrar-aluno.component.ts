@@ -1,5 +1,5 @@
 import {
-  AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   OnInit,
@@ -19,7 +19,6 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import interact from 'interactjs';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { Idioma } from '../../models/idioma';
 import { InputTextareaModule } from 'primeng/inputtextarea';
@@ -28,6 +27,7 @@ import { AlunoService } from '../../services/aluno.service';
 import { ToastService } from '../../services/toast.service';
 import { PaisService } from '../../services/pais.service';
 import { Pais } from '../../models/pais';
+import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 
 @Component({
   standalone: true,
@@ -42,17 +42,18 @@ import { Pais } from '../../models/pais';
     CardModule,
     InputTextareaModule,
     AutoCompleteModule,
+    ImageCropperComponent,
   ],
   templateUrl: './cadastrar-aluno.component.html',
   styleUrl: './cadastrar-aluno.component.css',
 })
-export class CadastrarAlunoComponent implements AfterViewInit, OnInit {
+export class CadastrarAlunoComponent implements OnInit {
   @ViewChild('imageContainer') imageContainerRef!: ElementRef;
   @ViewChild('pasteButton') pasteButtonRef!: ElementRef;
   @ViewChild('pasteListener') pasteListenerRef!: ElementRef;
 
-  imagemAtual: HTMLImageElement | null = null;
-  imagemBlob: Blob | null = null;
+  // imagemAtual: HTMLImageElement | null = null;
+  // imagemBlob: Blob | null = null;
   idiomasDisponiveis: Idioma[] = [];
 
   form: FormGroup;
@@ -70,7 +71,11 @@ export class CadastrarAlunoComponent implements AfterViewInit, OnInit {
   paisesFiltradosMoraPais: any[] = [];
   paisesFiltradosPaisNatal: any[] = [];
 
+  imagemEvento: any;
+  imagemCortada: Blob | null = null;
+
   constructor(
+    private cdRef: ChangeDetectorRef,
     private fb: FormBuilder,
     private router: Router,
     private idiomaService: IdiomaService,
@@ -94,65 +99,6 @@ export class CadastrarAlunoComponent implements AfterViewInit, OnInit {
       pontos: [''],
       linkPerfil: [''],
       idiomas: [''],
-    });
-  }
-
-  ngAfterViewInit(): void {
-    const pasteBtn = this.pasteButtonRef.nativeElement as HTMLButtonElement;
-    const container = this.imageContainerRef.nativeElement as HTMLDivElement;
-
-    pasteBtn.addEventListener('click', () => {
-      navigator.clipboard
-        .read()
-        .then((items) => {
-          for (const item of items) {
-            if (
-              item.types.includes('image/png') ||
-              item.types.includes('image/jpeg')
-            ) {
-              item.getType(item.types[0]).then((blob) => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                  this.showImage(e.target?.result as string, container);
-                };
-                reader.readAsDataURL(blob);
-              });
-            }
-          }
-        })
-        .catch((err) => {
-          alert('Erro ao colar imagem. Tente Ctrl+V ou use outro navegador.');
-        });
-    });
-  }
-
-  showImage(dataUrl: string, container: HTMLElement) {
-    if (this.imagemAtual) {
-      this.imagemAtual.remove();
-    }
-
-    const img = document.createElement('img');
-    img.src = dataUrl;
-    img.style.width = '200px';
-    this.imagemAtual = img;
-    container.appendChild(img);
-
-    interact(img).resizable({
-      edges: { left: true, right: true, bottom: true, top: true },
-      listeners: {
-        move(event) {
-          Object.assign(event.target.style, {
-            width: `${event.rect.width}px`,
-            height: `${event.rect.height}px`,
-          });
-        },
-      },
-      modifiers: [
-        interact.modifiers.restrictSize({
-          min: { width: 100, height: 100 },
-          max: { width: 800, height: 800 },
-        }),
-      ],
     });
   }
 
@@ -190,30 +136,7 @@ export class CadastrarAlunoComponent implements AfterViewInit, OnInit {
       return;
     }
 
-    if (this.imagemAtual) {
-      const canvas = document.createElement('canvas');
-      canvas.width = this.imagemAtual.width; // usa dimensões visuais finais
-      canvas.height = this.imagemAtual.height;
-
-      const ctx = canvas.getContext('2d');
-
-      const imagem = new Image();
-      imagem.onload = () => {
-        ctx?.drawImage(imagem, 0, 0, canvas.width, canvas.height);
-
-        canvas.toBlob((blob) => {
-          if (blob) {
-            // console.log('Imagem convertida em Blob com sucesso.');
-            this.imagemBlob = blob;
-            this.enviarFormulario();
-          }
-        }, 'image/png');
-      };
-
-      imagem.src = this.imagemAtual.src;
-    } else {
-      this.enviarFormulario();
-    }
+    this.enviarFormulario();
   }
 
   enviarFormulario(): void {
@@ -250,8 +173,8 @@ export class CadastrarAlunoComponent implements AfterViewInit, OnInit {
       }
     }
 
-    if (this.imagemBlob) {
-      formData.append('foto', this.imagemBlob, 'foto.png');
+    if (this.imagemCortada) {
+      formData.append('foto', this.imagemCortada, 'foto.png');
     }
 
     this.alunoService.incluirAluno(formData).subscribe({
@@ -294,5 +217,60 @@ export class CadastrarAlunoComponent implements AfterViewInit, OnInit {
     this.paisesFiltradosPaisNatal = this.paises.filter((pais) =>
       pais.nome.toLowerCase().includes(query)
     );
+  }
+
+  resetarCropper() {
+    this.imagemEvento = null;
+    this.imagemCortada = null;
+    this.imagemCortada = null;
+  }
+
+  carregarImagem(event: any) {
+    this.imagemEvento = null;
+    this.cdRef.detectChanges(); // força o Angular a reagir
+    this.imagemEvento = event;
+  }
+
+  onImageCropped(event: ImageCroppedEvent) {
+    this.imagemCortada = event.blob ?? null;
+  }
+
+  colarImagem() {
+    navigator.clipboard
+      .read()
+      .then((items) => {
+        for (const item of items) {
+          if (
+            item.types.includes('image/png') ||
+            item.types.includes('image/jpeg')
+          ) {
+            item.getType(item.types[0]).then((blob) => {
+              const file = new File([blob], 'imagem-colada.png', {
+                type: blob.type,
+              });
+
+              // ✅ Simular um input:file com FileList real
+              const dataTransfer = new DataTransfer();
+              dataTransfer.items.add(file);
+
+              const fakeInputEvent = new Event('change');
+              Object.defineProperty(fakeInputEvent, 'target', {
+                writable: false,
+                value: { files: dataTransfer.files },
+              });
+
+              this.carregarImagem(fakeInputEvent);
+            });
+            return;
+          }
+        }
+        alert('Nenhuma imagem encontrada na área de transferência.');
+      })
+      .catch((err) => {
+        console.error('Erro ao acessar a área de transferência:', err);
+        alert(
+          'Não foi possível acessar a área de transferência. Isso requer HTTPS ou localhost.'
+        );
+      });
   }
 }
