@@ -34,12 +34,12 @@ def salvar_foto(file):
     return final_filename
 
 
-def mover_foto_para_backup(caminho_atual: str, id_usuario: int):
+def mover_foto_para_backup(caminho_atual: str, aluno_id: int):
     if not caminho_atual:
         return
 
     # Exemplo: fotos/nome.jpg → fotos/backup/1/nome.jpg
     nome_arquivo = caminho_atual.split("/")[-1]
-    caminho_destino = f"{Config.AWS_S3_PASTA}/antigas/{id_usuario}/{nome_arquivo}"
+    caminho_destino = f"{Config.AWS_S3_PASTA}/antigas/{aluno_id}/{nome_arquivo}"
 
     mover_imagem_s3_backup(caminho_atual, caminho_destino)

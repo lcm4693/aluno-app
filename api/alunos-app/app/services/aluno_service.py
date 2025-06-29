@@ -221,7 +221,7 @@ def alterar_foto_usuario(file, aluno_id: int, id_usuario: int):
         if not aluno:
             return None, "Aluno não encontrado"
 
-        mover_foto_para_backup(aluno.foto, id_usuario)
+        mover_foto_para_backup(aluno.foto, aluno.id)
         final_filename = salvar_foto(file)
         aluno.foto = final_filename
         session.add(aluno)
