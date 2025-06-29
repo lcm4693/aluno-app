@@ -205,7 +205,6 @@ export class DetalharAlunoComponent implements OnInit {
   }
 
   atualizarFoto(urlImagemNova: string) {
-    console.log('URL NOVA:', urlImagemNova);
     this.aluno!.fotoUrl = urlImagemNova;
     this.modalAtualizarFotoVisivel = false;
   }
