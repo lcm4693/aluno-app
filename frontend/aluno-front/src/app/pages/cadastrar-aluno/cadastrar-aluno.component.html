@@ -178,6 +178,7 @@
         "
       >
         <image-cropper
+          *ngIf="imagemEvento"
           [imageChangedEvent]="imagemEvento"
           [maintainAspectRatio]="false"
           format="jpeg"
@@ -198,7 +199,7 @@
           ></button>
           <button
             pButton
-            label="Cancelar"
+            label="Limpar Imagem"
             (click)="resetarCropper()"
             *ngIf="imagemEvento"
           ></button>
