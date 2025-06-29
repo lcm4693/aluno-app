@@ -12,6 +12,7 @@ import ptBrLocale from '@fullcalendar/core/locales/pt-br';
 import { ButtonModule } from 'primeng/button';
 import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
+import { Constants } from '../../shared/constants';
 
 @Component({
   selector: 'app-calendario-aulas',
@@ -53,15 +54,40 @@ export class CalendarioAulasComponent implements OnInit {
           nomeAluno: string;
         }[]
       ) => {
-        this.calendarOptions.events = aulas.map((aula) => ({
-          title: aula.nomeAluno,
-          start: new Date(aula.dataAula),
-          allDay: true,
-          extendedProps: {
-            id: aula.id,
-            alunoId: aula.aluno_id,
-          },
-        }));
+        const mapaCores = new Map<number, string>();
+
+        // this.calendarOptions.events = aulas.map((aula) => ({
+        //   title: aula.nomeAluno,
+        //   start: new Date(aula.dataAula),
+        //   allDay: true,
+        //   extendedProps: {
+        //     id: aula.id,
+        //     alunoId: aula.aluno_id,
+        //   },
+        // }));
+
+        const eventos = aulas.map((aula) => {
+          let cor = mapaCores.get(aula.aluno_id);
+
+          if (!cor) {
+            cor = this.gerarCorPorId(aula.aluno_id);
+            mapaCores.set(aula.aluno_id, cor);
+          }
+
+          return {
+            title: aula.nomeAluno,
+            start: new Date(aula.dataAula),
+            allDay: true,
+            backgroundColor: cor,
+            borderColor: cor,
+            textColor: 'white',
+            extendedProps: {
+              alunoId: aula.aluno_id,
+            },
+          };
+        });
+
+        this.calendarOptions.events = eventos;
       }
     );
   }
@@ -72,6 +98,10 @@ export class CalendarioAulasComponent implements OnInit {
       console.log(aula);
       // this.router.navigate(['/aulas', aulaId]); // Ex: /aulas/48
     }
+  }
+
+  gerarCorPorId(id: number): string {
+    return Constants.CORES_VIBRANTES[id % Constants.CORES_VIBRANTES.length]; // simples, mas eficaz
   }
 
   voltarParaListagem(): void {

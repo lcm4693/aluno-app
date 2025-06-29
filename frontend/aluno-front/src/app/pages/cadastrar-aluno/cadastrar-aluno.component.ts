@@ -28,6 +28,7 @@ import { ToastService } from '../../services/toast.service';
 import { PaisService } from '../../services/pais.service';
 import { Pais } from '../../models/pais';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
+import { Constants } from '../../shared/constants';
 
 @Component({
   standalone: true,
@@ -58,14 +59,7 @@ export class CadastrarAlunoComponent implements OnInit {
 
   form: FormGroup;
 
-  niveis = [
-    { label: 'A1', value: 'A1' },
-    { label: 'A2', value: 'A2' },
-    { label: 'B1', value: 'B1' },
-    { label: 'B2', value: 'B2' },
-    { label: 'C1', value: 'C1' },
-    { label: 'C2', value: 'C2' },
-  ];
+  niveis = Constants.niveis;
 
   paises: Pais[] = [];
   paisesFiltradosMoraPais: any[] = [];
