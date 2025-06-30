@@ -22,6 +22,9 @@ import { Constants } from '../../shared/constants';
   styleUrl: './calendario-aulas.component.css',
 })
 export class CalendarioAulasComponent implements OnInit {
+  private mapaCores = new Map<number, string>();
+  private corIndex = 0;
+
   constructor(private aulaService: AulaService, private router: Router) {}
 
   calendarOptions: CalendarOptions = {
@@ -54,25 +57,8 @@ export class CalendarioAulasComponent implements OnInit {
           nomeAluno: string;
         }[]
       ) => {
-        const mapaCores = new Map<number, string>();
-
-        // this.calendarOptions.events = aulas.map((aula) => ({
-        //   title: aula.nomeAluno,
-        //   start: new Date(aula.dataAula),
-        //   allDay: true,
-        //   extendedProps: {
-        //     id: aula.id,
-        //     alunoId: aula.aluno_id,
-        //   },
-        // }));
-
         const eventos = aulas.map((aula) => {
-          let cor = mapaCores.get(aula.aluno_id);
-
-          if (!cor) {
-            cor = this.gerarCorPorId(aula.aluno_id);
-            mapaCores.set(aula.aluno_id, cor);
-          }
+          const cor = this.gerarCorUnica(aula.aluno_id);
 
           return {
             title: aula.nomeAluno,
@@ -100,8 +86,16 @@ export class CalendarioAulasComponent implements OnInit {
     }
   }
 
-  gerarCorPorId(id: number): string {
-    return Constants.CORES_VIBRANTES[id % Constants.CORES_VIBRANTES.length]; // simples, mas eficaz
+  private gerarCorUnica(alunoId: number): string {
+    if (!this.mapaCores.has(alunoId)) {
+      const cor =
+        Constants.CORES_VIBRANTES[
+          this.corIndex % Constants.CORES_VIBRANTES.length
+        ];
+      this.mapaCores.set(alunoId, cor);
+      this.corIndex++;
+    }
+    return this.mapaCores.get(alunoId)!;
   }
 
   voltarParaListagem(): void {
