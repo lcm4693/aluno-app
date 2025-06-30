@@ -68,7 +68,6 @@ export class AuthInterceptor implements HttpInterceptor {
               if (!success) {
                 this.userStore.clear();
                 this.router.navigate(['/login']);
-                return throwError(() => error);
               }
               if (environment.logDesenv) {
                 console.log('Token renovado');
