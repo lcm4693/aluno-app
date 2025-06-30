@@ -178,6 +178,7 @@ export class DetalharAlunoComponent implements OnInit {
       pontos,
       paisMora,
       paisNatal,
+      dataAniversario,
     } = this.aluno!;
 
     return {
@@ -191,6 +192,7 @@ export class DetalharAlunoComponent implements OnInit {
       pontos,
       paisMora,
       paisNatal,
+      dataAniversario,
     } as AlunoBasico;
   }
 

@@ -75,15 +75,22 @@
             >🎂</span
           >
           <ng-container *ngIf="!modoEdicao; else edicaoCampoAniversario">
-            <span class="ml-1">dd/MM/yyyy</span>
+            <span>{{
+              alunoEditado.dataAniversario
+                ? (alunoEditado.dataAniversario | date : "dd/MM/yyyy")
+                : ""
+            }}</span>
           </ng-container>
           <ng-template #edicaoCampoAniversario>
-            <input
-              pInputText
-              id="aniversario"
-              class="ml-1"
-              style="width: 7rem"
-            />
+            <p-calendar
+              *ngIf="edicaoCampoAniversario"
+              [(ngModel)]="alunoEditado.dataAniversario"
+              dateFormat="dd/mm/yy"
+              [showIcon]="true"
+              styleClass="calendario-pequeno"
+              appendTo="body"
+              [maxDate]="hoje"
+            ></p-calendar>
             <!-- #aniversarioRef="ngModel"
               [(ngModel)]="alunoEditado!.aniversario" -->
           </ng-template>

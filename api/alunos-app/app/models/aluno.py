@@ -21,6 +21,7 @@ class Aluno(Base):
     foto = Column(Text)
     deletado = Column(Boolean, default=False)
     data_primeira_aula = Column(Date)
+    data_aniversario = Column(Date)
 
     id_usuario = Column(Integer, ForeignKey("usuarios.id"))
     id_pais_mora = Column(Integer, ForeignKey("paises.id"))

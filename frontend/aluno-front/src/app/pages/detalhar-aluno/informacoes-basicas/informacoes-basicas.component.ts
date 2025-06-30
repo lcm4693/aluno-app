@@ -19,6 +19,7 @@ import { PaisService } from '../../../services/pais.service';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CidadePaisSpanComponent } from '../../../shared/cidade-pais-span/cidade-pais-span.component';
 import { CidadePaisInputComponent } from '../../../shared/cidade-pais-input/cidade-pais-input.component';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'app-informacoes-basicas',
@@ -34,6 +35,7 @@ import { CidadePaisInputComponent } from '../../../shared/cidade-pais-input/cida
     AutoCompleteModule,
     CidadePaisSpanComponent,
     CidadePaisInputComponent,
+    CalendarModule,
   ],
   templateUrl: './informacoes-basicas.component.html',
   styleUrl: './informacoes-basicas.component.css',
@@ -50,6 +52,8 @@ export class InformacoesBasicasComponent implements OnInit {
 
   paisNatalObj: Pais | undefined = undefined;
   paisMoraObj: Pais | undefined = undefined;
+
+  hoje: Date = new Date();
 
   constructor(private paisService: PaisService) {}
 

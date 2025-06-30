@@ -23,6 +23,7 @@ export class Aluno {
     public dataPrimeiraAula: Date,
     public aulas: Aula[],
     public paisMora: Pais | undefined,
-    public paisNatal: Pais | undefined
+    public paisNatal: Pais | undefined,
+    public dataAniversario: Date
   ) {}
 }

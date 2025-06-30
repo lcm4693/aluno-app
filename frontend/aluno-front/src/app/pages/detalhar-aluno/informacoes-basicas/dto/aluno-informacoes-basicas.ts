@@ -11,4 +11,5 @@ export interface AlunoBasico {
   pontos: string;
   paisMora: Pais | undefined;
   paisNatal: Pais | undefined;
+  dataAniversario: Date;
 }
