@@ -1,14 +1,19 @@
 # app/utils/date_utils.py
 
-from datetime import datetime, timezone, time
+from datetime import datetime, timezone, date, time
 
 
 def converter_data_para_front(data):
-    return (
-        (datetime.combine(data, time.max)).replace(tzinfo=timezone.utc)
-        if data
-        else None
-    )
+    if not data:
+        return None
+
+    if isinstance(data, datetime):
+        return data.replace(microsecond=0).isoformat()
+
+    if isinstance(data, date):
+        return datetime.combine(data, time.min).isoformat()
+
+    return str(data)  # fallback
 
 
 def converter_data_para_banco(data):

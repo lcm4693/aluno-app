@@ -87,12 +87,11 @@
               [(ngModel)]="alunoEditado.dataAniversario"
               dateFormat="dd/mm/yy"
               [showIcon]="true"
+              [showTime]="false"
               styleClass="calendario-pequeno"
               appendTo="body"
               [maxDate]="hoje"
             ></p-calendar>
-            <!-- #aniversarioRef="ngModel"
-              [(ngModel)]="alunoEditado!.aniversario" -->
           </ng-template>
         </div>
         <div class="col-12 md:col-4">

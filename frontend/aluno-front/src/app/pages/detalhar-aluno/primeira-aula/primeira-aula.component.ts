@@ -32,7 +32,7 @@ export class PrimeiraAulaComponent {
   ) {
     this.form = this.fb.group({
       dataPrimeiraAula: [
-        { value: this.aluno?.dataPrimeiraAula || new Date() },
+        this.aluno?.dataPrimeiraAula || new Date(),
         Validators.required,
       ],
     });
