@@ -89,7 +89,9 @@ export class InformacoesBasicasComponent implements OnInit {
       moraPaisObj: [''],
       moraPais: [''],
       idade: [this.alunoEditado.idade],
-      dataAniversario: [this.alunoEditado.dataAniversario || new Date()],
+      dataAniversario: [
+        new Date(this.alunoEditado.dataAniversario) || new Date(),
+      ],
       familia: [this.alunoEditado.familia],
       paisNatalObj: [''],
       cidadeNatal: [''],
