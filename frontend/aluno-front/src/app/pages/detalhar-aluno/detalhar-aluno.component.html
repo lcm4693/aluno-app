@@ -27,16 +27,16 @@
           {{ aluno.nome }} - {{ aluno.nivel }}
         </h2>
 
-        <!-- {{ aluno | json }} -->
-
         <!-- Grid das infos -->
         <div class="grid">
           <div class="col-12 md:col-12">
             <app-informacoes-basicas
+              *ngIf="alunoBasico"
               [alunoEditado]="alunoBasico"
               (editarInformacoesBasicas)="onEditarInformacoesBasicas($event)"
             ></app-informacoes-basicas>
             <app-idiomas
+              [idAluno]="aluno.id"
               [idiomasAluno]="aluno.idiomas"
               (editarIdiomas)="onEditarIdiomas($event)"
             ></app-idiomas>

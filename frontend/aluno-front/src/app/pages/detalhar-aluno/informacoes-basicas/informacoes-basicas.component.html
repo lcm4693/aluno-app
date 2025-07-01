@@ -1,200 +1,182 @@
-<div class="relative">
-  <div>
-    <!-- Botão cancelar (só aparece no modo de edição) -->
-    <button
-      *ngIf="modoEdicao"
-      class="botao-cancelar"
-      pTooltip="Cancelar edição"
-      tooltipPosition="left"
-      style="position: absolute; top: -0.4rem; right: 2rem"
-      (click)="cancelarEdicao()"
-    >
-      <i class="pi pi-times"></i>
-    </button>
-    <!-- Ícone do lápis -->
-    <button
-      class="botao-editar"
-      pTooltip="Editar informações pessoais"
-      tooltipPosition="left"
-      (click)="executarAcaoEdicao()"
-      style="position: absolute; top: -0.4rem; right: 0.5rem"
-    >
-      <i class="pi {{ !modoEdicao ? 'pi-pencil' : 'pi-check' }}"></i>
-    </button>
-  </div>
-  <div>
-    <p-fieldset legend="Informações pessoais" toggleable="true">
-      <div class="grid">
-        <div class="col-12 md:col-4">
-          <span
-            class="icone"
-            pTooltip="Local onde mora atualmente"
-            tooltipPosition="top"
-            >📍</span
-          >
-          <ng-container *ngIf="!modoEdicao; else edicaoCampoMora">
-            <app-cidade-pais-span
-              [cidade]="alunoEditado.mora"
-              [pais]="alunoEditado!.paisMora?.nome"
-            />
-          </ng-container>
-          <ng-template #edicaoCampoMora>
-            <!-- <input
-              pInputText
-              #moraRef="ngModel"
-              [(ngModel)]="alunoEditado!.mora"
-              class="ml-1"
-            /> -->
-            <app-cidade-pais-input
-              [(cidade)]="alunoEditado!.mora"
-              [(pais)]="paisMoraObj"
-              [paisesFiltrados]="paisesFiltradosPaisMora"
-              (buscarPaises)="filtrarPaisMora($event)"
-            />
-          </ng-template>
-        </div>
-        <div class="col-6 md:col-2">
-          <span class="icone" pTooltip="Idade" tooltipPosition="top">🕰️</span>
-          <ng-container *ngIf="!modoEdicao; else edicaoCampoIdade">
-            <span class="ml-1">{{ alunoEditado!.idade }}</span>
-          </ng-container>
-          <ng-template #edicaoCampoIdade>
-            <input
-              pInputText
-              id="idade"
-              type="number"
-              #idadeRef="ngModel"
-              [(ngModel)]="alunoEditado!.idade"
-              class="ml-1"
-              style="width: 7rem"
-            />
-          </ng-template>
-        </div>
-        <div class="col-6 md:col-2">
-          <span class="icone" pTooltip="Aniversário" tooltipPosition="top"
-            >🎂</span
-          >
-          <ng-container *ngIf="!modoEdicao; else edicaoCampoAniversario">
-            <span>{{
-              alunoEditado.dataAniversario
-                ? (alunoEditado.dataAniversario | date : "dd/MM/yyyy")
-                : ""
-            }}</span>
-          </ng-container>
-          <ng-template #edicaoCampoAniversario>
-            <p-calendar
-              *ngIf="edicaoCampoAniversario"
-              [(ngModel)]="alunoEditado.dataAniversario"
-              dateFormat="dd/mm/yy"
-              [showIcon]="true"
-              [showTime]="false"
-              styleClass="calendario-pequeno"
-              appendTo="body"
-              [maxDate]="hoje"
-            ></p-calendar>
-          </ng-template>
-        </div>
-        <div class="col-12 md:col-4">
-          <span class="icone" pTooltip="Família" tooltipPosition="top">👨‍👩‍👧‍👦</span>
-          <ng-container *ngIf="!modoEdicao; else edicaoCampoFamilia">
-            <span class="ml-1">{{ alunoEditado!.familia }}</span>
-          </ng-container>
-          <ng-template #edicaoCampoFamilia>
-            <input
-              pInputText
-              #familiaRef="ngModel"
-              [(ngModel)]="alunoEditado!.familia"
-              class="ml-2"
-            />
-          </ng-template>
-        </div>
-        <div class="col-12 md:col-4">
-          <span class="icone" pTooltip="Nasceu" tooltipPosition="top">🏠</span>
-          <ng-container *ngIf="!modoEdicao; else edicaoCampoCidadeNatal">
-            <app-cidade-pais-span
-              [cidade]="alunoEditado.cidadeNatal"
-              [pais]="alunoEditado.paisNatal?.nome"
-            />
-          </ng-container>
-
-          <ng-template #edicaoCampoCidadeNatal>
-            <app-cidade-pais-input
-              [(cidade)]="alunoEditado!.cidadeNatal"
-              [(pais)]="paisNatalObj"
-              [paisesFiltrados]="paisesFiltradosPaisNatal"
-              (buscarPaises)="filtrarPaisNatal($event)"
-            />
-          </ng-template>
-        </div>
-        <div class="col-12 md:col-4">
-          <span class="icone" pTooltip="Profissão" tooltipPosition="top"
-            >💼</span
-          >
-          <ng-container *ngIf="!modoEdicao; else edicaoCampoProfissao">
-            <span class="ml-1">{{ alunoEditado!.profissao }}</span>
-          </ng-container>
-          <ng-template #edicaoCampoProfissao>
-            <input
-              pInputText
-              #moraRef="ngModel"
-              [(ngModel)]="alunoEditado!.profissao"
-              class="ml-1 w-10"
-            />
-          </ng-template>
-        </div>
-        <div class="col-12 md:col-4">
-          <span class="icone" pTooltip="Hobbies" tooltipPosition="top">🎯</span>
-          <ng-container *ngIf="!modoEdicao; else edicaoCampoHobbies">
-            <span class="ml-1">{{ alunoEditado!.hobbies }}</span>
-          </ng-container>
-          <ng-template #edicaoCampoHobbies>
-            <input
-              pInputText
-              #moraRef="ngModel"
-              [(ngModel)]="alunoEditado!.hobbies"
-              class="ml-1"
-            />
-          </ng-template>
-        </div>
-        <div class="col-12 md:col-12">
-          <span class="icone" pTooltip="Perfil" tooltipPosition="top">👤</span>
-          <ng-container *ngIf="!modoEdicao; else edicaoCampoPerfil">
-            <a
-              [href]="alunoEditado!.linkPerfil"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="ml-1"
+<form [formGroup]="form">
+  <div class="relative">
+    <div>
+      <!-- Botão cancelar (só aparece no modo de edição) -->
+      <button
+        *ngIf="modoEdicao"
+        class="botao-cancelar"
+        pTooltip="Cancelar edição"
+        tooltipPosition="left"
+        style="position: absolute; top: -0.4rem; right: 2rem"
+        (click)="cancelarEdicao()"
+      >
+        <i class="pi pi-times"></i>
+      </button>
+      <!-- Ícone do lápis -->
+      <button
+        class="botao-editar"
+        pTooltip="Editar informações pessoais"
+        tooltipPosition="left"
+        (click)="executarAcaoEdicao()"
+        style="position: absolute; top: -0.4rem; right: 0.5rem"
+      >
+        <i class="pi {{ !modoEdicao ? 'pi-pencil' : 'pi-check' }}"></i>
+      </button>
+    </div>
+    <div>
+      <p-fieldset legend="Informações pessoais" toggleable="true">
+        <div class="grid">
+          <div class="col-12 md:col-4">
+            <span
+              class="icone"
+              pTooltip="Local onde mora atualmente"
+              tooltipPosition="top"
+              >📍</span
             >
-              <span>{{ alunoEditado!.linkPerfil }}</span>
-            </a>
-          </ng-container>
-          <ng-template #edicaoCampoPerfil>
-            <input
-              pInputText
-              #moraRef="ngModel"
-              [(ngModel)]="alunoEditado!.linkPerfil"
-              class="ml-1"
-            />
-          </ng-template>
-        </div>
+            <ng-container *ngIf="!modoEdicao; else edicaoCampoMora">
+              <app-cidade-pais-span
+                [cidade]="alunoEditado.mora"
+                [pais]="alunoEditado!.paisMora?.nome"
+              />
+            </ng-container>
+            <ng-template #edicaoCampoMora>
+              <app-cidade-pais-input
+                [(cidade)]="mora!"
+                [(pais)]="paisMoraObj"
+                [paisesFiltrados]="paisesFiltradosPaisMora"
+                (buscarPaises)="filtrarPaisMora($event)"
+              />
+            </ng-template>
+          </div>
+          <div class="col-6 md:col-2">
+            <span class="icone" pTooltip="Idade" tooltipPosition="top">🕰️</span>
+            <ng-container *ngIf="!modoEdicao; else edicaoCampoIdade">
+              <span class="ml-1">{{ alunoEditado!.idade }}</span>
+            </ng-container>
+            <ng-template #edicaoCampoIdade>
+              <input
+                pInputText
+                id="idade"
+                type="number"
+                formControlName="idade"
+                class="ml-1"
+                style="width: 7rem"
+              />
+            </ng-template>
+          </div>
+          <div class="col-6 md:col-2">
+            <span class="icone" pTooltip="Aniversário" tooltipPosition="top"
+              >🎂</span
+            >
+            <ng-container *ngIf="!modoEdicao; else edicaoCampoAniversario">
+              <span>{{
+                alunoEditado.dataAniversario
+                  ? (alunoEditado.dataAniversario | date : "dd/MM/yyyy")
+                  : ""
+              }}</span>
+            </ng-container>
+            <ng-template #edicaoCampoAniversario>
+              <p-calendar
+                *ngIf="modoEdicao"
+                formControlName="dataAniversario"
+                dateFormat="dd/mm/yy"
+                [showIcon]="true"
+                styleClass="calendario-pequeno"
+                appendTo="body"
+                [maxDate]="hoje"
+              ></p-calendar>
+            </ng-template>
+          </div>
+          <div class="col-12 md:col-4">
+            <span class="icone" pTooltip="Família" tooltipPosition="top"
+              >👨‍👩‍👧‍👦</span
+            >
+            <ng-container *ngIf="!modoEdicao; else edicaoCampoFamilia">
+              <span class="ml-1">{{ alunoEditado!.familia }}</span>
+            </ng-container>
+            <ng-template #edicaoCampoFamilia>
+              <input pInputText formControlName="familia" class="ml-2" />
+            </ng-template>
+          </div>
+          <div class="col-12 md:col-4">
+            <span class="icone" pTooltip="Nasceu" tooltipPosition="top"
+              >🏠</span
+            >
+            <ng-container *ngIf="!modoEdicao; else edicaoCampoCidadeNatal">
+              <app-cidade-pais-span
+                [cidade]="alunoEditado.cidadeNatal"
+                [pais]="alunoEditado.paisNatal?.nome"
+              />
+            </ng-container>
 
-        <div class="col-12 md:col-12">
-          <span class="icone" pTooltip="Pontos a saber" tooltipPosition="top"
-            >📌</span
-          >
-          <ng-container *ngIf="!modoEdicao; else edicaoCampoPontos">
-            <div>{{ alunoEditado!.pontos }}</div>
-          </ng-container>
-          <ng-template #edicaoCampoPontos>
-            <textarea
-              pInputTextarea
-              rows="3"
-              [(ngModel)]="alunoEditado!.pontos"
-              class="w-full"
-            ></textarea>
-          </ng-template>
+            <ng-template #edicaoCampoCidadeNatal>
+              <app-cidade-pais-input
+                [(cidade)]="cidadeNatal!"
+                [(pais)]="paisNatalObj"
+                [paisesFiltrados]="paisesFiltradosPaisNatal"
+                (buscarPaises)="filtrarPaisNatal($event)"
+              />
+            </ng-template>
+          </div>
+          <div class="col-12 md:col-4">
+            <span class="icone" pTooltip="Profissão" tooltipPosition="top"
+              >💼</span
+            >
+            <ng-container *ngIf="!modoEdicao; else edicaoCampoProfissao">
+              <span class="ml-1">{{ alunoEditado!.profissao }}</span>
+            </ng-container>
+            <ng-template #edicaoCampoProfissao>
+              <input pInputText formControlName="profissao" class="ml-1 w-10" />
+            </ng-template>
+          </div>
+          <div class="col-12 md:col-4">
+            <span class="icone" pTooltip="Hobbies" tooltipPosition="top"
+              >🎯</span
+            >
+            <ng-container *ngIf="!modoEdicao; else edicaoCampoHobbies">
+              <span class="ml-1">{{ alunoEditado!.hobbies }}</span>
+            </ng-container>
+            <ng-template #edicaoCampoHobbies>
+              <input pInputText formControlName="hobbies" class="ml-1" />
+            </ng-template>
+          </div>
+          <div class="col-12 md:col-12">
+            <span class="icone" pTooltip="Perfil" tooltipPosition="top"
+              >👤</span
+            >
+            <ng-container *ngIf="!modoEdicao; else edicaoCampoPerfil">
+              <a
+                [href]="alunoEditado!.linkPerfil"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ml-1"
+              >
+                <span>{{ alunoEditado!.linkPerfil }}</span>
+              </a>
+            </ng-container>
+            <ng-template #edicaoCampoPerfil>
+              <input pInputText formControlName="linkPerfil" class="ml-1" />
+            </ng-template>
+          </div>
+
+          <div class="col-12 md:col-12">
+            <span class="icone" pTooltip="Pontos a saber" tooltipPosition="top"
+              >📌</span
+            >
+            <ng-container *ngIf="!modoEdicao; else edicaoCampoPontos">
+              <div>{{ alunoEditado!.pontos }}</div>
+            </ng-container>
+            <ng-template #edicaoCampoPontos>
+              <textarea
+                pInputTextarea
+                rows="3"
+                class="w-full"
+                formControlName="pontos"
+              ></textarea>
+            </ng-template>
+          </div>
         </div>
-      </div>
-    </p-fieldset>
+      </p-fieldset>
+    </div>
   </div>
-</div>
+</form>

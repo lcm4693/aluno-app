@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Aluno } from '../models/aluno';
-import { AlunoBasico } from '../pages/detalhar-aluno/informacoes-basicas/dto/aluno-informacoes-basicas';
 import { environment } from '../../environments/environment';
+import { AlunoBasico } from '../models/dto/aluno-basico';
 
 @Injectable({
   providedIn: 'root',

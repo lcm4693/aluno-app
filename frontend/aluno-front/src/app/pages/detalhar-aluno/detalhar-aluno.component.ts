@@ -18,12 +18,12 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { IdiomasComponent } from './idiomas/idiomas.component';
 import { Idioma } from '../../models/idioma';
 import { IdiomaService } from '../../services/idioma.service';
-import { AlunoBasico } from './informacoes-basicas/dto/aluno-informacoes-basicas';
 import { DetalharAulaComponent } from './detalhar-aula/detalhar-aula.component';
 import { ToastService } from '../../services/toast.service';
 import { InputTextModule } from 'primeng/inputtext';
 import { PrimeiraAulaComponent } from './primeira-aula/primeira-aula.component';
 import { UploadFotoComponent } from './upload-foto/upload-foto.component';
+import { AlunoBasico } from '../../models/dto/aluno-basico';
 
 @Component({
   standalone: true,
@@ -66,7 +66,6 @@ export class DetalharAlunoComponent implements OnInit {
     private router: Router,
     private alunoService: AlunoService,
     private aulaService: AulaService,
-    private idiomaService: IdiomaService,
     private toastService: ToastService
   ) {}
 
@@ -142,32 +141,20 @@ export class DetalharAlunoComponent implements OnInit {
   }
 
   onEditarInformacoesBasicas(alunoEditado: AlunoBasico): void {
-    this.alunoService.atualizarAluno(this.aluno!.id, alunoEditado).subscribe({
-      next: (res) => {
-        this.aluno = {
-          ...this.aluno!, // mantém os dados já existentes (inclusive listas)
-          ...alunoEditado, // sobrescreve apenas os campos do AlunoBasico
-        };
-        this.toastService.success(res.mensagem);
-      },
-      complete: () => {},
-    });
+    this.aluno = {
+      ...this.aluno!, // mantém os dados já existentes (inclusive listas)
+      ...alunoEditado, // sobrescreve apenas os campos do AlunoBasico
+    };
+    this.alunoBasico = alunoEditado;
   }
 
   onEditarIdiomas(idiomas: Idioma[]) {
-    this.idiomaService
-      .atualizarIdiomasAluno(this.aluno!.id, idiomas)
-      .subscribe({
-        next: (res) => {
-          this.aluno!.idiomas = idiomas;
-          this.toastService.success(res.mensagem);
-        },
-        complete: () => {},
-      });
+    this.aluno!.idiomas = idiomas;
   }
 
   extrairAlunoBasicoInformacoesBasicas(): AlunoBasico {
     const {
+      id,
       mora,
       idade,
       cidadeNatal,
@@ -182,6 +169,7 @@ export class DetalharAlunoComponent implements OnInit {
     } = this.aluno!;
 
     return {
+      id,
       mora,
       idade,
       cidadeNatal,

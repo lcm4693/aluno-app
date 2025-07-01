@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewChecked,
   Component,
   EventEmitter,
   Input,
@@ -8,18 +9,27 @@ import {
   Output,
 } from '@angular/core';
 import { FieldsetModule } from 'primeng/fieldset';
-import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
-import { AlunoBasico } from './dto/aluno-informacoes-basicas';
 import { Pais } from '../../../models/pais';
 import { PaisService } from '../../../services/pais.service';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CidadePaisSpanComponent } from '../../../shared/cidade-pais-span/cidade-pais-span.component';
 import { CidadePaisInputComponent } from '../../../shared/cidade-pais-input/cidade-pais-input.component';
 import { CalendarModule } from 'primeng/calendar';
+import { AlunoService } from '../../../services/aluno.service';
+import { ToastService } from '../../../services/toast.service';
+import { AlunoMapper } from '../../../mappers/aluno.mapper';
+import { AlunoBasico } from '../../../models/dto/aluno-basico';
 
 @Component({
   selector: 'app-informacoes-basicas',
@@ -36,6 +46,7 @@ import { CalendarModule } from 'primeng/calendar';
     CidadePaisSpanComponent,
     CidadePaisInputComponent,
     CalendarModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './informacoes-basicas.component.html',
   styleUrl: './informacoes-basicas.component.css',
@@ -46,20 +57,48 @@ export class InformacoesBasicasComponent implements OnInit {
   alunoEditado!: AlunoBasico;
   @Output() editarInformacoesBasicas = new EventEmitter<AlunoBasico>();
 
+  form!: FormGroup;
+
   paises: Pais[] = [];
   paisesFiltradosPaisMora: any[] = [];
   paisesFiltradosPaisNatal: any[] = [];
+
+  mora: string | undefined = undefined;
+  cidadeNatal: string | undefined = undefined;
 
   paisNatalObj: Pais | undefined = undefined;
   paisMoraObj: Pais | undefined = undefined;
 
   hoje: Date = new Date();
 
-  constructor(private paisService: PaisService) {}
+  constructor(
+    private paisService: PaisService,
+    private alunoService: AlunoService,
+    private toastService: ToastService,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit(): void {
-    this.paisNatalObj = this.alunoEditado.paisNatal;
     this.paisMoraObj = this.alunoEditado.paisMora;
+    this.mora = this.alunoEditado.mora;
+    this.cidadeNatal = this.alunoEditado.cidadeNatal;
+    this.paisNatalObj = this.alunoEditado.paisNatal;
+
+    this.form = this.fb.group({
+      mora: [''],
+      moraPaisObj: [''],
+      moraPais: [''],
+      idade: [this.alunoEditado.idade],
+      dataAniversario: [this.alunoEditado.dataAniversario || new Date()],
+      familia: [this.alunoEditado.familia],
+      paisNatalObj: [''],
+      cidadeNatal: [''],
+      paisNatal: [''],
+      profissao: [this.alunoEditado.profissao],
+      hobbies: [this.alunoEditado.hobbies],
+      linkPerfil: [this.alunoEditado.linkPerfil],
+      pontos: [this.alunoEditado.pontos],
+    });
 
     this.paisService.getPaises().subscribe({
       next: (res) => {
@@ -70,13 +109,30 @@ export class InformacoesBasicasComponent implements OnInit {
 
   executarAcaoEdicao() {
     if (this.modoEdicao) {
-      this.alunoEditado.paisNatal = this.paisNatalObj;
-      this.alunoEditado.paisMora = this.paisMoraObj;
+      this.form.value.mora = this.mora;
+      this.form.value.cidadeNatal = this.cidadeNatal;
 
-      this.editarInformacoesBasicas.emit(this.alunoEditado!);
+      const alunoConvertido: AlunoBasico = AlunoMapper.fromForm(
+        this.form,
+        this.paisMoraObj!,
+        this.paisNatalObj!,
+        this.alunoEditado.id
+      );
+
+      this.alunoService
+        .atualizarAluno(this.alunoEditado.id, alunoConvertido)
+        .subscribe({
+          next: (res) => {
+            this.toastService.success(res.mensagem);
+            this.editarInformacoesBasicas.emit(alunoConvertido);
+          },
+          complete: () => {
+            this.modoEdicao = !this.modoEdicao;
+          },
+        });
+    } else {
+      this.modoEdicao = !this.modoEdicao;
     }
-
-    this.modoEdicao = !this.modoEdicao;
   }
 
   cancelarEdicao() {

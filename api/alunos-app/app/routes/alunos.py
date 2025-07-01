@@ -102,12 +102,17 @@ def put_aluno_basico(aluno_id):
     idUsuario = get_jwt_identity()
 
     dados = request.get_json()
+    logger.debug(f"Entrada - put_aluno_basico: {dados}")
+
     erro, status = atualizar_informacoes_basicas(aluno_id, dados, id_usuario=idUsuario)
 
     if erro:
         return jsonify({"erro": erro}), status
 
-    return jsonify({"mensagem": "Informações básicas atualizadas com sucesso"}), 200
+    retorno = {"mensagem": "Informações básicas atualizadas com sucesso"}
+    logger.debug(f"Retorno - put_aluno_basico: {retorno}")
+
+    return jsonify(retorno), 200
 
 
 @alunos_bp.route("/<int:aluno_id>", methods=["DELETE"])

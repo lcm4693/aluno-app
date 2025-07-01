@@ -8,6 +8,7 @@ import { IdiomaService } from '../../../services/idioma.service';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-idiomas',
@@ -24,13 +25,19 @@ import { TooltipModule } from 'primeng/tooltip';
   styleUrl: './idiomas.component.css',
 })
 export class IdiomasComponent implements OnInit {
-  modoEdicao: boolean = false;
-  idiomasDisponiveis: Idioma[] = [];
+  @Input() idAluno!: number | null;
   @Input() idiomasAluno!: Idioma[] | null;
-  idiomasSelecionados: number[] = [];
   @Output() editarIdiomas = new EventEmitter<Idioma[]>();
 
-  constructor(private idiomaService: IdiomaService) {}
+  modoEdicao: boolean = false;
+
+  idiomasDisponiveis: Idioma[] = [];
+  idiomasSelecionados: number[] = [];
+
+  constructor(
+    private idiomaService: IdiomaService,
+    private toastService: ToastService
+  ) {}
 
   ngOnInit(): void {
     this.idiomasSelecionados = this.idiomasAluno?.map((i) => i.id) || [];
@@ -48,10 +55,21 @@ export class IdiomasComponent implements OnInit {
       this.idiomasAluno = this.idiomasDisponiveis.filter((idioma) =>
         this.idiomasSelecionados.includes(idioma.id)
       );
-      this.editarIdiomas.emit(this.idiomasAluno!);
-    }
 
-    this.modoEdicao = !this.modoEdicao;
+      this.idiomaService
+        .atualizarIdiomasAluno(this.idAluno!, this.idiomasAluno)
+        .subscribe({
+          next: (res) => {
+            this.toastService.success(res.mensagem);
+            this.editarIdiomas.emit(this.idiomasAluno!);
+          },
+          complete: () => {
+            this.modoEdicao = !this.modoEdicao;
+          },
+        });
+    } else {
+      this.modoEdicao = !this.modoEdicao;
+    }
   }
 
   cancelarEdicao() {

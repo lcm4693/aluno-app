@@ -1,6 +1,7 @@
-import { Pais } from '../../../../models/pais';
+import { Pais } from '../pais';
 
 export interface AlunoBasico {
+  id: number;
   mora: string;
   idade: number;
   cidadeNatal: string;
