@@ -69,6 +69,7 @@ export class CalendarioAulasComponent implements OnInit {
             textColor: 'white',
             extendedProps: {
               alunoId: aula.aluno_id,
+              aulaId: aula.id,
             },
           };
         });
@@ -79,10 +80,13 @@ export class CalendarioAulasComponent implements OnInit {
   }
 
   onEventClick(info: any): void {
-    const aula = info.event.extendedProps;
-    if (aula) {
-      console.log(aula);
-      // this.router.navigate(['/aulas', aulaId]); // Ex: /aulas/48
+    const alunoId = info.event.extendedProps.alunoId;
+    const aulaId = info.event.extendedProps.aulaId;
+
+    if (alunoId && aulaId) {
+      this.router.navigate([`/alunos`, alunoId], {
+        queryParams: { aula: aulaId, origem: 'calendario-aulas' },
+      });
     }
   }
 

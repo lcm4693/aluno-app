@@ -61,6 +61,8 @@ export class DetalharAlunoComponent implements OnInit {
 
   fotoAlunoUrl: SafeUrl | null = null;
 
+  origem!: string | null;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -71,6 +73,9 @@ export class DetalharAlunoComponent implements OnInit {
 
   ngOnInit(): void {
     const alunoId = this.route.snapshot.paramMap.get('id');
+    const aulaId = this.route.snapshot.queryParamMap.get('aula');
+    this.origem = this.route.snapshot.queryParamMap.get('origem');
+
     if (alunoId) {
       this.alunoService.getAluno(+alunoId).subscribe({
         next: (res) => {
@@ -83,6 +88,13 @@ export class DetalharAlunoComponent implements OnInit {
           }
           this.aluno = res;
           this.alunoBasico = this.extrairAlunoBasicoInformacoesBasicas();
+
+          if (aulaId) {
+            const aulaSelecao: Aula | undefined = this.aluno.aulas.find(
+              (aula) => aula.id === Number(aulaId)
+            );
+            this.selecionarAula(aulaSelecao!);
+          }
         },
         complete: () => {},
       });
@@ -97,8 +109,12 @@ export class DetalharAlunoComponent implements OnInit {
     this.modalNovaAulaVisivel = false;
   }
 
-  voltarParaListagem(): void {
-    this.router.navigate(['/listar']);
+  voltar(): void {
+    if (this.origem === 'calendario-aulas') {
+      this.router.navigate(['/' + this.origem]);
+    } else {
+      this.router.navigate(['/listar']);
+    }
   }
 
   onSalvarAula(aula: Aula): void {
