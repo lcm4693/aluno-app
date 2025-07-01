@@ -12,13 +12,17 @@ import { UserStoreService } from '../services/user-store.service';
 import { ToastService } from '../../services/toast.service';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { LoggerService } from '../../services/logger.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+  private readonly production: Boolean = environment.production as Boolean;
+
   constructor(
     private userStore: UserStoreService,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private loggerService: LoggerService
   ) {}
 
   intercept(
@@ -67,13 +71,13 @@ export class AuthInterceptor implements HttpInterceptor {
             switchMap((success) => {
               if (!success) {
                 this.userStore.clear();
-                console.log('Token não-renovado');
+                this.loggerService.info('Token não-renovado');
                 this.toastService.error('Sessão expirada', 'Refaça o login');
                 this.router.navigate(['/login']);
                 return throwError(() => error);
               }
-              if (environment.logDesenv) {
-                console.log('Token renovado');
+              if (!this.production) {
+                this.loggerService.info('Token renovado');
                 this.toastService.success('Token renovado');
               }
 

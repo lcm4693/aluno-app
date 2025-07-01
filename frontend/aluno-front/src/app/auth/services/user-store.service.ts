@@ -1,5 +1,13 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  finalize,
+  map,
+  Observable,
+  of,
+  tap,
+} from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { Usuario } from '../../models/usuario';
 import { JwtPayload } from '../jwtpayload';
@@ -13,6 +21,8 @@ export class UserStoreService {
   private usuarioSubject = new BehaviorSubject<Usuario | null>(null);
   usuario$ = this.usuarioSubject.asObservable();
 
+  private refreshInProgress = false;
+
   constructor(private authService: AuthService) {}
 
   setUsuarioFromToken(accessToken: string, refreshToken: string) {
@@ -24,6 +34,7 @@ export class UserStoreService {
         isAdmin: decoded.admin,
         email: decoded.email,
       };
+
       this.usuarioSubject.next(usuario);
       localStorage.setItem('token-aluno-app', accessToken);
       localStorage.setItem('refresh-aluno-app', refreshToken);
@@ -51,21 +62,27 @@ export class UserStoreService {
   }
 
   refreshAccessToken(): Observable<boolean> {
-    const refreshToken = localStorage.getItem('refresh-aluno-app');
+    if (this.refreshInProgress) {
+      return of(false); // ou aguardar a conclusão usando Subject
+    }
+
+    const refreshToken = this.getRefreshToken();
     if (!refreshToken) {
       return of(false);
     }
 
     return this.authService.refreshToken(refreshToken).pipe(
       tap((res: any) => {
-        localStorage.setItem('token-aluno-app', res.access_token);
+        // localStorage.setItem('token-aluno-app', res.access_token);
         this.setUsuarioFromToken(res.access_token, refreshToken);
       }),
       map(() => true),
       catchError((err) => {
-        console.error('Erro ao renovar token:', err);
         this.clear();
         return of(false);
+      }),
+      finalize(() => {
+        this.refreshInProgress = false;
       })
     );
   }

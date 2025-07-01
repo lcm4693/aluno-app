@@ -9,10 +9,13 @@ import {
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { LoggerService } from '../services/logger.service';
 
 @Injectable()
 export class LogHTTP implements HttpInterceptor {
-  constructor() {}
+  private readonly production: Boolean = environment.production as Boolean;
+
+  constructor(private loggerService: LoggerService) {}
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
@@ -23,39 +26,39 @@ export class LogHTTP implements HttpInterceptor {
       return next.handle(req);
     }
 
-    if (environment.logDesenv) {
-      console.log('🔵 REQUEST');
-      console.log('URL:', req.urlWithParams);
-      console.log('Método:', req.method);
-      if (req.body) console.log('Body:', req.body);
-      console.log('Headers:', req.headers);
-      console.log(
+    if (!this.production) {
+      this.loggerService.info('🔵 REQUEST');
+      this.loggerService.info('URL:', req.urlWithParams);
+      this.loggerService.info('Método:', req.method);
+      if (req.body) this.loggerService.info('Body:', req.body);
+      this.loggerService.info('Headers:', req.headers);
+      this.loggerService.info(
         '==================================================================='
       );
     }
     return next.handle(req).pipe(
       tap({
         next: (event: any) => {
-          if (event instanceof HttpResponse && environment.logDesenv) {
-            console.log('🟢 RESPONSE');
-            console.log('Status:', event.status);
-            console.log('URL:', event.url);
-            console.log('Body:', event.body);
-            console.log('========================');
+          if (event instanceof HttpResponse && !this.production) {
+            this.loggerService.info('🟢 RESPONSE');
+            this.loggerService.info('Status:', event.status);
+            this.loggerService.info('URL:', event.url);
+            this.loggerService.info('Body:', event.body);
+            this.loggerService.info('========================');
           }
         },
         error: (error: any) => {
-          if (environment.logDesenv && error.status != 401) {
-            console.error('🔴 ERROR RESPONSE');
+          if (!this.production && error.status != 401) {
+            this.loggerService.info('🔴 ERROR RESPONSE');
             if (error instanceof HttpErrorResponse) {
-              console.error('Status:', error.status);
-              console.error('URL:', error.url);
-              console.error('Message:', error.message);
-              console.error('Error:', error.error);
+              this.loggerService.info('Status:', error.status);
+              this.loggerService.info('URL:', error.url);
+              this.loggerService.info('Message:', error.message);
+              this.loggerService.info('Error:', error.error);
             } else {
-              console.error(error);
+              this.loggerService.info(error);
             }
-            console.log('========================');
+            this.loggerService.info('========================');
           }
         },
       })

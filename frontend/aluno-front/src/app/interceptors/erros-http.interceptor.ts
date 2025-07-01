@@ -10,10 +10,15 @@ import { Injectable } from '@angular/core';
 import { catchError, EMPTY, Observable, throwError } from 'rxjs';
 import { ToastService } from '../services/toast.service';
 import { Router } from '@angular/router';
+import { LoggerService } from '../services/logger.service';
 
 @Injectable()
 export class ErrosHttp implements HttpInterceptor {
-  constructor(private toastService: ToastService, private router: Router) {}
+  constructor(
+    private toastService: ToastService,
+    private router: Router,
+    private loggerService: LoggerService
+  ) {}
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
@@ -21,8 +26,9 @@ export class ErrosHttp implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((err: HttpErrorResponse) => {
         const codigoErro = err.status;
+
         if (codigoErro == 0) {
-          console.log('Erro de rede');
+          this.loggerService.error('Erro de rede');
           this.toastService.error(
             'Erro de conexão',
             'Não foi possível se conectar ao servidor'
@@ -30,37 +36,31 @@ export class ErrosHttp implements HttpInterceptor {
         } else {
           switch (codigoErro) {
             case 401:
-              console.log(
-                'Usuário não possui um token válido e será tentado o refresh'
-              );
-              // this.toastService.error('Acesso negado', err.error?.erro);
-              // this.router.navigate(['/login']);
               break;
-            // case 403:
-            //   console.log('Recurso solicitado não foi autorizado');
-            //   this.toastService.error(
-            //     'Acesso negado',
-            //     'Você não tem permissão para essa ação'
-            //   );
-            //   break;
+            case 403:
+              this.toastService.error(
+                'Acesso negado',
+                'Você não tem permissão para essa ação'
+              );
+              break;
             case 404:
-              console.log('Recurso solicitado não foi localizado');
+              this.loggerService.error('Recurso solicitado não foi localizado');
               this.toastService.error('Recurso solicitado não foi localizado');
               break;
             case 500:
-              console.log('Erro no servidor');
+              this.loggerService.error('Erro no servidor');
               this.toastService.error(
                 'Erro interno. Tente novamente mais tarde'
               );
               break;
             default:
-              console.log('Erro ' + codigoErro);
+              this.loggerService.error('Erro ' + codigoErro);
               this.toastService.error('Erro não identificado:' + err.message);
               break;
           }
         }
         if (codigoErro != 401) {
-          console.error('Erro HTTP:', err);
+          this.loggerService.error('Erro HTTP:', err);
         }
         return throwError(() => err);
       })

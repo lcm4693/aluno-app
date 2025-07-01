@@ -17,6 +17,7 @@ import { AuthInterceptor } from './auth/interceptors/auth.interceptor';
 import { ErrosHttp } from './interceptors/erros-http.interceptor';
 import { LogHTTP } from './interceptors/log-http-interceptor';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
+import { LOCALE_ID } from '@angular/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,6 +26,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()),
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
+
     provideRouter(
       routes,
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })

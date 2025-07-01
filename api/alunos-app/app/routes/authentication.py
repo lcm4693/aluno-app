@@ -1,6 +1,9 @@
 from flask import Blueprint, request, jsonify
-from app.services.auth_service import autenticar_usuario
+from app.services.auth_service import autenticar_usuario, gerar_refresh_token
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
+from app.utils.logger_config import configurar_logger
+
+logger = configurar_logger(__name__)
 
 auth_bp = Blueprint("authentication", __name__, url_prefix="/api/auth")
 
@@ -25,5 +28,16 @@ def login():
 @jwt_required(refresh=True)
 def refresh():
     current_user = get_jwt_identity()
-    new_token = create_access_token(identity=current_user)
+    logger.debug(f"Current user: {current_user}")
+
+    if not current_user:
+        return jsonify({"erro": "Token inválido"}), 401
+
+    new_token = gerar_refresh_token(current_user)
+
+    if not new_token:
+        return jsonify({"erro": "Erro ao gerar o refresh token"}), 401
+
+    logger.debug(f"Novo token gerado com sucesso")
+
     return jsonify(access_token=new_token), 200
