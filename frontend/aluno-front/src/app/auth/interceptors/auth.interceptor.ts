@@ -67,7 +67,10 @@ export class AuthInterceptor implements HttpInterceptor {
             switchMap((success) => {
               if (!success) {
                 this.userStore.clear();
+                console.log('Token não-renovado');
+                this.toastService.error('Sessão expirada', 'Refaça o login');
                 this.router.navigate(['/login']);
+                return throwError(() => error);
               }
               if (environment.logDesenv) {
                 console.log('Token renovado');
