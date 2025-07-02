@@ -36,7 +36,7 @@ export class NovaAulaComponent {
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       dataAula: [new Date(), [Validators.required, dataNoFuturoValidator()]],
-      anotacoes: ['', Validators.required],
+      anotacoes: [''],
       comentarios: [''],
       proximaAula: [''],
     });

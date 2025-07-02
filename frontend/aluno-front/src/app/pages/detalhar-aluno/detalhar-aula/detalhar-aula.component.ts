@@ -57,7 +57,7 @@ export class DetalharAulaComponent implements AfterViewInit, OnChanges {
         { value: this.aula?.dataAula || new Date(), disabled: !this.editando },
         [Validators.required, dataNoFuturoValidator()],
       ],
-      anotacoes: [this.aula?.anotacoes, Validators.required],
+      anotacoes: [this.aula?.anotacoes],
       comentarios: [this.aula?.comentarios],
       proximaAula: [this.aula?.proximaAula],
     });
