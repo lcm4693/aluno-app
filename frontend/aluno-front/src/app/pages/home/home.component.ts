@@ -9,6 +9,7 @@ import { TableModule } from 'primeng/table';
 import { AvatarModule } from 'primeng/avatar';
 import { Estatisticas } from '../../models/estatisticas';
 import { DashboardService } from '../../services/dashboard.service';
+import { AlunoFavorito } from '../../models/alunoFavorito';
 
 @Component({
   selector: 'app-home',
@@ -29,29 +30,7 @@ export class HomeComponent implements OnInit {
 
   cardsEstatisticas: Estatisticas | undefined;
 
-  favoritos = [
-    {
-      id: 51,
-      nomeAluno: 'Alex',
-      enderecoFoto:
-        'https://aluno-app-fotos.s3.us-east-1.amazonaws.com/fotos-dev/438aac3b-4e94-4b04-b386-e2e89289a92b.jpg',
-      quantidadeAulas: 10,
-    },
-    {
-      id: 64,
-      nomeAluno: 'Brandon Martinez',
-      enderecoFoto:
-        'https://aluno-app-fotos.s3.us-east-1.amazonaws.com/fotos-dev/foto_1750264887.png',
-      quantidadeAulas: 6,
-    },
-    {
-      id: 55,
-      nomeAluno: 'Dominic Gendron',
-      enderecoFoto:
-        'https://aluno-app-fotos.s3.us-east-1.amazonaws.com/fotos-dev/foto_1750008120.png',
-      quantidadeAulas: 5,
-    },
-  ];
+  favoritos: AlunoFavorito[] | undefined;
 
   ultimasAulas = [
     {
@@ -91,6 +70,12 @@ export class HomeComponent implements OnInit {
     this.dashboardService.getCardsEstatisticas().subscribe({
       next: (res) => {
         this.cardsEstatisticas = res;
+      },
+    });
+
+    this.dashboardService.getAlunosFavoritos().subscribe({
+      next: (res) => {
+        this.favoritos = res;
       },
     });
   }

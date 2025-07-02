@@ -4,9 +4,13 @@ from flask_jwt_extended import create_access_token, create_refresh_token
 from datetime import timedelta
 from app.database import get_session
 from app.config import Config
+from app.utils.logger_config import configurar_logger
+
+logger = configurar_logger(__name__)
 
 
 def gerar_refresh_token(id_usuario):
+    logger.debug("Vai executar a chamada ao banco")
     with get_session() as session:
         usuario = (
             session.query(Usuario)
@@ -14,6 +18,7 @@ def gerar_refresh_token(id_usuario):
             .first()
         )
 
+        logger.debug(f"Usuário retornado: {usuario}")
         if not usuario:
             return None
 
@@ -27,6 +32,8 @@ def gerar_refresh_token(id_usuario):
             identity=str(usuario.id),
             additional_claims=claims,
         )
+
+        logger.debug(f"Token gerado: {access_token}")
 
         return access_token
 

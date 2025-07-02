@@ -43,3 +43,17 @@ def mover_foto_para_backup(caminho_atual: str, aluno_id: int):
     caminho_destino = f"{Config.AWS_S3_PASTA}/antigas/{aluno_id}/{nome_arquivo}"
 
     mover_imagem_s3_backup(caminho_atual, caminho_destino)
+
+
+def alterar_nome_foto_para_url_foto(aluno):
+    foto_nome = aluno.get("foto")
+    if foto_nome:
+        aluno["fotoUrl"] = (
+            f"https://{Config.AWS_S3_BUCKET}.s3.{Config.AWS_S3_REGION}.amazonaws.com/{foto_nome}"
+        )
+    else:
+        aluno["fotoUrl"] = (
+            f"https://{Config.AWS_S3_BUCKET}.s3.{Config.AWS_S3_REGION}.amazonaws.com/{Config.AWS_S3_PASTA}/foto0.png"
+        )
+    aluno.pop("foto", None)
+    return aluno

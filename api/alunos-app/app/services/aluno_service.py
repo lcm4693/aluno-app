@@ -11,6 +11,7 @@ from datetime import datetime
 from app.config import Config
 from app.utils.date_utils import converter_data_para_front, converter_data_para_banco
 from app.utils.foto_utils import salvar_foto, mover_foto_para_backup
+from app.utils.foto_utils import *
 
 
 def inserir_aluno(dados, foto_filename, idiomas_ids, id_usuario):
@@ -134,20 +135,6 @@ def buscar_aluno_completo(aluno_id, id_usuario):
         alterar_nome_foto_para_url_foto(aluno_dict_resultado)
 
         return aluno_dict_resultado, None
-
-
-def alterar_nome_foto_para_url_foto(aluno):
-    foto_nome = aluno.get("foto")
-    if foto_nome:
-        aluno["fotoUrl"] = (
-            f"https://{Config.AWS_S3_BUCKET}.s3.{Config.AWS_S3_REGION}.amazonaws.com/{foto_nome}"
-        )
-    else:
-        aluno["fotoUrl"] = (
-            f"https://{Config.AWS_S3_BUCKET}.s3.{Config.AWS_S3_REGION}.amazonaws.com/{Config.AWS_S3_PASTA}/foto0.png"
-        )
-    aluno.pop("foto", None)
-    return aluno
 
 
 def atualizar_informacoes_basicas(aluno_id, dados, id_usuario):

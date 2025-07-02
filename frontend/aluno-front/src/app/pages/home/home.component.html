@@ -68,3 +68,91 @@
     </div>
   </div>
 </div>
+
+<div class="w-full max-w-screen-lg pl-8">
+  <div class="grid gap-3">
+    <!-- Favoritos - 4 colunas -->
+    <div class="col-12 md:col-4" *ngIf="favoritos">
+      <p-card>
+        <ng-template pTemplate="header">
+          <span class="font-bold text-lg">⭐ Favoritos do mês</span>
+        </ng-template>
+        <div>
+          <div
+            class="grid align-items-center py-3 border-top-1 surface-border borda-tabela-card"
+            *ngFor="let aluno of favoritos"
+          >
+            <div class="col-3 flex flex-column align-items-center text-center">
+              <img
+                [src]="aluno.fotoUrl"
+                alt="Foto do aluno"
+                class="border-circle shadow-1 img-miniatura mb-2"
+                style="width: 50px; height: 50px"
+              />
+              <a
+                [routerLink]="['/alunos', aluno.id]"
+                class="text-sm text-primary hover:underline link"
+              >
+                Ver perfil
+              </a>
+            </div>
+            <div class="col-9 font-bold text-color">
+              {{ aluno.nomeAluno }} - {{ aluno.quantidadeAulas }} aulas
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!favoritos">SEM ALUNOS FAVORITOS</div>
+      </p-card>
+    </div>
+    <!-- Últimas aulas realizadas -->
+    <div class="col-12 md:col-6">
+      <p-card>
+        <ng-template pTemplate="header">
+          <span class="font-bold text-lg">📚 Últimas aulas realizadas</span>
+        </ng-template>
+
+        <div
+          class="grid font-semibold text-sm text-color-secondary mb-2 text-center"
+        >
+          <div class="col-4">Aluno</div>
+          <div class="col-4">Data</div>
+          <div class="col-4">Total de Aulas</div>
+        </div>
+        <div
+          class="grid align-items-center py-2 border-top-1 borda-tabela-card text-center"
+          *ngFor="let aula of ultimasAulas"
+        >
+          <div class="col-4 font-medium">
+            <div class="flex align-items-center text-center">
+              <img
+                [src]="aula.enderecoFoto"
+                alt="Foto do aluno"
+                class="border-circle shadow-1 img-miniatura mb-2"
+                style="width: 50px; height: 50px"
+              />
+              <span class="ml-3">{{ aula.nomeAluno }}</span>
+            </div>
+          </div>
+          <div class="col-4">
+            {{ aula.data | date : "d 'de' MMMM 'de' y" }}
+          </div>
+          <div class="col-4">
+            {{ aula.totalAulas }}
+          </div>
+        </div>
+        <p *ngIf="ultimasAulas.length === 0" class="text-secondary text-center">
+          Nenhuma aula recente encontrada.
+        </p>
+      </p-card>
+    </div>
+    <!-- Notificações (abaixo ocupando 100%) -->
+    <div class="col-12">
+      <p-card>
+        <ng-template pTemplate="header">
+          <span class="font-bold text-lg">🔔 Notificações</span>
+        </ng-template>
+        <!-- lista de lembretes -->
+      </p-card>
+    </div>
+  </div>
+</div>
