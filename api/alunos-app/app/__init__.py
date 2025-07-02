@@ -8,6 +8,7 @@ from .routes.idiomas import idiomas_bp
 from .routes.aulas import aulas_bp
 from .routes.paises import paises_bp
 from .routes.authentication import auth_bp
+from .routes.dashboard import dashboard_bp
 from flask_jwt_extended import JWTManager
 
 
@@ -35,6 +36,7 @@ def create_app():
     app.register_blueprint(aulas_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(paises_bp)
+    app.register_blueprint(dashboard_bp)
 
     # ERROS GLOBAIS
     @app.errorhandler(404)

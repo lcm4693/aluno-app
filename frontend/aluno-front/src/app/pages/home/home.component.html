@@ -1,5 +1,6 @@
+<!-- min-h-screen -->
 <div
-  class="flex flex-column align-items-center justify-content-center min-h-screen p-4 gap-4 bg-gray-100"
+  class="flex flex-column align-items-center justify-content-center p-4 gap-4 bg-gray-100"
 >
   <p-card class="w-full max-w-md text-center shadow-4">
     <ng-template pTemplate="header">
@@ -32,14 +33,16 @@
     </div>
   </p-card>
 
-  <div class="w-full max-w-screen-lg mt-4">
+  <div class="w-full max-w-screen-lg mt-4" *ngIf="cardsEstatisticas">
     <div class="flex flex-wrap justify-content-center gap-3">
       <div class="summary-card">
         <p-card>
           <ng-template pTemplate="header">
             <span class="font-bold">Total de alunos</span>
           </ng-template>
-          <div class="text-center text-5xl font-bold text-primary">10</div>
+          <div class="text-center text-5xl font-bold text-primary">
+            {{ cardsEstatisticas.totalAlunos }}
+          </div>
         </p-card>
       </div>
       <div class="summary-card">
@@ -47,7 +50,9 @@
           <ng-template pTemplate="header">
             <span class="font-bold">Aulas no mês</span>
           </ng-template>
-          <div class="text-center text-5xl font-bold text-primary">30</div>
+          <div class="text-center text-5xl font-bold text-primary">
+            {{ cardsEstatisticas.aulasMesAtual }}
+          </div>
         </p-card>
       </div>
       <div class="summary-card">
@@ -55,35 +60,11 @@
           <ng-template pTemplate="header">
             <span class="font-bold">Aulas nessa semana</span>
           </ng-template>
-          <div class="text-center text-5xl font-bold text-primary">5</div>
+          <div class="text-center text-5xl font-bold text-primary">
+            {{ cardsEstatisticas.aulasSemanaAtual }}
+          </div>
         </p-card>
       </div>
     </div>
-  </div>
-
-  <!-- Últimas aulas realizadas -->
-  <div class="w-6 max-w-screen-lg mt-5">
-    <p-card>
-      <ng-template pTemplate="header">
-        <span class="font-bold text-lg">📚 Últimas aulas realizadas</span>
-      </ng-template>
-
-      <div class="grid font-semibold text-sm text-color-secondary mb-2">
-        <div class="col-6">Aluno</div>
-        <div class="col-6">Data</div>
-      </div>
-      <div
-        class="grid align-items-center py-2 border-top-1 borda-tabela-card"
-        *ngFor="let aula of ultimasAulas"
-      >
-        <div class="col-6 font-medium">{{ aula.nomeAluno }}</div>
-        <div class="col-6">
-          {{ aula.data | date : "d 'de' MMMM 'de' y" }}
-        </div>
-      </div>
-      <p *ngIf="ultimasAulas.length === 0" class="text-secondary text-center">
-        Nenhuma aula recente encontrada.
-      </p>
-    </p-card>
   </div>
 </div>

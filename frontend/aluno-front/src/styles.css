@@ -24,10 +24,6 @@ body {
   margin-bottom: 14px !important;
 }
 
-.text-center {
-  text-align: center !important;
-}
-
 textarea {
   line-height: 1.5;
 }
@@ -116,7 +112,7 @@ tr {
 }
 
 .link {
-  color: #2c7be5;
+  color: #2c7be5 !important;
   text-decoration: underline;
   cursor: pointer;
 }
