@@ -105,7 +105,7 @@
       </p-card>
     </div>
     <!-- Últimas aulas realizadas -->
-    <div class="col-12 md:col-6">
+    <div class="col-12 md:col-6" *ngIf="ultimasAulas">
       <p-card>
         <ng-template pTemplate="header">
           <span class="font-bold text-lg">📚 Últimas aulas realizadas</span>
@@ -125,7 +125,7 @@
           <div class="col-4 font-medium">
             <div class="flex align-items-center text-center">
               <img
-                [src]="aula.enderecoFoto"
+                [src]="aula.fotoUrl"
                 alt="Foto do aluno"
                 class="border-circle shadow-1 img-miniatura mb-2"
                 style="width: 50px; height: 50px"
@@ -134,7 +134,7 @@
             </div>
           </div>
           <div class="col-4">
-            {{ aula.data | date : "d 'de' MMMM 'de' y" }}
+            {{ aula.dataAula | date : "d 'de' MMMM 'de' y" }}
           </div>
           <div class="col-4">
             {{ aula.totalAulas }}

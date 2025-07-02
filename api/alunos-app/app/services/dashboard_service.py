@@ -6,6 +6,8 @@ from app.models.aula import Aula
 from app.utils.foto_utils import *
 from datetime import date, timedelta
 from calendar import monthrange
+from app.utils.date_utils import *
+from sqlalchemy.orm import aliased
 
 logger = configurar_logger(__name__)
 
@@ -54,7 +56,6 @@ def buscar_alunos_favoritos(id_usuario):
     ultimo_dia = date(hoje.year, hoje.month, monthrange(hoje.year, hoje.month)[1])
 
     with get_session() as session:
-        print("VAI EXECUTAR====================================")
         top_alunos_mes = (
             session.query(
                 Aluno.id.label("id"),
@@ -72,8 +73,6 @@ def buscar_alunos_favoritos(id_usuario):
             .all()
         )
 
-        print("EXECUTOU====================================")
-
         lista = [
             {
                 "id": aluno.id,
@@ -84,8 +83,57 @@ def buscar_alunos_favoritos(id_usuario):
             for aluno in top_alunos_mes
         ]
 
-        print("CONVERTEU LISTA====================================")
         lista = [alterar_nome_foto_para_url_foto(aluno) for aluno in lista]
 
-        print(f"lista: {lista}")
+        return lista
+
+
+def buscar_alunos_ultimas_aulas(id_usuario):
+    quantidade_alunos_ultimas_aulas = 5
+    with get_session() as session:
+
+        # Subquery que calcula a contagem total de aulas por aluno
+        sub_total_aulas = (
+            session.query(
+                Aula.aluno_id.label("aluno_id"),
+                func.count(Aula.id).label("quantidadeAulas"),
+            )
+            .group_by(Aula.aluno_id)
+            .subquery()
+        )
+
+        # Aliases para evitar conflitos
+        AlunoAlias = aliased(Aluno)
+
+        # Query principal: últimas aulas
+        resultado = (
+            session.query(
+                Aula.id.label("idAula"),
+                Aula.data.label("dataAula"),
+                AlunoAlias.id.label("id"),
+                AlunoAlias.nome.label("nomeAluno"),
+                AlunoAlias.foto.label("foto"),
+                sub_total_aulas.c.quantidadeAulas,
+            )
+            .join(AlunoAlias, Aula.aluno_id == AlunoAlias.id)
+            .join(sub_total_aulas, sub_total_aulas.c.aluno_id == AlunoAlias.id)
+            .filter(AlunoAlias.id_usuario == id_usuario)
+            .order_by(Aula.data.desc())
+            .limit(quantidade_alunos_ultimas_aulas)
+            .all()
+        )
+
+        lista = [
+            {
+                "id": aluno.id,
+                "nomeAluno": aluno.nomeAluno,
+                "foto": aluno.foto,
+                "dataAula": converter_data_para_front(aluno.dataAula),
+                "totalAulas": aluno.quantidadeAulas,
+            }
+            for aluno in resultado
+        ]
+
+        lista = [alterar_nome_foto_para_url_foto(aluno) for aluno in lista]
+
         return lista

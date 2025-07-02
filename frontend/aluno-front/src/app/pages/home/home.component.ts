@@ -10,6 +10,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { Estatisticas } from '../../models/estatisticas';
 import { DashboardService } from '../../services/dashboard.service';
 import { AlunoFavorito } from '../../models/alunoFavorito';
+import { UltimasAulas } from '../../models/ultimas_aulas';
 
 @Component({
   selector: 'app-home',
@@ -32,32 +33,7 @@ export class HomeComponent implements OnInit {
 
   favoritos: AlunoFavorito[] | undefined;
 
-  ultimasAulas = [
-    {
-      id: 101,
-      nomeAluno: 'Anna Kowalska',
-      data: new Date('2025-06-28'),
-      totalAulas: 10,
-      enderecoFoto:
-        'https://aluno-app-fotos.s3.us-east-1.amazonaws.com/fotos-dev/438aac3b-4e94-4b04-b386-e2e89289a92b.jpg',
-    },
-    {
-      id: 102,
-      nomeAluno: 'Hiroshi Tanaka',
-      data: new Date('2025-06-27'),
-      totalAulas: 5,
-      enderecoFoto:
-        'https://aluno-app-fotos.s3.us-east-1.amazonaws.com/fotos-dev/foto_1750264887.png',
-    },
-    {
-      id: 103,
-      nomeAluno: 'Sofia García',
-      data: new Date('2025-06-26'),
-      totalAulas: 3,
-      enderecoFoto:
-        'https://aluno-app-fotos.s3.us-east-1.amazonaws.com/fotos-dev/foto_1750008120.png',
-    },
-  ];
+  ultimasAulas: UltimasAulas[] | undefined;
 
   constructor(
     private router: Router,
@@ -76,6 +52,12 @@ export class HomeComponent implements OnInit {
     this.dashboardService.getAlunosFavoritos().subscribe({
       next: (res) => {
         this.favoritos = res;
+      },
+    });
+
+    this.dashboardService.getUltimasAulas().subscribe({
+      next: (res) => {
+        this.ultimasAulas = res;
       },
     });
   }

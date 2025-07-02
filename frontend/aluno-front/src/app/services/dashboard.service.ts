@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Estatisticas } from '../models/estatisticas';
 import { AlunoFavorito } from '../models/alunoFavorito';
+import { UltimasAulas } from '../models/ultimas_aulas';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,11 @@ export class DashboardService {
 
   getAlunosFavoritos(): Observable<AlunoFavorito[]> {
     return this.http.get<AlunoFavorito[]>(
-      `${this.baseUrl}` + '/alunos_favoritos'
+      `${this.baseUrl}` + '/alunos-favoritos'
     );
+  }
+
+  getUltimasAulas(): Observable<UltimasAulas[]> {
+    return this.http.get<UltimasAulas[]>(`${this.baseUrl}` + '/ultimas-aulas');
   }
 }

@@ -21,7 +21,7 @@ def buscar_estatisticas():
     return jsonify(cardsEstatisticas)
 
 
-@dashboard_bp.route("/alunos_favoritos", methods=["GET"])
+@dashboard_bp.route("/alunos-favoritos", methods=["GET"])
 @handle_errors
 @jwt_required()
 def recuperar_alunos_favoritos():
@@ -30,3 +30,14 @@ def recuperar_alunos_favoritos():
     alunos_favoritos = buscar_alunos_favoritos(idUsuario)
     logger.debug(f"Retorno: {alunos_favoritos}")
     return jsonify(alunos_favoritos)
+
+
+@dashboard_bp.route("/ultimas-aulas", methods=["GET"])
+@handle_errors
+@jwt_required()
+def recuperar_alunos_ultimas_aulas():
+    idUsuario = get_jwt_identity()
+
+    alunos_ultimas_aulas = buscar_alunos_ultimas_aulas(idUsuario)
+    logger.debug(f"Retorno: {alunos_ultimas_aulas}")
+    return jsonify(alunos_ultimas_aulas)
