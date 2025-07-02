@@ -92,7 +92,7 @@ export class InformacoesBasicasComponent implements OnInit {
       dataAniversario: [
         this.alunoEditado.dataAniversario
           ? new Date(this.alunoEditado.dataAniversario)
-          : new Date(),
+          : undefined,
       ],
       familia: [this.alunoEditado.familia],
       paisNatalObj: [''],
