@@ -31,7 +31,7 @@ export class LoggerService {
 
   debug(message: string, ...optionalParams: any[]): void {
     if (this.shouldLog('debug')) {
-      console.debug(
+      console.info(
         `[DEBUG] - ${this.getTimestamp()} - ${message}`,
         ...optionalParams
       );

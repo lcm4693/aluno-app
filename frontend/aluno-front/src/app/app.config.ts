@@ -34,12 +34,12 @@ export const appConfig: ApplicationConfig = {
     ), // 👈 essa linha garante que o scroll volta pro topo),
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: LoadingInterceptor,
+      useClass: AuthInterceptor,
       multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
+      useClass: LoadingInterceptor,
       multi: true,
     },
     {

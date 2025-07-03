@@ -14,6 +14,8 @@ import { DialogModule } from 'primeng/dialog';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { AlunoService } from '../../../services/aluno.service';
 import { Aluno } from '../../../models/aluno';
+import { LoggerService } from '../../../services/logger.service';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-upload-foto',
@@ -30,7 +32,9 @@ export class UploadFotoComponent {
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    private alunoService: AlunoService
+    private alunoService: AlunoService,
+    private loggerService: LoggerService,
+    private toastService: ToastService
   ) {}
   modalAberta = false;
   imagemEvento: any;
@@ -61,7 +65,7 @@ export class UploadFotoComponent {
 
       this.alunoService.uploadFoto(this.aluno.id, formData).subscribe({
         next: (res) => {
-          console.log('Resposta:', res);
+          this.loggerService.debug('Resposta:', res);
           this.resetarCropper();
           this.fotoAtualizada.emit(res.url);
         },
@@ -98,11 +102,18 @@ export class UploadFotoComponent {
             return;
           }
         }
-        alert('Nenhuma imagem encontrada na área de transferência.');
+        this.toastService.error(
+          'Erro ao colar imagem',
+          'Nenhuma imagem encontrada na área de transferência'
+        );
       })
       .catch((err) => {
-        console.error('Erro ao acessar a área de transferência:', err);
-        alert(
+        this.loggerService.error(
+          'Erro ao acessar a área de transferência:',
+          err
+        );
+        this.toastService.error(
+          'Erro ao colar imagem',
           'Não foi possível acessar a área de transferência. Isso requer HTTPS ou localhost.'
         );
       });

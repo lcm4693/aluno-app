@@ -6,23 +6,18 @@ import {
   HttpInterceptorFn,
   HttpRequest,
 } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { UserStoreService } from '../services/user-store.service';
-import { ToastService } from '../../services/toast.service';
-import { Router } from '@angular/router';
-import { environment } from '../../../environments/environment';
 import { LoggerService } from '../../services/logger.service';
+import { TokenRefreshService } from '../../services/token-refresh.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  private readonly production: Boolean = environment.production as Boolean;
-
   constructor(
     private userStore: UserStoreService,
-    private toastService: ToastService,
-    private router: Router,
-    private loggerService: LoggerService
+    private loggerService: LoggerService,
+    private tokenRefreshService: TokenRefreshService
   ) {}
 
   intercept(
@@ -30,10 +25,6 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const token = this.userStore.getToken();
-
-    // if (!token) {
-    //   return next.handle(req);
-    // }
 
     // Para o interceptador funcionar com o proxy, é necessário uma barra no fim da URL,
     //porém nã podemos usar isso para imagens e outros recursos.
@@ -62,36 +53,16 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(authReq).pipe(
       catchError((error) => {
+        this.loggerService.debug(
+          '[AuthInterceptor] erro detectado: ' + error.status
+        );
+
         if (
           error instanceof HttpErrorResponse &&
           (error.status === 401 || error.status === 403) &&
           this.userStore.getToken()
         ) {
-          return this.userStore.refreshAccessToken().pipe(
-            switchMap((success) => {
-              if (!success) {
-                this.userStore.clear();
-                this.loggerService.info('Token não-renovado');
-                this.toastService.error('Sessão expirada', 'Refaça o login');
-                this.router.navigate(['/login']);
-                return throwError(() => error);
-              }
-              if (!this.production) {
-                this.loggerService.info('Token renovado');
-                this.toastService.success('Token renovado');
-              }
-
-              const newToken = this.userStore.getToken();
-              const retryReq = req.clone({
-                url,
-                setHeaders: {
-                  Authorization: `Bearer ${newToken}`,
-                },
-              });
-
-              return next.handle(retryReq);
-            })
-          );
+          return this.tokenRefreshService.handle401Erro(authReq, next);
         }
         return throwError(() => error);
       })

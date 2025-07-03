@@ -29,6 +29,7 @@ import { PaisService } from '../../services/pais.service';
 import { Pais } from '../../models/pais';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { Constants } from '../../shared/constants';
+import { LoggerService } from '../../services/logger.service';
 
 @Component({
   standalone: true,
@@ -75,7 +76,8 @@ export class CadastrarAlunoComponent implements OnInit {
     private idiomaService: IdiomaService,
     private paisService: PaisService,
     private alunoService: AlunoService,
-    private toast: ToastService
+    private toast: ToastService,
+    private loggerService: LoggerService
   ) {
     this.form = this.fb.group({
       nome: ['', Validators.required],
@@ -100,9 +102,6 @@ export class CadastrarAlunoComponent implements OnInit {
     this.idiomaService.getIdiomas().subscribe({
       next: (res) => {
         this.idiomasDisponiveis = res;
-      },
-      error: (err) => {
-        console.error(err);
       },
       complete: () => {},
     });
@@ -177,7 +176,7 @@ export class CadastrarAlunoComponent implements OnInit {
         this.toast.success(res.mensagem);
       },
       error: (err) => {
-        console.log('Erro back:', err);
+        this.loggerService.error('Erro back:', err);
         const erros = err.error?.erros;
 
         if (Array.isArray(erros)) {
@@ -258,12 +257,19 @@ export class CadastrarAlunoComponent implements OnInit {
             return;
           }
         }
-        alert('Nenhuma imagem encontrada na área de transferência.');
+        this.toast.error(
+          'Erro ao colar imagem',
+          'Nenhuma imagem encontrada na área de transferência'
+        );
       })
       .catch((err) => {
-        console.error('Erro ao acessar a área de transferência:', err);
-        alert(
-          'Não foi possível acessar a área de transferência. Isso requer HTTPS ou localhost.'
+        this.loggerService.error(
+          'Erro ao acessar a área de transferência:',
+          err
+        );
+        this.toast.error(
+          'Erro ao colar imagem',
+          'Não foi possível acessar a área de transferência. Isso requer HTTPS ou localhost'
         );
       });
   }

@@ -15,6 +15,7 @@ import { ToastService } from '../../services/toast.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
+import { LoggerService } from '../../services/logger.service';
 
 @Component({
   standalone: true,
@@ -46,7 +47,8 @@ export class ListarAlunosComponent {
     private http: HttpClient,
     private confirmationService: ConfirmationService,
     private alunoService: AlunoService, // Se você tiver um serviço específico para alunos, pode injetá-lo aqui
-    private toastService: ToastService
+    private toastService: ToastService,
+    private loggerService: LoggerService
   ) {}
 
   ngOnInit(): void {
@@ -96,7 +98,7 @@ export class ListarAlunosComponent {
             this.toastService.success(res.mensagem);
           },
           error: (err) => {
-            console.error('Erro ao excluir:', err);
+            this.loggerService.error('Erro ao excluir:', err);
             this.toastService.error(err.erro);
           },
           complete: () => {},

@@ -57,10 +57,6 @@ export class PrimeiraAulaComponent {
           this.toastService.success(res.mensagem);
           this.aluno.dataPrimeiraAula = dataPrimeiraAula;
         },
-        error: (err) => {
-          console.log('Erro ocorrido');
-          return;
-        },
         complete: () => {},
       });
     }
