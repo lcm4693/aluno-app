@@ -18,18 +18,20 @@ import { ToastService } from '../../../services/toast.service';
   templateUrl: './primeira-aula.component.html',
   styleUrl: './primeira-aula.component.css',
 })
-export class PrimeiraAulaComponent {
+export class PrimeiraAulaComponent implements OnInit {
   editandoAlunoDesde: boolean = false;
   @Input() aluno!: Aluno;
 
-  form: FormGroup;
+  form!: FormGroup;
   hoje: Date = new Date();
 
   constructor(
     private fb: FormBuilder,
     private alunoService: AlunoService,
     private toastService: ToastService
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     this.form = this.fb.group({
       dataPrimeiraAula: [
         this.aluno.dataPrimeiraAula
