@@ -110,8 +110,8 @@ export class DetalharAlunoComponent implements OnInit {
   }
 
   voltar(): void {
-    if (this.origem === 'calendario-aulas') {
-      this.router.navigate(['/' + this.origem]);
+    if (this.origem) {
+      this.router.navigate([this.origem]);
     } else {
       this.router.navigate(['/listar']);
     }

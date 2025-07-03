@@ -1,0 +1,30 @@
+<p-card *ngIf="favoritos">
+  <ng-template pTemplate="header">
+    <span class="font-bold text-lg">⭐ Favoritos do mês</span>
+  </ng-template>
+  <div>
+    <div
+      class="grid align-items-center py-3 border-top-1 surface-border borda-tabela-card"
+      *ngFor="let aluno of favoritos"
+    >
+      <div class="col-3 flex flex-column align-items-center text-center">
+        <img
+          [src]="aluno.fotoUrl"
+          alt="Foto do aluno"
+          class="border-circle shadow-1 img-miniatura mb-2"
+          style="width: 50px; height: 50px"
+        />
+        <a
+          (click)="redirecionarAluno(aluno.id)"
+          class="text-sm text-primary hover:underline link"
+        >
+          Ver perfil
+        </a>
+      </div>
+      <div class="col-9 font-bold text-color">
+        {{ aluno.nomeAluno }} - {{ aluno.quantidadeAulas }} aulas
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!favoritos">SEM ALUNOS FAVORITOS</div>
+</p-card>

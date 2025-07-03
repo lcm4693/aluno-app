@@ -85,7 +85,7 @@ export class CalendarioAulasComponent implements OnInit {
 
     if (alunoId && aulaId) {
       this.router.navigate([`/alunos`, alunoId], {
-        queryParams: { aula: aulaId, origem: 'calendario-aulas' },
+        queryParams: { aula: aulaId, origem: '/calendario-aulas' },
       });
     }
   }

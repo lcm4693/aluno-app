@@ -110,7 +110,7 @@ def buscar_alunos_ultimas_aulas(id_usuario):
             session.query(
                 Aula.id.label("idAula"),
                 Aula.data.label("dataAula"),
-                AlunoAlias.id.label("id"),
+                AlunoAlias.id.label("idAluno"),
                 AlunoAlias.nome.label("nomeAluno"),
                 AlunoAlias.foto.label("foto"),
                 sub_total_aulas.c.quantidadeAulas,
@@ -125,9 +125,10 @@ def buscar_alunos_ultimas_aulas(id_usuario):
 
         lista = [
             {
-                "id": aluno.id,
+                "idAluno": aluno.idAluno,
                 "nomeAluno": aluno.nomeAluno,
                 "foto": aluno.foto,
+                "idAula": aluno.idAula,
                 "dataAula": converter_data_para_front(aluno.dataAula),
                 "totalAulas": aluno.quantidadeAulas,
             }

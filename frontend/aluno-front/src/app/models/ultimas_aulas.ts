@@ -1,6 +1,7 @@
 export class UltimasAulas {
   constructor(
-    public id: number,
+    public idAula: number,
+    public idAluno: number,
     public nomeAluno: string,
     public fotoUrl: string,
     public dataAula: Date,

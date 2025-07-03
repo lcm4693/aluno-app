@@ -7,7 +7,6 @@ html {
 
 body {
   font-size: 1rem !important;
-  background-color: #ffffff;
   background: #f1f1f1;
   text-align: left;
   label {
@@ -311,4 +310,34 @@ tr {
 
 .p-datatable-tbody > tr:hover {
   background-color: #c6d9e8 !important;
+}
+
+.linha-clicavel {
+  border-radius: 0.5rem; /* ou 8px */
+  transition: background-color 0.3s ease;
+}
+
+.linha-clicavel:hover {
+  background-color: #c6d9e8 !important;
+  cursor: pointer;
+}
+
+.text-secondary {
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+.summary-card {
+  width: 100%;
+  max-width: 18rem;
+}
+
+.p-card {
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.06);
+}
+
+.borda-tabela-card {
+  border-color: #ede4e4 !important;
 }
