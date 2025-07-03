@@ -4,7 +4,6 @@ import {
   catchError,
   filter,
   Observable,
-  of,
   switchMap,
   take,
   throwError,
