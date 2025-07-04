@@ -135,3 +135,33 @@ def buscar_aula_aluno(aluno_id, aula_id):
         )
 
         return aula
+
+
+def buscar_aulas_sem_anotacoes(id_usuario, page, page_size):
+    with get_session() as session:
+
+        offset = (page - 1) * page_size
+
+        aulas_sem_anotacao = (
+            session.query(Aula.id, Aula.data, Aluno.nome, Aula.aluno_id)
+            .join(Aluno, Aula.aluno_id == Aluno.id)
+            .filter(Aluno.deletado == False)
+            .filter(Aluno.id_usuario == id_usuario)
+            .filter(Aula.anotacoes == None)
+            .order_by(Aula.data.desc())
+            .offset(offset)
+            .limit(page_size)
+            .all()
+        )
+
+        lista = [
+            {
+                "idAluno": aula.aluno_id,
+                "dataAula": aula.data,
+                "idAula": aula.id,
+                "nomeAluno": aula.nome,
+            }
+            for aula in aulas_sem_anotacao
+        ]
+
+        return lista

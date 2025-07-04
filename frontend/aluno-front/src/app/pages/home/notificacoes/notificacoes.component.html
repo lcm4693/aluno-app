@@ -1,0 +1,36 @@
+<p-card *ngIf="notificacoes">
+  <ng-template pTemplate="header">
+    <span class="font-bold text-lg">🔔 Notificações</span>
+  </ng-template>
+  <!-- lista de lembretes -->
+  <p-accordionTab>
+    <ng-template pTemplate="header">
+      📝 <span class="ml-2 font-bold">Aulas sem anotação</span>
+    </ng-template>
+
+    <!-- <li
+          *ngFor="let aula of notificacoes.aulasSemAnotacao"
+          class="py-2 border-bottom-1 surface-border cursor-pointer hover:surface-200 px-2"
+          (click)="marcarComoLida(aula)"
+        > -->
+
+    <div
+      *ngFor="let notificacao of notificacoes.aulasSemAnotacao"
+      class="flex justify-between align-items-center border-bottom-1 surface-border py-3 px-2 hover:surface-100 border-round cursor-pointer transition-duration-200"
+    >
+      <div class="flex align-items-center gap-3">
+        <i class="pi pi-exclamation-circle text-orange-500 text-xl"></i>
+        <div class="flex flex-column">
+          <span class="font-medium">{{ notificacao.mensagem }}</span>
+        </div>
+      </div>
+    </div>
+
+    <p
+      *ngIf="notificacoes.aulasSemAnotacao.length === 0"
+      class="text-center text-color-secondary py-3"
+    >
+      Nenhuma notificação nesta categoria.
+    </p>
+  </p-accordionTab>
+</p-card>

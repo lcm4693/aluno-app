@@ -41,3 +41,14 @@ def recuperar_alunos_ultimas_aulas():
     alunos_ultimas_aulas = buscar_alunos_ultimas_aulas(idUsuario)
     logger.debug(f"Retorno: {alunos_ultimas_aulas}")
     return jsonify(alunos_ultimas_aulas)
+
+
+@dashboard_bp.route("/notificacoes", methods=["GET"])
+@handle_errors
+@jwt_required()
+def buscar_todas_notificacoes_usuario():
+    idUsuario = get_jwt_identity()
+    notificacoes = retornar_notificacoes(idUsuario)
+    logger.debug(f"Retorno: {notificacoes}")
+
+    return jsonify(notificacoes)

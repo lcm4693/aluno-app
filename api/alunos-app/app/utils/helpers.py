@@ -1,6 +1,7 @@
 # app/utils/helpers.py
 
 import unicodedata
+from enum import Enum
 
 
 def remover_acentos(texto):
@@ -37,3 +38,11 @@ def aluno_dict(row):
         "id_pais_natal",
     ]
     return dict(zip(keys, row))
+
+
+def model_to_dict(obj):
+    return {
+        key: (value.name if isinstance(value, Enum) else value)
+        for key, value in obj.__dict__.items()
+        if not key.startswith("_")
+    }

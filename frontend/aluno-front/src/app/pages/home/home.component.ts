@@ -8,6 +8,7 @@ import { Usuario } from '../../models/usuario';
 import { FavoritosComponent } from './favoritos/favoritos.component';
 import { UltimasAulasComponent } from './ultimas-aulas/ultimas-aulas.component';
 import { CardsEstatisticasComponent } from './cards-estatisticas/cards-estatisticas.component';
+import { NotificacoesComponent } from './notificacoes/notificacoes.component';
 
 @Component({
   selector: 'app-home',
@@ -20,6 +21,7 @@ import { CardsEstatisticasComponent } from './cards-estatisticas/cards-estatisti
     FavoritosComponent,
     UltimasAulasComponent,
     CardsEstatisticasComponent,
+    NotificacoesComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',

@@ -1,6 +1,6 @@
 # app/utils/date_utils.py
 
-from datetime import datetime, timezone, date, time
+from datetime import datetime, date, time, timedelta
 
 
 def converter_data_para_front(data):
@@ -20,3 +20,7 @@ def converter_data_para_banco(data):
     if data:
         return datetime.fromisoformat(data.replace("Z", "+00:00")).date()
     return None
+
+
+def get_date_in_one_week():
+    return (datetime.utcnow() + timedelta(days=7)).date()

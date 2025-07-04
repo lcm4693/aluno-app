@@ -8,6 +8,11 @@ from datetime import date, timedelta
 from calendar import monthrange
 from app.utils.date_utils import *
 from sqlalchemy.orm import aliased
+from app.models.notificacao import Notificacao, TipoNotificacao
+from app.services.notificacao_service import *
+from sqlalchemy import or_
+from datetime import date
+
 
 logger = configurar_logger(__name__)
 
@@ -138,3 +143,128 @@ def buscar_alunos_ultimas_aulas(id_usuario):
         lista = [alterar_nome_foto_para_url_foto(aluno) for aluno in lista]
 
         return lista
+
+
+def buscar_aulas_sem_anotacoes(id_usuario, page, page_size):
+    with get_session() as session:
+
+        offset = (page - 1) * page_size
+
+        aulas_sem_anotacao = (
+            session.query(Aula.id, Aula.data, Aula.aluno_id, Aluno.nome)
+            .join(Aluno, Aula.aluno_id == Aluno.id)
+            .filter(Aluno.deletado == False)
+            .filter(Aluno.id_usuario == id_usuario)
+            .filter(
+                or_(
+                    Aula.anotacoes == "",
+                    Aula.anotacoes == None,
+                )
+            )
+            .order_by(Aula.data.desc())
+            .offset(offset)
+            .limit(page_size)
+            .all()
+        )
+
+        lista = [
+            {
+                "idAluno": aula.aluno_id,
+                "dataAula": converter_data_para_front(aula.data),
+                "idAula": aula.id,
+                "nomeAluno": aula.nome,
+            }
+            for aula in aulas_sem_anotacao
+        ]
+
+        return lista
+
+
+def retornar_notificacoes(id_usuario):
+    notificacoes_aulas_sem_anotacao = retornar_notificacoes_aulas_sem_anotacao(
+        id_usuario
+    )
+
+    lista = {"aulasSemAnotacao": notificacoes_aulas_sem_anotacao}
+
+    return lista
+
+
+def retornar_notificacoes_aulas_sem_anotacao(id_usuario):
+    print(f"INICIO DO METODO==========================================")
+    notificacoes_existentes = buscar_todas_notificacoes_usuario(
+        id_usuario, TipoNotificacao.SEM_ANOTACAO.value
+    )
+
+    print(f"BUSCOU TUDO DO BANCO==========================================")
+
+    chaves_existentes = {n["chave_unica"] for n in notificacoes_existentes}
+
+    print(f"CRIOU CHAVES EXISTENTES==========================================")
+
+    notificacoes_nao_lidas = [n for n in notificacoes_existentes if not n["lida"]]
+
+    print(f"CRIOU NOTIFICACOES NAO LIDAS==========================================")
+
+    limite_total = 10
+    faltam = limite_total - len(notificacoes_nao_lidas)
+
+    if faltam <= 0:
+        return  # já tem 10 ou mais não lidas, não precisa cadastrar mais
+
+    notificacoes_a_cadastrar = []
+
+    pagina = 1
+
+    print(f"INICIAR O WHILE==========================================")
+
+    while len(notificacoes_a_cadastrar) < faltam:
+        aulas = buscar_aulas_sem_anotacoes(id_usuario, pagina, limite_total)
+        if not aulas:
+            break  # não há mais aulas para buscar
+
+        for aula in aulas:
+            chave_unica = f"{TipoNotificacao.SEM_ANOTACAO.value}|{aula['idAula']}"
+            if chave_unica not in chaves_existentes:
+                notificacoes_a_cadastrar.append(
+                    Notificacao(
+                        id_usuario=id_usuario,
+                        tipo=TipoNotificacao.SEM_ANOTACAO.value,
+                        chave_unica=chave_unica,
+                        # titulo=f"A aula do dia {aula['dataAula']} do {aula['nomeAluno']} está em branco",
+                        # mensagem=f"A aula do dia {aula['dataAula']} do {aula['nomeAluno']} está em branco",
+                        lida=False,
+                        data_criacao=date.today(),
+                        data_expiracao=get_date_in_one_week(),
+                        id_aluno=aula["idAluno"],
+                        id_aula=aula["idAula"],
+                    )
+                )
+                if len(notificacoes_a_cadastrar) >= faltam:
+                    break  # já temos 10 notificações novas
+        pagina += 1  # próxima página
+
+    print(notificacoes_a_cadastrar)
+
+    if notificacoes_a_cadastrar:
+        criar_notificacoes_em_lote(notificacoes_a_cadastrar)
+
+    print(f"TUDO CADASTRADO==========================================")
+
+    notificacoes_validas_mostrar = buscar_notificacoes_nao_lidas(
+        id_usuario, TipoNotificacao.SEM_ANOTACAO.value
+    )
+    print(f"VAI RETORNAR==========================================")
+
+    print(
+        f"{notificacoes_validas_mostrar}========================================================="
+    )
+    return [
+        {
+            "nomeAluno": notif.aluno.nome,
+            "idAluno": notif.aluno.id,
+            "dataAula": converter_data_para_front(notif.aula.data),
+            "idAula": notif.aula.id,
+        }
+        for notif in notificacoes_validas_mostrar
+    ]

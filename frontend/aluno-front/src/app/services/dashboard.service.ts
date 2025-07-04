@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Estatisticas } from '../models/estatisticas';
 import { AlunoFavorito } from '../models/alunoFavorito';
 import { UltimasAulas } from '../models/ultimas_aulas';
+import { Notificacao } from '../models/notificacoes/notificacao';
 
 @Injectable({
   providedIn: 'root',
@@ -28,5 +29,9 @@ export class DashboardService {
 
   getUltimasAulas(): Observable<UltimasAulas[]> {
     return this.http.get<UltimasAulas[]>(`${this.baseUrl}` + '/ultimas-aulas');
+  }
+
+  geNotificacoes(): Observable<Notificacao> {
+    return this.http.get<Notificacao>(`${this.baseUrl}` + '/notificacoes');
   }
 }
