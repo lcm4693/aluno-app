@@ -4,14 +4,14 @@ import { DashboardService } from '../../../services/dashboard.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { LoggerService } from '../../../services/logger.service';
-import { Accordion, AccordionModule, AccordionTab } from 'primeng/accordion';
 import { AulaSemAnotacao } from '../../../models/notificacoes/aulasSemAnotacao';
+import { AccordionModule } from 'primeng/accordion';
 
 @Component({
   selector: 'app-notificacoes',
   standalone: true,
   imports: [CommonModule, CardModule, AccordionModule],
-  providers: [DatePipe, AccordionTab, Accordion],
+  providers: [DatePipe],
   templateUrl: './notificacoes.component.html',
   styleUrl: './notificacoes.component.css',
 })
@@ -29,6 +29,9 @@ export class NotificacoesComponent implements OnInit {
       next: (res) => {
         this.loggerService.info(JSON.stringify(res));
         this.notificacoes = res;
+
+        this.loggerService.info(JSON.stringify(this.notificacoes));
+
         this.notificacoes.aulasSemAnotacao.forEach((aula) => {
           const dataAula = this.datePipe.transform(
             aula.dataAula,

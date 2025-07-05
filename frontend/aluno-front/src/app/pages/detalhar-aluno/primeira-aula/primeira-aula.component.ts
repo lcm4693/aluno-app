@@ -6,15 +6,15 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { CalendarModule } from 'primeng/calendar';
 import { Aluno } from '../../../models/aluno';
 import { AlunoService } from '../../../services/aluno.service';
 import { ToastService } from '../../../services/toast.service';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-primeira-aula',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CalendarModule],
+  imports: [CommonModule, ReactiveFormsModule, DatePickerModule],
   templateUrl: './primeira-aula.component.html',
   styleUrl: './primeira-aula.component.css',
 })

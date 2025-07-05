@@ -12,7 +12,6 @@ import {
 } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { PanelModule } from 'primeng/panel';
-import { Calendar, CalendarModule } from 'primeng/calendar';
 import {
   FormBuilder,
   FormGroup,
@@ -22,7 +21,8 @@ import {
 } from '@angular/forms';
 import { Aula } from '../../../models/aula';
 import { dataNoFuturoValidator } from '../../../validators';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TextareaModule } from 'primeng/textarea';
+import { DatePicker } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-detalhar-aula',
@@ -31,10 +31,10 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     CommonModule,
     ButtonModule,
     PanelModule,
-    CalendarModule,
     FormsModule,
     ReactiveFormsModule,
-    InputTextareaModule,
+    TextareaModule,
+    DatePicker,
   ],
   templateUrl: './detalhar-aula.component.html',
   styleUrl: './detalhar-aula.component.css',
@@ -83,12 +83,12 @@ export class DetalharAulaComponent implements AfterViewInit, OnChanges {
   salvar(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      Object.keys(this.form.controls).forEach((campo) => {
-        const control = this.form.get(campo);
-        if (control && control.invalid) {
-          console.warn(`Campo "${campo}" inválido. Erros:`, control.errors);
-        }
-      });
+      // Object.keys(this.form.controls).forEach((campo) => {
+      //   const control = this.form.get(campo);
+      //   if (control && control.invalid) {
+      //     console.warn(`Campo "${campo}" inválido. Erros:`, control.errors);
+      //   }
+      // });
       return;
     } else {
       this.aula!.dataAula = this.form.get('dataAula')?.value;

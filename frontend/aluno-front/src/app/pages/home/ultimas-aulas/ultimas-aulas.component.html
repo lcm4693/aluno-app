@@ -5,12 +5,12 @@
 
   <div class="grid font-semibold text-sm text-color-secondary mb-2 text-center">
     <div class="col-6 md:col-5 text-base">Aluno</div>
-    <div class="col-6 md:col-5 text-base">Data</div>
-    <div class="hidden md:block md:col-2 text-base">Total de Aulas</div>
+    <div class="col-6 md:col-3 text-base">Data</div>
+    <div class="hidden md:block md:col-4 text-base">Total de Aulas</div>
   </div>
   <div class="pt-2 text-center" *ngFor="let aula of ultimasAulas">
     <div
-      class="grid align-items-center col-12 border-top-1 borda-tabela-card linha-clicavel p-2"
+      class="grid align-items-center col-12 border-top-1 linha-clicavel p-2 surface-border"
       (click)="redirecionarAluno(aula.idAluno, aula.idAula)"
     >
       <div class="col-6 md:col-5 font-medium">
@@ -21,13 +21,13 @@
             class="border-circle shadow-1 img-miniatura mb-2"
             style="width: 50px; height: 50px"
           />
-          <span class="ml-3">{{ aula.nomeAluno }}</span>
+          <span class="ml-5">{{ aula.nomeAluno }}</span>
         </div>
       </div>
-      <div class="col-6 md:col-5">
-        {{ aula.dataAula | date : "d 'de' MMMM 'de' y" }}
+      <div class="col-6 md:col-3">
+        {{ aula.dataAula | date : "dd/MM/yyyy" }}
       </div>
-      <div class="hidden md:block md:col-2">
+      <div class="hidden md:block md:col-4">
         {{ aula.totalAulas }}
       </div>
     </div>

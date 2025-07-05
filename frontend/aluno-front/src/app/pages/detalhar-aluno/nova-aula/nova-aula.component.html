@@ -3,12 +3,13 @@
   <div class="flex flex-wrap mb-4">
     <div class="basis-1/6 md:basis-1/6 pr-3">
       <label for="dataAula">Data da aula:</label>
-      <p-calendar
+
+      <p-datepicker
         formControlName="dataAula"
-        inputId="dataAula"
+        size="small"
+        showIcon
+        iconDisplay="input"
         dateFormat="dd/mm/yy"
-        [showIcon]="true"
-        class="w-full"
         [maxDate]="hoje"
         [ngClass]="{
           'ng-invalid ng-dirty':
@@ -16,16 +17,17 @@
         }"
       />
       <small
-        class="p-error"
+        class="error-message"
         *ngIf="
-          form.get('date')?.hasError('required') && form.get('date')?.touched
+          form.get('dataAula')?.hasError('required') &&
+          form.get('dataAula')?.touched
         "
       >
         Data da aula é obrigatória</small
       >
 
       <small
-        class="p-error"
+        class="error-message"
         *ngIf="form.get('dataAula')?.errors?.['dataNoFuturo']"
       >
         A data não pode ser futura.
@@ -49,7 +51,7 @@
         }"
       ></textarea>
       <small
-        class="p-error"
+        class="error-message"
         *ngIf="
           form.get('anotacoes')?.hasError('required') &&
           form.get('anotacoes')?.touched

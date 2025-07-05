@@ -9,20 +9,21 @@
           ? (aluno.dataPrimeiraAula | date : "dd/MM/yyyy")
           : "-"
       }}</span>
-      <p-calendar
+
+      <p-datepicker
         *ngIf="editandoAlunoDesde"
         formControlName="dataPrimeiraAula"
+        size="small"
+        showIcon
+        iconDisplay="input"
         dateFormat="dd/mm/yy"
-        [showIcon]="true"
-        styleClass="calendario-pequeno"
-        appendTo="body"
+        [maxDate]="hoje"
         [ngClass]="{
           'ng-invalid ng-dirty':
             form.get('dataPrimeiraAula')?.invalid &&
             form.get('dataPrimeiraAula')?.touched
         }"
-        [maxDate]="hoje"
-      ></p-calendar>
+      />
     </div>
     <!-- Botão cancelar (só aparece no modo de edição) -->
     <button

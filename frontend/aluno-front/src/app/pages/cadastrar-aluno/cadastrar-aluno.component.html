@@ -19,7 +19,7 @@
         }"
       />
       <small
-        class="p-error"
+        class="error-message"
         *ngIf="
           form.get('nome')?.hasError('required') && form.get('nome')?.touched
         "
@@ -106,7 +106,7 @@
         }"
       ></p-dropdown>
       <small
-        class="p-error"
+        class="error-message"
         *ngIf="
           form.get('nivel')?.hasError('required') && form.get('nivel')?.touched
         "

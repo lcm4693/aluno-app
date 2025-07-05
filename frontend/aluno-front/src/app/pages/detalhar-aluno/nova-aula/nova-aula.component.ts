@@ -7,12 +7,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
 import { Aula } from '../../../models/aula';
 import { dataNoFuturoValidator } from '../../../validators';
-import { AnotacoesComponent } from '../../../shared/anotacoes/anotacoes.component';
+import { ButtonModule } from 'primeng/button';
+import { TextareaModule } from 'primeng/textarea';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-nova-aula',
@@ -20,9 +20,11 @@ import { AnotacoesComponent } from '../../../shared/anotacoes/anotacoes.componen
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    CalendarModule,
-    InputTextareaModule,
+    DatePickerModule,
     InputTextModule,
+    InputTextModule,
+    ButtonModule,
+    TextareaModule,
   ],
   templateUrl: './nova-aula.component.html',
   styleUrl: './nova-aula.component.css',

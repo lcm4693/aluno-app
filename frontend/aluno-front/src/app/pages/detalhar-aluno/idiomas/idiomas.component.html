@@ -28,10 +28,13 @@
         <div class="checkbox-item" *ngFor="let idioma of idiomasDisponiveis">
           <p-checkbox
             [(ngModel)]="idiomasSelecionados"
-            [label]="idioma.nome"
             [value]="idioma.id"
             [disabled]="!modoEdicao"
+            inputId="idiomasSelecionados"
           ></p-checkbox>
+          <label for="idiomasSelecionados" class="ml-2">{{
+            idioma.nome
+          }}</label>
         </div>
       </div>
     </p-fieldset>

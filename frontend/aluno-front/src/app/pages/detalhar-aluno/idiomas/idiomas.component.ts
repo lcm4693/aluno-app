@@ -3,7 +3,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FieldsetModule } from 'primeng/fieldset';
 import { Idioma } from '../../../models/idioma';
-import { HttpClient } from '@angular/common/http';
 import { IdiomaService } from '../../../services/idioma.service';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';

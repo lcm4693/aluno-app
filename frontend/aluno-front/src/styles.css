@@ -1,17 +1,12 @@
 html {
-  font-family: var(--font-family);
+  font-family: Inter var, sans-serif;
   font-size: 0.875rem;
-  color: var(--text-color);
   line-height: 1.5;
 }
 
 body {
   font-size: 1rem !important;
   background: #f1f1f1;
-  text-align: left;
-  label {
-    margin-bottom: 0;
-  }
 }
 
 .titulo {
@@ -21,25 +16,6 @@ body {
   height: 30px;
   width: 100%;
   margin-bottom: 14px !important;
-}
-
-textarea {
-  line-height: 1.5;
-}
-
-table {
-  caption-side: bottom;
-}
-
-tbody,
-td,
-tfoot,
-th,
-thead,
-tr {
-  border-color: inherit;
-  border-style: solid;
-  border-width: 0;
 }
 
 .img-miniatura {
@@ -110,40 +86,8 @@ tr {
   font-weight: 400 !important;
 }
 
-.link {
-  color: #2c7be5 !important;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.link-icone {
-  text-decoration: none;
-  cursor: pointer;
-  font-size: 1.1rem;
-}
-
-.white-space-pre-line {
-  white-space: pre-line !important;
-}
-
 .icone {
   font-size: 1.3rem;
-}
-
-.botao-nova-aula .span {
-  font-size: 1.15rem;
-}
-
-.botao-editar {
-  background: none;
-  border: none;
-  color: var(--primary-color, #007ad9);
-  cursor: pointer;
-  font-size: 1.2rem;
-}
-
-.botao-editar .pi {
-  font-size: 1.15rem;
 }
 
 .botao-editar:hover {
@@ -160,15 +104,6 @@ tr {
 
 .botao-cancelar:hover {
   color: var(--red-200);
-}
-
-.calendario-pequeno {
-  width: 10rem !important;
-}
-
-.calendario-pequeno .p-inputtext {
-  width: 6.5rem !important;
-  font-size: 0.85rem;
 }
 
 .calendar-card {
@@ -227,14 +162,6 @@ tr {
   width: 100%;
 }
 
-.p-tooltip .p-tooltip-text {
-  font-size: 0.85rem;
-}
-
-.p-button {
-  font-size: 1.25rem;
-}
-
 .p-datatable {
   font-size: 13px !important;
   word-break: break-all !important;
@@ -249,11 +176,8 @@ tr {
   word-break: normal;
   white-space: normal;
   background-color: #455d7a;
-  outline: none;
   color: #fff;
-  border: 0.1px solid #d4d4d4;
   border-right: 1px solid #ffffff;
-  /* font-weight: 400; */
   min-height: 30px;
   padding: 4px 15px 4px 5px;
 }
@@ -262,31 +186,8 @@ tr {
   border-right: 1px solid #d4d4d4;
 }
 
-.p-datatable .p-datatable-tbody > tr:not(.expandable) td {
-  height: 30px;
-  min-height: 30px;
-}
-
-.p-datatable.p-datatable-striped .p-datatable-tbody > tr:nth-child(even) {
-  background: #e0e2e3;
-}
-
 .p-datatable .p-sortable-column.p-highlight .p-sortable-column-icon {
   color: #fff;
-}
-
-.p-table td,
-.p-datatable td,
-.p-datatable .p-column-title,
-.p-datatable .p-cell-content {
-  word-break: normal;
-  overflow-wrap: break-word;
-  white-space: normal;
-}
-
-.p-error {
-  display: block;
-  margin-top: 4px;
 }
 
 .p-autocomplete-input-inf-basicas > div > input {
@@ -294,9 +195,55 @@ tr {
   width: 10rem;
 }
 
-.p-dialog .p-dialog-header {
-  color: #58595b;
-  background-color: #e0e2e3;
+/* 
+
+
+*/
+
+textarea {
+  line-height: 1.5;
+}
+
+.botao-editar {
+  background: none;
+  border: none;
+  color: var(--primary-color, #007ad9);
+  cursor: pointer;
+}
+
+.botao-editar .pi {
+  font-size: 1.2rem;
+}
+
+.error-message {
+  display: block;
+  color: red;
+  font-size: 0.8em; /* Adjust as needed */
+  margin-top: 5px; /* Adjust spacing */
+}
+
+.link {
+  color: var(--primary-color, #007ad9) !important;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link-icone {
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.button-large > button {
+  font-size: 1.25rem !important;
+}
+
+.p-tooltip .p-tooltip-text {
+  font-size: 0.85rem;
+}
+
+.fc-event-title-container {
+  text-align: center;
 }
 
 .p-dialog-loading .p-dialog-content {
@@ -304,12 +251,8 @@ tr {
   box-shadow: none;
 }
 
-.fc-event-title-container {
-  text-align: center;
-}
-
 .p-datatable-tbody > tr:hover {
-  background-color: #c6d9e8 !important;
+  background-color: #cde3f2 !important;
 }
 
 .linha-clicavel {
@@ -318,26 +261,32 @@ tr {
 }
 
 .linha-clicavel:hover {
-  background-color: #c6d9e8 !important;
+  background-color: #cde3f2 !important;
   cursor: pointer;
 }
 
-.text-secondary {
-  color: #6c757d;
-  font-size: 1rem;
-}
-
-.summary-card {
+.cartao-estatistica {
   width: 100%;
   max-width: 18rem;
 }
 
 .p-card {
   padding: 1.5rem;
-  border-radius: 1rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.06);
 }
 
-.borda-tabela-card {
-  border-color: #ede4e4 !important;
+/*
+table {
+  caption-side: bottom;
 }
+
+tbody,
+td,
+tfoot,
+th,
+thead,
+tr {
+  border-color: inherit;
+  border-style: solid;
+  border-width: 0;
+}
+*/

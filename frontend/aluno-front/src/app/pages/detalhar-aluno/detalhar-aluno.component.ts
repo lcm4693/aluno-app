@@ -1,13 +1,11 @@
-import { AfterContentChecked, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { FieldsetModule } from 'primeng/fieldset';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { NovaAulaComponent } from './nova-aula/nova-aula.component';
-import { CalendarModule } from 'primeng/calendar';
 import { Aula } from '../../models/aula';
 import { Aluno } from '../../models/aluno';
 import { TooltipModule } from 'primeng/tooltip';
@@ -17,13 +15,13 @@ import { AulaService } from '../../services/aula.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { IdiomasComponent } from './idiomas/idiomas.component';
 import { Idioma } from '../../models/idioma';
-import { IdiomaService } from '../../services/idioma.service';
 import { DetalharAulaComponent } from './detalhar-aula/detalhar-aula.component';
 import { ToastService } from '../../services/toast.service';
 import { InputTextModule } from 'primeng/inputtext';
 import { PrimeiraAulaComponent } from './primeira-aula/primeira-aula.component';
 import { UploadFotoComponent } from './upload-foto/upload-foto.component';
 import { AlunoBasico } from '../../models/dto/aluno-basico';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   standalone: true,
@@ -35,7 +33,6 @@ import { AlunoBasico } from '../../models/dto/aluno-basico';
     CommonModule,
     DialogModule,
     NovaAulaComponent,
-    CalendarModule,
     DetalharAulaComponent,
     TooltipModule,
     InformacoesBasicasComponent,
@@ -43,6 +40,7 @@ import { AlunoBasico } from '../../models/dto/aluno-basico';
     InputTextModule,
     PrimeiraAulaComponent,
     UploadFotoComponent,
+    DatePickerModule,
   ],
   templateUrl: './detalhar-aluno.component.html',
   styleUrl: './detalhar-aluno.component.css',
@@ -149,6 +147,9 @@ export class DetalharAlunoComponent implements OnInit {
         if (index !== -1) {
           this.aluno!.aulas[index] = aula;
         }
+
+        this.reordenarAulasPorData();
+
         this.fechaModalDetalharAula();
         this.toastService.success(res.mensagem);
       },

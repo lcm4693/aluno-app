@@ -7,14 +7,13 @@
       <!-- Coluna com o calendário (ocupa 25%) -->
       <div class="w-full md:w-2">
         <label class="block mb-1">Data da aula:</label>
-        <p-calendar
+        <p-datepicker
           formControlName="dataAula"
+          showIcon
+          iconDisplay="input"
           dateFormat="dd/mm/yy"
-          [showIcon]="true"
-          class="w-full"
-          [readonlyInput]="true"
           [maxDate]="hoje"
-        ></p-calendar>
+        />
       </div>
 
       <!-- Coluna com botões (ocupa 75%) -->
@@ -66,7 +65,7 @@
           }"
         ></textarea>
         <small
-          class="p-error"
+          class="error-message"
           *ngIf="
             form.get('anotacoes')?.hasError('required') &&
             form.get('anotacoes')?.touched
@@ -77,7 +76,7 @@
       </div>
       <div class="flex-1 md:w-12" *ngIf="!editando">
         <p-panel class="w-full" header="Anotações">
-          <div class="white-space-pre-line">
+          <div>
             {{ aula!.anotacoes || "—" }}
           </div>
         </p-panel>
@@ -95,7 +94,7 @@
       </div>
       <div class="flex-1 md:w-5" *ngIf="!editando">
         <p-panel class="w-full" header="Comentários do professor">
-          <div class="white-space-pre-line">
+          <div>
             {{ aula!.comentarios || "—" }}
           </div>
         </p-panel>
@@ -112,7 +111,7 @@
       </div>
       <div class="flex-1 md:w-5" *ngIf="!editando">
         <p-panel class="w-full" header="Próxima aula">
-          <div class="white-space-pre-line">
+          <div>
             {{ aula!.proximaAula || "—" }}
           </div>
         </p-panel>

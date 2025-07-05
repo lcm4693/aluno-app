@@ -17,7 +17,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TextareaModule } from 'primeng/textarea';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
 import { Pais } from '../../../models/pais';
@@ -25,11 +25,11 @@ import { PaisService } from '../../../services/pais.service';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CidadePaisSpanComponent } from '../../../shared/cidade-pais-span/cidade-pais-span.component';
 import { CidadePaisInputComponent } from '../../../shared/cidade-pais-input/cidade-pais-input.component';
-import { CalendarModule } from 'primeng/calendar';
 import { AlunoService } from '../../../services/aluno.service';
 import { ToastService } from '../../../services/toast.service';
 import { AlunoMapper } from '../../../mappers/aluno.mapper';
 import { AlunoBasico } from '../../../models/dto/aluno-basico';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-informacoes-basicas',
@@ -39,14 +39,14 @@ import { AlunoBasico } from '../../../models/dto/aluno-basico';
     FieldsetModule,
     FormsModule,
     InputTextModule,
-    InputTextareaModule,
+    TextareaModule,
     TooltipModule,
     CheckboxModule,
     AutoCompleteModule,
     CidadePaisSpanComponent,
     CidadePaisInputComponent,
-    CalendarModule,
     ReactiveFormsModule,
+    DatePickerModule,
   ],
   templateUrl: './informacoes-basicas.component.html',
   styleUrl: './informacoes-basicas.component.css',

@@ -76,15 +76,15 @@
               }}</span>
             </ng-container>
             <ng-template #edicaoCampoAniversario>
-              <p-calendar
+              <p-datepicker
                 *ngIf="modoEdicao"
                 formControlName="dataAniversario"
+                size="small"
+                showIcon
+                iconDisplay="input"
                 dateFormat="dd/mm/yy"
-                [showIcon]="true"
-                styleClass="calendario-pequeno"
-                appendTo="body"
                 [maxDate]="hoje"
-              ></p-calendar>
+              />
             </ng-template>
           </div>
           <div class="col-12 md:col-4">
