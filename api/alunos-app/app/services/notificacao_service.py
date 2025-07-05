@@ -44,6 +44,7 @@ def buscar_notificacoes_nao_lidas(id_usuario: int, tipo: str):
                 Notificacao.id_usuario == id_usuario,
                 Notificacao.tipo == tipo,
                 Notificacao.lida == False,
+                Notificacao.data_expiracao >= date.today(),
             )
             .options(
                 joinedload(Notificacao.aluno),

@@ -10,9 +10,8 @@ from app.utils.date_utils import *
 from sqlalchemy.orm import aliased
 from app.models.notificacao import Notificacao, TipoNotificacao
 from app.services.notificacao_service import *
-from sqlalchemy import or_
+from sqlalchemy import extract, and_, or_
 from datetime import date
-
 
 logger = configurar_logger(__name__)
 
@@ -180,31 +179,78 @@ def buscar_aulas_sem_anotacoes(id_usuario, page, page_size):
         return lista
 
 
+def buscar_aniversarios_alunos(id_usuario, page, page_size):
+    with get_session() as session:
+
+        offset = (page - 1) * page_size
+
+        hoje = datetime.today()
+        proximos_dias = [(hoje + timedelta(days=i)) for i in range(0, 7)]
+
+        # Gera pares (dia, mês) para os próximos 7 dias
+        dias_e_meses = [(d.day, d.month) for d in proximos_dias]
+
+        # Cria condições OR para cada dia/mês
+        condicoes = [
+            and_(
+                extract("day", Aluno.data_aniversario) == dia,
+                extract("month", Aluno.data_aniversario) == mes,
+            )
+            for dia, mes in dias_e_meses
+        ]
+
+        # Monta a query
+        alunos = (
+            session.query(Aluno)
+            .filter(
+                Aluno.deletado == False, Aluno.id_usuario == id_usuario, or_(*condicoes)
+            )
+            .order_by(
+                extract("month", Aluno.data_aniversario),
+                extract("day", Aluno.data_aniversario),
+            )
+            .offset(offset)
+            .limit(page_size)
+            .all()
+        )
+
+        lista = [
+            {
+                "idAluno": aluno.id,
+                "dataAniversario": aluno.data_aniversario,
+                "nomeAluno": aluno.nome,
+            }
+            for aluno in alunos
+        ]
+
+        return lista
+
+
 def retornar_notificacoes(id_usuario):
     notificacoes_aulas_sem_anotacao = retornar_notificacoes_aulas_sem_anotacao(
         id_usuario
     )
 
-    lista = {"aulasSemAnotacao": notificacoes_aulas_sem_anotacao}
+    notificacoes_aniversarios_alunos = retornar_notificacoes_aniversarios_aluno(
+        id_usuario
+    )
+
+    lista = {
+        "aulasSemAnotacao": notificacoes_aulas_sem_anotacao,
+        "aniversariosAlunos": notificacoes_aniversarios_alunos,
+    }
 
     return lista
 
 
 def retornar_notificacoes_aulas_sem_anotacao(id_usuario):
-    print(f"INICIO DO METODO==========================================")
     notificacoes_existentes = buscar_todas_notificacoes_usuario(
         id_usuario, TipoNotificacao.SEM_ANOTACAO.value
     )
 
-    print(f"BUSCOU TUDO DO BANCO==========================================")
-
     chaves_existentes = {n["chave_unica"] for n in notificacoes_existentes}
 
-    print(f"CRIOU CHAVES EXISTENTES==========================================")
-
     notificacoes_nao_lidas = [n for n in notificacoes_existentes if not n["lida"]]
-
-    print(f"CRIOU NOTIFICACOES NAO LIDAS==========================================")
 
     limite_total = 10
     faltam = limite_total - len(notificacoes_nao_lidas)
@@ -215,8 +261,6 @@ def retornar_notificacoes_aulas_sem_anotacao(id_usuario):
     notificacoes_a_cadastrar = []
 
     pagina = 1
-
-    print(f"INICIAR O WHILE==========================================")
 
     while len(notificacoes_a_cadastrar) < faltam:
         aulas = buscar_aulas_sem_anotacoes(id_usuario, pagina, limite_total)
@@ -234,6 +278,7 @@ def retornar_notificacoes_aulas_sem_anotacao(id_usuario):
                         # titulo=f"A aula do dia {aula['dataAula']} do {aula['nomeAluno']} está em branco",
                         # mensagem=f"A aula do dia {aula['dataAula']} do {aula['nomeAluno']} está em branco",
                         lida=False,
+                        data_evento=date.today(),
                         data_criacao=date.today(),
                         data_expiracao=get_date_in_one_week(),
                         id_aluno=aula["idAluno"],
@@ -244,20 +289,11 @@ def retornar_notificacoes_aulas_sem_anotacao(id_usuario):
                     break  # já temos 10 notificações novas
         pagina += 1  # próxima página
 
-    print(notificacoes_a_cadastrar)
-
     if notificacoes_a_cadastrar:
         criar_notificacoes_em_lote(notificacoes_a_cadastrar)
 
-    print(f"TUDO CADASTRADO==========================================")
-
     notificacoes_validas_mostrar = buscar_notificacoes_nao_lidas(
         id_usuario, TipoNotificacao.SEM_ANOTACAO.value
-    )
-    print(f"VAI RETORNAR==========================================")
-
-    print(
-        f"{notificacoes_validas_mostrar}========================================================="
     )
     return [
         {
@@ -265,6 +301,66 @@ def retornar_notificacoes_aulas_sem_anotacao(id_usuario):
             "idAluno": notif.aluno.id,
             "dataAula": converter_data_para_front(notif.aula.data),
             "idAula": notif.aula.id,
+        }
+        for notif in notificacoes_validas_mostrar
+    ]
+
+
+def retornar_notificacoes_aniversarios_aluno(id_usuario):
+    notificacoes_existentes = buscar_todas_notificacoes_usuario(
+        id_usuario, TipoNotificacao.ANIVERSARIO.value
+    )
+
+    chaves_existentes = {n["chave_unica"] for n in notificacoes_existentes}
+
+    notificacoes_nao_lidas = [n for n in notificacoes_existentes if not n["lida"]]
+
+    limite_total = 10
+    faltam = limite_total - len(notificacoes_nao_lidas)
+
+    if faltam <= 0:
+        return  # já tem 10 ou mais não lidas, não precisa cadastrar mais
+
+    notificacoes_a_cadastrar = []
+
+    pagina = 1
+
+    while len(notificacoes_a_cadastrar) < faltam:
+        alunos = buscar_aniversarios_alunos(id_usuario, pagina, limite_total)
+        if not alunos:
+            break  # não há mais nada para buscar
+
+        for aluno in alunos:
+            chave_unica = f"{TipoNotificacao.ANIVERSARIO.value}|{aluno['idAluno']}"
+            if chave_unica not in chaves_existentes:
+                notificacoes_a_cadastrar.append(
+                    Notificacao(
+                        id_usuario=id_usuario,
+                        tipo=TipoNotificacao.ANIVERSARIO.value,
+                        chave_unica=chave_unica,
+                        lida=False,
+                        data_evento=aluno["dataAniversario"],
+                        data_criacao=date.today(),
+                        data_expiracao=get_date_in_one_week(),
+                        id_aluno=aluno["idAluno"],
+                        id_aula=None,
+                    )
+                )
+                if len(notificacoes_a_cadastrar) >= faltam:
+                    break  # já temos 10 notificações novas
+        pagina += 1  # próxima página
+
+    if notificacoes_a_cadastrar:
+        criar_notificacoes_em_lote(notificacoes_a_cadastrar)
+
+    notificacoes_validas_mostrar = buscar_notificacoes_nao_lidas(
+        id_usuario, TipoNotificacao.ANIVERSARIO.value
+    )
+    return [
+        {
+            "nomeAluno": notif.aluno.nome,
+            "idAluno": notif.aluno.id,
+            "dataAniversario": converter_data_para_front(notif.data_evento),
         }
         for notif in notificacoes_validas_mostrar
     ]

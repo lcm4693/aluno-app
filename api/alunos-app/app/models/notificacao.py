@@ -39,6 +39,7 @@ class Notificacao(Base):
     mensagem = Column(Text, nullable=True)
 
     lida = Column(Boolean, default=False)
+    data_evento = Column(Date)
     data_criacao = Column(DateTime, default=datetime.utcnow)
     data_expiracao = Column(Date, default=get_date_in_one_week())
     data_leitura = Column(DateTime, nullable=True)
