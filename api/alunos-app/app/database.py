@@ -18,7 +18,7 @@ if APP_ENV == "dev":
 # ✅ 3. Montagem da URL de conexão com o banco
 DATABASE_URL = (
     f"mysql+mysqldb://{Config.DB_USER}:{Config.DB_PASS}"
-    f"@{Config.DB_HOST}:{Config.DB_PORT}/{Config.DB_NAME}?charset=utf8mb4"
+    f"@{Config.DB_HOST}:{Config.DB_PORT}/{Config.DB_NAME}?charset=utf8mb4&connect_timeout=5"
 )
 
 # ✅ 4. Engine e Session do SQLAlchemy
@@ -29,7 +29,8 @@ engine = create_engine(
     poolclass=QueuePool,
     pool_size=5,  # número de conexões persistentes no pool
     max_overflow=10,  # quantas extras ele pode abrir temporariamente
-    pool_timeout=30,  # tempo em segundos para esperar uma conexão do pool)
+    pool_timeout=5,  # tempo em segundos para esperar uma conexão do pool)
+    pool_recycle=600,  # fecha conexões inativas após 10 minutos
 )
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 Base = declarative_base()
