@@ -1,0 +1,220 @@
+<!-- cadastrar-aluno.component.html -->
+<div
+  class="p-card p-4 shadow-2 border-round-xl surface-ground"
+  style="margin: 2rem auto !important; max-width: 100rem"
+>
+  <h2 class="text-3xl font-bold mb-4">Cadastro de Aluno</h2>
+
+  <form [formGroup]="form" class="grid formgrid p-fluid">
+    <!-- Linha 1 -->
+    <div class="field col-3 md:col-3">
+      <label for="nome">Nome:</label>
+      <input
+        pInputText
+        id="nome"
+        type="text"
+        formControlName="nome"
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+            form.get('nome')?.invalid && form.get('nome')?.touched
+        }"
+      />
+      <small
+        class="error-message"
+        *ngIf="
+          form.get('nome')?.hasError('required') && form.get('nome')?.touched
+        "
+      >
+        Nome é obrigatório
+      </small>
+    </div>
+    <div class="field col-3 md:col-3">
+      <div class="flex gap-2 align-items-end">
+        <div class="field w-full">
+          <label for="mora">Mora:</label>
+          <input pInputText id="mora" type="text" formControlName="mora" />
+        </div>
+        <div class="field w-full">
+          <label for="mora">País:</label>
+          <p-autoComplete
+            id="paisMora"
+            formControlName="moraPaisObj"
+            [suggestions]="paisesFiltradosMoraPais"
+            (completeMethod)="filtrarPaisMora($event)"
+            optionLabel="nome"
+            [field]="'nome'"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="field col-3 md:col-3">
+      <div class="flex gap-2 align-items-end">
+        <div class="field w-full">
+          <label for="cidadeNatal">Cidade Natal:</label>
+          <input
+            pInputText
+            id="cidadeNatal"
+            type="text"
+            formControlName="cidadeNatal"
+          />
+        </div>
+        <div class="field w-full">
+          <label for="mora">País Natal:</label>
+          <p-autoComplete
+            id="paisNatal"
+            formControlName="paisNatalObj"
+            [suggestions]="paisesFiltradosPaisNatal"
+            (completeMethod)="filtrarPaisNatal($event)"
+            optionLabel="nome"
+            [field]="'nome'"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="field col-3 md:col-3">
+      <label for="familia">Família:</label>
+      <input pInputText id="familia" type="text" formControlName="familia" />
+    </div>
+
+    <!-- Linha 2 -->
+    <div class="field col-3 md:col-3">
+      <label for="profissao">Profissão:</label>
+      <input
+        pInputText
+        id="profissao"
+        type="text"
+        formControlName="profissao"
+      />
+    </div>
+    <div class="field col-3 md:col-3">
+      <label for="nivel">Nível:</label>
+      <p-dropdown
+        [options]="niveis"
+        placeholder="Selecione..."
+        inputId="nivel"
+        formControlName="nivel"
+        optionLabel="label"
+        optionValue="value"
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+            form.get('nivel')?.invalid && form.get('nivel')?.touched
+        }"
+      ></p-dropdown>
+      <small
+        class="error-message"
+        *ngIf="
+          form.get('nivel')?.hasError('required') && form.get('nivel')?.touched
+        "
+      >
+        Nível é obrigatório
+      </small>
+    </div>
+    <div class="field col-3 md:col-3">
+      <label for="idade">Idade:</label>
+      <input pInputText id="idade" type="number" formControlName="idade" />
+    </div>
+    <div class="field col-3 md:col-3">
+      <label for="hobbies">Hobbies:</label>
+      <input pInputText id="hobbies" type="text" formControlName="hobbies" />
+    </div>
+
+    <!-- Linha 3 -->
+    <div class="field col-3 md:col-3">
+      <label for="pontos">Pontos a saber:</label>
+      <textarea
+        pInputTextarea
+        id="pontos"
+        formControlName="pontos"
+        rows="3"
+        class="w-full"
+        style="height: 255px !important"
+      ></textarea>
+    </div>
+    <div class="field col-3 md:col-3">
+      <label for="link">Link do perfil:</label>
+      <input pInputText id="link" type="text" formControlName="linkPerfil" />
+    </div>
+    <!-- Linha 4: Idiomas -->
+    <div class="field col-6 md:col-6">
+      <label>Idiomas:</label>
+      <div class="flex flex-wrap">
+        <div
+          *ngFor="let idioma of idiomasDisponiveis"
+          class="w-5 md:w-5 flex items-center mb-2"
+        >
+          <p-checkbox
+            name="idiomas"
+            formControlName="idiomas"
+            [value]="idioma.id"
+            inputId="{{ idioma.id }}"
+          ></p-checkbox>
+          <label for="{{ idioma.id }}" class="ml-2">{{ idioma.nome }}</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="field col-3">
+      <div #pasteListener class="invisible-input" contenteditable="true">
+        <input type="file" name="foto" id="foto-input" class="d-none" />
+      </div>
+    </div>
+
+    <!-- Linha 5: Upload de imagem -->
+    <div class="field col-12" style="margin-bottom: 0.5rem">
+      <label for="foto">Imagem do aluno:</label>
+
+      <div
+        #imageContainer
+        class="border-2 border-dashed surface-border surface-100 p-4 border-round mt-4 mb-4"
+        style="
+          display: flex;
+          background-color: #e1e1e1 !important;
+          justify-content: center;
+        "
+      >
+        <image-cropper
+          *ngIf="imagemEvento"
+          [imageChangedEvent]="imagemEvento"
+          [maintainAspectRatio]="false"
+          format="jpeg"
+          style="display: block; margin-bottom: 1rem"
+          (imageCropped)="onImageCropped($event)"
+        ></image-cropper>
+      </div>
+    </div>
+    <div class="field col-12">
+      <div class="flex justify-content-between items-center w-full">
+        <!-- Botão à esquerda -->
+        <div class="flex gap-2 col-3">
+          <button
+            pButton
+            label="Colar Imagem"
+            (click)="colarImagem()"
+            *ngIf="!imagemEvento"
+          ></button>
+          <button
+            pButton
+            label="Limpar Imagem"
+            (click)="resetarCropper()"
+            *ngIf="imagemEvento"
+          ></button>
+        </div>
+
+        <!-- Botões ao centro -->
+        <div class="flex gap-2 justify-center">
+          <p-button
+            label="Salvar"
+            icon="pi pi-check"
+            (onClick)="salvar()"
+          ></p-button>
+          <p-button
+            label="Cancelar"
+            icon="pi pi-times"
+            severity="secondary"
+            (onClick)="voltarInicio()"
+          ></p-button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

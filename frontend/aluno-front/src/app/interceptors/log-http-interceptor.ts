@@ -44,7 +44,9 @@ export class LogHTTP implements HttpInterceptor {
             this.loggerService.info('Status:', event.status);
             this.loggerService.info('URL:', event.url);
             this.loggerService.info('Body:', event.body);
-            this.loggerService.info('========================');
+            this.loggerService.info(
+              '==================================================================='
+            );
           }
         },
         error: (error: any) => {

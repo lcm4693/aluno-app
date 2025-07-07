@@ -6,6 +6,7 @@ import { CardModule } from 'primeng/card';
 import { LoggerService } from '../../../services/logger.service';
 import { AulaSemAnotacao } from '../../../models/notificacoes/aulasSemAnotacao';
 import { AccordionModule } from 'primeng/accordion';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-notificacoes',
@@ -21,17 +22,14 @@ export class NotificacoesComponent implements OnInit {
   constructor(
     private dashboardService: DashboardService,
     private loggerService: LoggerService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.dashboardService.geNotificacoes().subscribe({
       next: (res) => {
-        this.loggerService.info(JSON.stringify(res));
         this.notificacoes = res;
-
-        this.loggerService.info(JSON.stringify(this.notificacoes));
-
         this.notificacoes.aulasSemAnotacao.forEach((aula) => {
           const dataAula = this.datePipe.transform(
             aula.dataAula,
@@ -41,11 +39,27 @@ export class NotificacoesComponent implements OnInit {
           );
           aula.mensagem = `Aula de ${aula.nomeAluno} (${dataAula})`;
         });
+
+        this.notificacoes.aniversariosAlunos.forEach((aluno) => {
+          const dataAniversario = this.datePipe.transform(
+            aluno.dataAniversario,
+            'dd/MM/yyyy',
+            undefined,
+            'pt-BR'
+          );
+          aluno.mensagem = `${aluno.nomeAluno} (${dataAniversario})`;
+        });
       },
     });
   }
 
-  marcarComoLida(aula: AulaSemAnotacao) {
-    console.log(JSON.stringify(aula));
+  marcarComoLida(obj: any) {
+    console.log(JSON.stringify(obj));
+  }
+
+  redirecionarAlunoAula(idAluno: number, idAula: number | undefined) {
+    this.router.navigate([`/alunos`, idAluno], {
+      queryParams: { origem: '/', aula: idAula },
+    });
   }
 }

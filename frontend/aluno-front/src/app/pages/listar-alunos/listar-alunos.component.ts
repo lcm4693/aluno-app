@@ -16,6 +16,8 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
 import { LoggerService } from '../../services/logger.service';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
 @Component({
   standalone: true,
@@ -31,6 +33,8 @@ import { LoggerService } from '../../services/logger.service';
     DialogModule,
     ReactiveFormsModule,
     InputTextModule,
+    InputGroupModule,
+    InputGroupAddonModule,
   ],
   providers: [ConfirmationService], // <-- Aqui você fornece o serviço!
   templateUrl: './listar-alunos.component.html',

@@ -22,10 +22,13 @@
       <i class="pi {{ !modoEdicao ? 'pi-pencil' : 'pi-check' }}"></i>
     </button>
   </div>
-  <div class="mt-3">
+  <div>
     <p-fieldset legend="Idiomas" toggleable="true">
       <div class="checkbox-group-horizontal">
-        <div class="checkbox-item" *ngFor="let idioma of idiomasDisponiveis">
+        <div
+          *ngFor="let idioma of idiomasDisponiveis"
+          class="flex items-center min-w-[7rem]"
+        >
           <p-checkbox
             [(ngModel)]="idiomasSelecionados"
             [value]="idioma.id"

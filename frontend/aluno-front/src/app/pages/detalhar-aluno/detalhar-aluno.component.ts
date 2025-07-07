@@ -122,8 +122,10 @@ export class DetalharAlunoComponent implements OnInit {
           this.aluno!.aulas = [];
         }
         this.aluno!.aulas.push(aula);
+
         this.reordenarAulasPorData();
         this.fechaModalNovaAula();
+        this.toastService.success(res.mensagem);
       },
       complete: () => {},
     });

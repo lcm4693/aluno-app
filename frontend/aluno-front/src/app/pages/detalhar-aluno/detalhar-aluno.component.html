@@ -1,89 +1,72 @@
-<div class="surface-100 p-4 min-h-screen flex justify-content-center">
-  <p-card class="w-full md:w-full">
-    <div
-      class="flex flex-column md:flex-row align-items-start gap-4"
-      *ngIf="aluno"
-    >
-      <div class="flex flex-column align-items-center w-2">
-        <!-- Foto -->
-        <img
-          [src]="aluno.fotoUrl"
-          alt="Foto do aluno"
-          class="img-detalhe-aluno cursor-pointer"
-          style="width: 9rem"
-          (click)="abrirModalAtualizarFoto()"
-        />
-
-        <app-primeira-aula [aluno]="aluno" *ngIf="aluno" />
-      </div>
-
-      <!-- Informações -->
-      <div class="flex flex-column gap-3 w-full">
-        <!-- Nome -->
-        <h2 class="mt-0 mb-2 text-5xl font-bold">
-          {{ aluno.nome }} - {{ aluno.nivel }}
-        </h2>
-
-        <!-- Grid das infos -->
-        <div class="grid">
-          <div class="col-12 md:col-12">
-            <app-informacoes-basicas
-              *ngIf="alunoBasico"
-              [alunoEditado]="alunoBasico"
-              (editarInformacoesBasicas)="onEditarInformacoesBasicas($event)"
-            ></app-informacoes-basicas>
-            <app-idiomas
-              [idAluno]="aluno.id"
-              [idiomasAluno]="aluno.idiomas"
-              (editarIdiomas)="onEditarIdiomas($event)"
-            ></app-idiomas>
-          </div>
+<div class="surface-100 p-4 min-h-screen flex justify-center">
+  <div class="w-full max-w-[100rem]">
+    <p-card class="w-full md:w-full">
+      <div class="flex flex-col md:flex-row gap-8" *ngIf="aluno">
+        <!-- Coluna da esquerda -->
+        <div class="flex flex-col items-center text-center md:w-48 gap-2">
+          <img
+            [src]="aluno.fotoUrl"
+            alt="Foto do aluno"
+            class="img-aluno img-detalhe-aluno cursor-pointer"
+            (click)="abrirModalAtualizarFoto()"
+          />
+          <app-primeira-aula [aluno]="aluno" *ngIf="aluno" />
         </div>
-
-        <!-- Aulas -->
-        <div class="grid">
-          <div class="col-6 md:col-6">
-            <div style="position: relative">
-              <button
-                pButton
-                pRipple
-                type="button"
-                icon="pi pi-calendar-plus"
-                class="p-button-text p-button-rounded"
-                style="position: absolute; top: -18px; right: 0; z-index: 10"
-                aria-label="Nova Aula"
-                (click)="abrirModalNovaAula()"
-              ></button>
-              <p-fieldset legend="Aulas" toggleable="true">
-                <div class="grid">
-                  <div
-                    class="col-12 md:col-12 mb-2"
-                    *ngFor="let aula of aluno.aulas"
+        <!-- Coluna da direita -->
+        <div class="flex flex-col w-full">
+          <h2 class="text-5xl font-bold">
+            {{ aluno.nome }} - {{ aluno.nivel }}
+          </h2>
+          <app-informacoes-basicas
+            class="mt-4"
+            *ngIf="alunoBasico"
+            [alunoEditado]="alunoBasico"
+            (editarInformacoesBasicas)="onEditarInformacoesBasicas($event)"
+          ></app-informacoes-basicas>
+        </div>
+      </div>
+      <div class="flex flex-col flex-wrap items-start gap-6 mt-4" *ngIf="aluno">
+        <app-idiomas
+          [idAluno]="aluno.id"
+          [idiomasAluno]="aluno.idiomas"
+          (editarIdiomas)="onEditarIdiomas($event)"
+          class="w-full mt-4"
+        ></app-idiomas>
+        <div class="flex flex-col gap-6 w-full md:flex-row">
+          <div class="relative w-full md:w-2/4">
+            <button
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-calendar-plus"
+              class="p-button-text p-button-rounded"
+              style="position: absolute; top: -18px; right: 0; z-index: 10"
+              aria-label="Nova Aula"
+              (click)="abrirModalNovaAula()"
+            ></button>
+            <p-fieldset legend="Aulas" toggleable="true">
+              <div class="grid">
+                <div
+                  class="col-12 md:col-12 mb-2"
+                  *ngFor="let aula of aluno.aulas"
+                >
+                  <a role="button" (click)="selecionarAula(aula)" class="link">
+                    {{ aula.dataAula | date : "dd/MM/yyyy" }}</a
                   >
-                    <a
-                      role="button"
-                      (click)="selecionarAula(aula)"
-                      class="link"
-                    >
-                      {{ aula.dataAula | date : "dd/MM/yyyy" }}</a
-                    >
 
-                    {{
-                      aula.comentarios
-                        ? aula.comentarios!.length > 120
-                          ? " - " + (aula.comentarios | slice : 0 : 117) + "..."
-                          : " - " + aula.comentarios
-                        : " - Sem comentários do professor"
-                    }}
-                  </div>
+                  {{
+                    aula.comentarios
+                      ? aula.comentarios!.length > 120
+                        ? " - " + (aula.comentarios | slice : 0 : 117) + "..."
+                        : " - " + aula.comentarios
+                      : " - Sem comentários do professor"
+                  }}
                 </div>
-              </p-fieldset>
-            </div>
+              </div>
+            </p-fieldset>
           </div>
-
-          <!-- Recursos que foram trocados entre prof e aluno -->
-          <div class="col-6 md:col-6">
-            <p-fieldset legend="Recursos trocados" toggleable="true">
+          <div class="w-full md:w-2/4">
+            <p-fieldset legend="Estatísticas" toggleable="true">
               <div class="grid">
                 <div class="col-12 md:col-12">
                   <a href="#"> https://www.g1.com </a>
@@ -99,66 +82,66 @@
           </div>
         </div>
       </div>
-    </div>
-  </p-card>
 
-  <p-dialog
-    *ngIf="aluno"
-    [(visible)]="modalAtualizarFotoVisivel"
-    [modal]="true"
-    header="Atualizar Foto do Aluno"
-    [style]="{ width: '500px', maxWidth: '90vw' }"
-  >
-    <app-upload-foto
-      [aluno]="aluno"
-      (fotoAtualizada)="atualizarFoto($event)"
-    ></app-upload-foto>
-  </p-dialog>
-
-  <p-dialog
-    header="Nova Aula"
-    [(visible)]="modalNovaAulaVisivel"
-    [modal]="true"
-    [style]="{ width: '1500px' }"
-    [closable]="false"
-    [draggable]="false"
-    [closable]="true"
-  >
-    <app-nova-aula
-      *ngIf="modalNovaAulaVisivel"
-      (salvarAula)="onSalvarAula($event)"
-      (cancelar)="fechaModalNovaAula()"
-    ></app-nova-aula>
-  </p-dialog>
-
-  <p-dialog
-    header="Detalhar Aula"
-    [(visible)]="modalNovaDetalharAulaVisivel"
-    [modal]="true"
-    [style]="{ width: '1500px' }"
-    [closable]="false"
-    [draggable]="false"
-    [closable]="true"
-  >
-    <app-detalhar-aula
-      *ngIf="modalNovaDetalharAulaVisivel"
-      [aula]="aulaSelecionada"
-      (fechar)="fechaModalDetalharAula()"
-      (editarAula)="finalizarEditarModalDetalharAula($event)"
-    ></app-detalhar-aula>
-  </p-dialog>
-
-  <!-- Botões ao centro -->
-
-  <footer class="footer-fixo shadow-3">
-    <div class="flex gap-3" style="justify-content: center">
-      <p-button
-        label="Voltar"
-        icon="pi pi-arrow-left"
-        class="p-button-text p-button-secondary button-large"
-        (onClick)="voltar()"
+      <p-dialog
+        *ngIf="aluno"
+        [(visible)]="modalAtualizarFotoVisivel"
+        [modal]="true"
+        header="Atualizar Foto do Aluno"
+        styleClass="w-2/6"
       >
-      </p-button>
-    </div>
-  </footer>
+        <app-upload-foto
+          [aluno]="aluno"
+          (fotoAtualizada)="atualizarFoto($event)"
+        ></app-upload-foto>
+      </p-dialog>
+
+      <p-dialog
+        header="Nova Aula"
+        [(visible)]="modalNovaAulaVisivel"
+        [modal]="true"
+        styleClass="w-5/6"
+        [closable]="false"
+        [draggable]="false"
+        [closable]="true"
+      >
+        <app-nova-aula
+          *ngIf="modalNovaAulaVisivel"
+          (salvarAula)="onSalvarAula($event)"
+          (cancelar)="fechaModalNovaAula()"
+        ></app-nova-aula>
+      </p-dialog>
+
+      <p-dialog
+        header="Detalhar Aula"
+        [(visible)]="modalNovaDetalharAulaVisivel"
+        [modal]="true"
+        [closable]="false"
+        [draggable]="false"
+        [closable]="true"
+        styleClass="w-5/6"
+      >
+        <app-detalhar-aula
+          *ngIf="modalNovaDetalharAulaVisivel"
+          [aula]="aulaSelecionada"
+          (fechar)="fechaModalDetalharAula()"
+          (editarAula)="finalizarEditarModalDetalharAula($event)"
+        ></app-detalhar-aula>
+      </p-dialog>
+
+      <!-- Botões ao centro -->
+
+      <footer class="footer-fixo shadow-3">
+        <div class="flex gap-3" style="justify-content: center">
+          <p-button
+            label="Voltar"
+            icon="pi pi-arrow-left"
+            class="p-button-text p-button-secondary button-large"
+            (onClick)="voltar()"
+          >
+          </p-button>
+        </div>
+      </footer>
+    </p-card>
+  </div>
 </div>

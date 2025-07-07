@@ -4,24 +4,24 @@
   </ng-template>
   <div>
     <div
-      class="grid align-items-center py-3 border-top-1 surface-border"
+      class="flex gap-5 items-center py-3 border-t-1 surface-border"
       *ngFor="let aluno of favoritos"
     >
-      <div class="col-3 flex flex-column align-items-center text-center">
+      <div class="flex flex-col items-center text-center">
         <img
           [src]="aluno.fotoUrl"
           alt="Foto do aluno"
-          class="border-circle shadow-1 img-miniatura mb-2"
+          class="border-circle shadow-1 img-aluno img-miniatura mb-2"
           style="width: 50px; height: 50px"
         />
         <a
           (click)="redirecionarAluno(aluno.id)"
-          class="text-sm text-primary hover:underline link"
+          class="text-sm hover:underline link"
         >
           Ver perfil
         </a>
       </div>
-      <div class="col-9 font-bold text-color">
+      <div class="font-bold text-color">
         {{ aluno.nomeAluno }} - {{ aluno.quantidadeAulas }} aulas
       </div>
     </div>

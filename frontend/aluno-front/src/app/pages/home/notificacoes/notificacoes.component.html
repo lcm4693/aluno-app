@@ -10,9 +10,14 @@
       <p-accordion-content>
         <div
           *ngFor="let notificacao of notificacoes.aulasSemAnotacao"
-          class="flex justify-between align-items-center border-bottom-1 surface-border py-3 px-2 hover:surface-100 border-round cursor-pointer transition-duration-200"
+          class="flex justify-between items-center border-bottom-1 surface-border py-3 px-2 hover:surface-100 border-round transition-duration-200"
         >
-          <div class="flex align-items-center gap-3">
+          <div
+            class="flex items-center gap-3 cursor-pointer"
+            (click)="
+              redirecionarAlunoAula(notificacao.idAluno, notificacao.idAula)
+            "
+          >
             <i class="pi pi-exclamation-circle text-orange-500 text-xl"></i>
             <div class="flex flex-column">
               <span class="font-medium">{{ notificacao.mensagem }}</span>
@@ -24,26 +29,32 @@
           *ngIf="notificacoes.aulasSemAnotacao.length === 0"
           class="text-center text-color-secondary py-3"
         >
-          Nenhuma notificação nesta categoria.
+          Nenhuma notificação.
+        </p>
+      </p-accordion-content>
+    </p-accordion-panel>
+    <p-accordion-panel value="0">
+      <p-accordion-header>🎂 Aniversários</p-accordion-header>
+      <p-accordion-content>
+        <div
+          *ngFor="let notificacao of notificacoes.aniversariosAlunos"
+          class="flex justify-between items-center border-bottom-1 surface-border py-3 px-2 hover:surface-100 border-round cursor-pointer transition-duration-200"
+        >
+          <div class="flex items-center gap-3">
+            <i class="pi pi-gift text-green-500 text-xl"></i>
+            <div class="flex flex-column">
+              <span class="font-medium">{{ notificacao.mensagem }}</span>
+            </div>
+          </div>
+        </div>
+
+        <p
+          *ngIf="notificacoes.aulasSemAnotacao.length === 0"
+          class="text-center text-color-secondary py-3"
+        >
+          Nenhuma notificação.
         </p>
       </p-accordion-content>
     </p-accordion-panel>
   </p-accordion>
 </p-card>
-
-<!-- <p-accordion [multiple]="true">
-    <p-accordionTab
-      header="📝 Aulas sem anotação"
-      *ngIf="notificacoes.aulasSemAnotacao?.length"
-    >
-      <ul class="list-none p-0 m-0">
-        <li
-          *ngFor="let aula of notificacoes.aulasSemAnotacao"
-          class="py-2 border-bottom-1 surface-border cursor-pointer hover:surface-200 px-2"
-          (click)="marcarComoLida(aula)"
-        >
-          {{ aula.mensagem }}
-        </li>
-      </ul>
-    </p-accordionTab>
-  </p-accordion> -->

@@ -8,6 +8,7 @@ import { LoadingService } from '../services/loading.service';
 import { finalize, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { LoggerService } from '../services/logger.service';
+import { SKIP_LOADING } from '../shared/loading-context.token';
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
@@ -19,12 +20,27 @@ export class LoadingInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    this.loggerService.debug('[LoadingInterceptor] Executando o show');
-    this.loadingService.show();
+    const skipLoading = req.context.get(SKIP_LOADING) === true;
+
+    if (!skipLoading) {
+      this.loggerService.debug(
+        '[LoadingInterceptor] Executando o show para ' + req.url
+      );
+      this.loadingService.show();
+    } else {
+      this.loggerService.debug(
+        '[LoadingInterceptor] Pulando o show para ' + req.url
+      );
+    }
+
     return next.handle(req).pipe(
       finalize(() => {
-        this.loggerService.debug('[LoadingInterceptor] finalize -> hide');
-        this.loadingService.hide();
+        if (!skipLoading) {
+          this.loggerService.debug(
+            '[LoadingInterceptor] finalize -> hide para ' + req.url
+          );
+          this.loadingService.hide();
+        }
       })
     );
   }

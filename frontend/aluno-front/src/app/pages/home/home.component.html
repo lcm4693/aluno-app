@@ -1,17 +1,17 @@
 <!-- min-h-screen -->
-<div
-  class="flex flex-column align-items-center justify-content-center p-4 gap-4 bg-gray-100"
->
-  <p-card class="w-full max-w-md text-center shadow-4">
+<div class="flex flex-col items-center justify-center p-4 gap-4 bg-gray-100">
+  <p-card class="w-full max-w shadow-xl rounded-lg overflow-hidden">
     <ng-template pTemplate="header">
-      <h2 class="mt-4">Olá, {{ usuario.nome }}! 👋</h2>
-      <p class="text-secondary">
-        Pronto para mais uma aula<br class="sm:hidden" />
-        incrível hoje?
-      </p>
+      <div class="text-center py-6">
+        <h2 class="mt-4">Olá, {{ usuario.nome }}! 👋</h2>
+        <p class="text-secondary">
+          Pronto para mais uma aula<br class="sm:hidden" />
+          incrível hoje?
+        </p>
+      </div>
     </ng-template>
 
-    <div class="flex flex-row gap-3 mt-4 justify-content-center flex-wrap">
+    <div class="flex flex-row gap-3 mt-4 justify-center flex-wrap">
       <p-button
         label="Cadastrar aluno"
         icon="pi pi-user-plus"
@@ -38,17 +38,14 @@
   ></app-cards-estatisticas>
 </div>
 
-<div class="w-full max-w-screen-lg grid gap-3 px-3 sm:px-4 md:px-6 lg:px-8">
+<!-- <div
+  class="w-full max-w-screen-lg flex flex-wrap gap-3 px-3 sm:px-4 md:px-6 lg:px-8"
+> -->
+<div class="flex gap-8 ml-20 mt-5">
   <!-- Favoritos - 4 colunas -->
-  <div class="col-12 md:col-4">
-    <app-favoritos></app-favoritos>
-  </div>
+  <app-favoritos class="w-full basis-lg"></app-favoritos>
   <!-- Últimas aulas realizadas -->
-  <div class="col-12 md:col-6">
-    <app-ultimas-aulas></app-ultimas-aulas>
-  </div>
-  <!-- Notificações (abaixo ocupando 100%) -->
-  <div class="col-12 md:col-12">
-    <app-notificacoes></app-notificacoes>
-  </div>
+  <app-ultimas-aulas class="w-full basis-3xl mb-8"></app-ultimas-aulas>
 </div>
+<!-- Notificações (abaixo ocupando 100%) -->
+<app-notificacoes class="w-full md:w-[32%]"></app-notificacoes>

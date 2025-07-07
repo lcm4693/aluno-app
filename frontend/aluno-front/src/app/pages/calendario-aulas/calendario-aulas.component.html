@@ -1,4 +1,7 @@
-<p-card header="📅 Calendário de Aulas" styleClass="mb-4 calendar-card">
+<p-card styleClass="calendar-card shadow-4">
+  <ng-template pTemplate="header">
+    <h1 class="titulo">📅 Calendário de Aulas</h1>
+  </ng-template>
   <full-calendar [options]="calendarOptions" style="width: 100%" />
 </p-card>
 <footer class="footer-fixo shadow-3">
