@@ -58,12 +58,12 @@ export class MenuComponent implements OnInit {
       // },
     ];
 
-    if (this.usuario.isAdmin) {
-      this.items.push({
-        label: 'Cadastrar usuário',
-        icon: 'pi pi-user-plus',
-        routerLink: '/cadastrar-usuario',
-      });
-    }
+    // if (this.usuario.isAdmin) {
+    this.items.push({
+      label: 'Cadastrar usuário',
+      icon: 'pi pi-user-plus',
+      routerLink: '/cadastrar-usuario',
+    });
+    // }
   }
 }
