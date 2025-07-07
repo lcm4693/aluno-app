@@ -31,7 +31,9 @@ def buscar_cards_estatisticas(id_usuario):
 
         aulasMesAtual = (
             session.query(func.count(Aula.id))
+            .join(Aluno, Aula.aluno_id == Aluno.id)
             .filter(Aula.data >= primeiro_dia, Aula.data <= ultimo_dia)
+            .filter(Aluno.id_usuario == id_usuario, Aluno.deletado == False)
             .scalar()
         )
 
@@ -42,6 +44,8 @@ def buscar_cards_estatisticas(id_usuario):
         aulas_semana = (
             session.query(func.count(Aula.id))
             .filter(Aula.data >= domingo, Aula.data <= hoje)
+            .join(Aluno, Aula.aluno_id == Aluno.id)
+            .filter(Aluno.id_usuario == id_usuario, Aluno.deletado == False)
             .scalar()
         )
 
