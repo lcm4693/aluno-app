@@ -166,7 +166,7 @@
               <input type="file" name="foto" id="foto-input" class="d-none" />
             </div>
           </div>
-          <div class="flex flex-col col-span-1 md:col-span-12">
+          <div class="hidden md:flex md:flex-col md:col-span-12">
             <label for="foto" class="label">Imagem do aluno:</label>
 
             <div
@@ -191,7 +191,7 @@
         </div>
         <div class="grid grid-cols-12">
           <!-- Botão à esquerda -->
-          <div class="col-span-3 flex gap-3">
+          <div class="col-span-3 gap-3 hidden md:flex">
             <button
               pButton
               label="Colar Imagem"
@@ -206,7 +206,9 @@
           </div>
 
           <!-- Botões ao centro -->
-          <div class="col-span-6 flex gap-3 justify-center items-center">
+          <div
+            class="flex flex-col md:flex-row col-span-12 md:col-span-6 gap-3 justify-center items-center"
+          >
             <p-button
               label="Salvar"
               icon="pi pi-check"
