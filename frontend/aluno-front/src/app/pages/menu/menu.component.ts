@@ -25,8 +25,7 @@ import { Usuario } from '../../models/usuario';
 })
 export class MenuComponent implements OnInit {
   constructor(private userStorage: UserStoreService) {}
-  items: { label: string; icon: string; routerLink: string }[] | undefined =
-    undefined;
+  items: any[] | undefined = undefined;
 
   usuario: Usuario | undefined;
 
@@ -42,7 +41,10 @@ export class MenuComponent implements OnInit {
       {
         label: 'Alunos',
         icon: 'pi pi-users',
-        routerLink: '/listar',
+        items: [
+          { label: 'Listar', routerLink: '/listar' },
+          { label: 'Cadastrar', routerLink: '/alunos/cadastrar' },
+        ],
       },
       {
         label: 'Calendário',
@@ -62,7 +64,7 @@ export class MenuComponent implements OnInit {
       this.items.push({
         label: 'Cadastrar usuário',
         icon: 'pi pi-user-plus',
-        routerLink: '/alunos/cadastrar',
+        // routerLink: '/alunos/cadastrar',
       });
     }
   }
