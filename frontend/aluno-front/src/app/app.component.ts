@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { GlobalToastComponent } from './shared/ui/global-toast/global-toast/global-toast.component';
 import { UserStoreService } from './auth/services/user-store.service';
@@ -7,11 +7,19 @@ import { LoadingService } from './services/loading.service';
 import { Observable } from 'rxjs';
 import { LoadingComponent } from './shared/loading/loading.component';
 import { CommonModule } from '@angular/common';
+import { MenuComponent } from './pages/menu/menu.component';
+import { Usuario } from './models/usuario';
 
 @Component({
   standalone: true,
   selector: 'app-root',
-  imports: [RouterOutlet, GlobalToastComponent, LoadingComponent, CommonModule],
+  imports: [
+    RouterOutlet,
+    GlobalToastComponent,
+    LoadingComponent,
+    CommonModule,
+    MenuComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
@@ -20,7 +28,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     private userStorage: UserStoreService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private router: Router
   ) {
     this.carregando$ = this.loadingService.loading$;
     const token = localStorage.getItem('token-aluno-app');
@@ -32,4 +41,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  urlPermiteMenu(): boolean {
+    const urlSemMenu = ['/login'];
+    return !urlSemMenu.includes(this.router.url);
+  }
 }

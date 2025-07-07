@@ -250,6 +250,10 @@ def retornar_notificacoes_aulas_sem_anotacao(id_usuario):
 
     chaves_existentes = {n["chave_unica"] for n in notificacoes_existentes}
 
+    logger.debug(
+        f"retornar_notificacoes_aulas_sem_anotacao - Chaves existentes: {chaves_existentes}"
+    )
+
     notificacoes_nao_lidas = [n for n in notificacoes_existentes if not n["lida"]]
 
     limite_total = 10
@@ -262,6 +266,8 @@ def retornar_notificacoes_aulas_sem_anotacao(id_usuario):
 
     pagina = 1
 
+    logger.debug(f"retornar_notificacoes_aulas_sem_anotacao - Faltam: {faltam}")
+
     while len(notificacoes_a_cadastrar) < faltam:
         aulas = buscar_aulas_sem_anotacoes(id_usuario, pagina, limite_total)
         if not aulas:
@@ -269,7 +275,14 @@ def retornar_notificacoes_aulas_sem_anotacao(id_usuario):
 
         for aula in aulas:
             chave_unica = f"{TipoNotificacao.SEM_ANOTACAO.value}|{aula['idAula']}"
+            logger.debug(
+                f"retornar_notificacoes_aulas_sem_anotacao - Chave única: {chave_unica}"
+            )
             if chave_unica not in chaves_existentes:
+                logger.debug(
+                    f"retornar_notificacoes_aulas_sem_anotacao - Chave não tem na lista: {chave_unica}"
+                )
+
                 notificacoes_a_cadastrar.append(
                     Notificacao(
                         id_usuario=id_usuario,
@@ -278,13 +291,14 @@ def retornar_notificacoes_aulas_sem_anotacao(id_usuario):
                         lida=False,
                         data_evento=aula["dataAula"],
                         data_criacao=date.today(),
-                        data_expiracao=get_date_in_one_week(),
+                        data_expiracao=get_date_in_one_week(aula["dataAula"]),
                         id_aluno=aula["idAluno"],
                         id_aula=aula["idAula"],
                     )
                 )
                 if len(notificacoes_a_cadastrar) >= faltam:
                     break  # já temos 10 notificações novas
+
         pagina += 1  # próxima página
 
     if notificacoes_a_cadastrar:
@@ -295,6 +309,7 @@ def retornar_notificacoes_aulas_sem_anotacao(id_usuario):
     )
     return [
         {
+            "idNotificacao": notif.id,
             "nomeAluno": notif.aluno.nome,
             "idAluno": notif.aluno.id,
             "dataAula": converter_data_para_front(notif.aula.data),
@@ -339,7 +354,7 @@ def retornar_notificacoes_aniversarios_aluno(id_usuario):
                         lida=False,
                         data_evento=aluno["dataAniversario"],
                         data_criacao=date.today(),
-                        data_expiracao=get_date_in_one_week(),
+                        data_expiracao=get_date_in_one_week(date.today()),
                         id_aluno=aluno["idAluno"],
                         id_aula=None,
                     )
@@ -356,9 +371,32 @@ def retornar_notificacoes_aniversarios_aluno(id_usuario):
     )
     return [
         {
+            "idNotificacao": notif.id,
             "nomeAluno": notif.aluno.nome,
             "idAluno": notif.aluno.id,
             "dataAniversario": converter_data_para_front(notif.data_evento),
         }
         for notif in notificacoes_validas_mostrar
     ]
+
+
+def atualizar_notificacao_marcar_como_lida(notificacao_id, id_usuario):
+    with get_session() as session:
+        notificacao = (
+            session.query(Notificacao)
+            .filter(
+                Notificacao.id == notificacao_id,
+                Notificacao.id_usuario == id_usuario,
+                Notificacao.lida == False,
+            )
+            .first()
+        )
+
+        if not notificacao:
+            return "Notificação não encontrada", 404
+
+        notificacao.lida = True
+
+        session.add(notificacao)  # opcional, mas explícito
+
+        return (None, 200)

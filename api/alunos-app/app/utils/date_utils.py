@@ -22,5 +22,6 @@ def converter_data_para_banco(data):
     return None
 
 
-def get_date_in_one_week():
-    return (datetime.utcnow() + timedelta(days=7)).date()
+def get_date_in_one_week(data: date):
+
+    return data + timedelta(days=7)

@@ -33,8 +33,15 @@ export class DashboardService {
   }
 
   geNotificacoes(): Observable<Notificacao> {
-    return this.http.get<Notificacao>(`${this.baseUrl}` + '/notificacoes', {
+    return this.http.get<Notificacao>(`${this.baseUrl}/notificacoes`, {
       context: new HttpContext().set(SKIP_LOADING, true),
     });
+  }
+
+  marcarNotificacaoComoLida(notificacaoId: number): Observable<any> {
+    return this.http.put<any>(
+      `${this.baseUrl}/notificacoes/${notificacaoId}`,
+      true
+    );
   }
 }

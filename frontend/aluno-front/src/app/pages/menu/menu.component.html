@@ -1,0 +1,25 @@
+<!-- navbar.component.html -->
+<p-menubar
+  [model]="items"
+  class="fixed top-0 left-0 w-full z-50 shadow-md bg-white border-b border-gray-200"
+>
+  <ng-template #end>
+    <div class="flex items-center gap-2">
+      <input
+        type="text"
+        pInputText
+        placeholder="Pesquise pelo nome do aluno..."
+        class="w-65 md:w-90"
+      />
+
+      <p-avatar
+        class="ml-3"
+        image="https://aluno-app-fotos.s3.us-east-1.amazonaws.com/fotos-dev/4105926a-0db7-44b0-a835-764784dd83fa.jpg"
+        shape="circle"
+        size="large"
+      />
+    </div>
+  </ng-template>
+</p-menubar>
+<div class="h-14"></div>
+<!-- espaço para empurrar conteúdo -->

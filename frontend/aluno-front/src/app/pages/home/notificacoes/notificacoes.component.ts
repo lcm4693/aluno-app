@@ -7,6 +7,7 @@ import { LoggerService } from '../../../services/logger.service';
 import { AulaSemAnotacao } from '../../../models/notificacoes/aulasSemAnotacao';
 import { AccordionModule } from 'primeng/accordion';
 import { Router } from '@angular/router';
+import { AniversarioAluno } from '../../../models/notificacoes/aniversariosAluno';
 
 @Component({
   selector: 'app-notificacoes',
@@ -27,34 +28,61 @@ export class NotificacoesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.dashboardService.geNotificacoes().subscribe({
-      next: (res) => {
-        this.notificacoes = res;
-        this.notificacoes.aulasSemAnotacao.forEach((aula) => {
-          const dataAula = this.datePipe.transform(
-            aula.dataAula,
-            'dd/MM/yyyy',
-            undefined,
-            'pt-BR'
-          );
-          aula.mensagem = `Aula de ${aula.nomeAluno} (${dataAula})`;
-        });
+    // if (!this.notificacoes) {
+    //   this.dashboardService.geNotificacoes().subscribe({
+    //     next: (res) => {
+    //       this.notificacoes = res;
+    //       this.notificacoes.aulasSemAnotacao.forEach((aula) => {
+    //         const dataAula = this.datePipe.transform(
+    //           aula.dataAula,
+    //           'dd/MM/yyyy',
+    //           undefined,
+    //           'pt-BR'
+    //         );
+    //         aula.mensagem = `Aula de ${aula.nomeAluno} (${dataAula})`;
+    //       });
+    //       this.notificacoes.aniversariosAlunos.forEach((aluno) => {
+    //         const dataAniversario = this.datePipe.transform(
+    //           aluno.dataAniversario,
+    //           'dd/MM/yyyy',
+    //           undefined,
+    //           'pt-BR'
+    //         );
+    //         aluno.mensagem = `${aluno.nomeAluno} (${dataAniversario})`;
+    //       });
+    //     },
+    //   });
+    // }
+  }
 
-        this.notificacoes.aniversariosAlunos.forEach((aluno) => {
-          const dataAniversario = this.datePipe.transform(
-            aluno.dataAniversario,
-            'dd/MM/yyyy',
-            undefined,
-            'pt-BR'
-          );
-          aluno.mensagem = `${aluno.nomeAluno} (${dataAniversario})`;
-        });
-      },
-    });
+  executarAcao(obj: any) {
+    this.marcarComoLida(obj);
+    if ('idAluno' in obj && 'idAula' in obj && 'dataAula' in obj) {
+      this.redirecionarAlunoAula(obj.idAluno, obj.idAula);
+    }
   }
 
   marcarComoLida(obj: any) {
-    console.log(JSON.stringify(obj));
+    // this.loggerService.info(JSON.stringify(obj));
+    if (!obj.lida) {
+      this.dashboardService
+        .marcarNotificacaoComoLida(obj.idNotificacao)
+        .subscribe({
+          next: (res) => {
+            this.notificacoes?.aulasSemAnotacao.find((n) => {
+              if (n.idNotificacao === obj.idNotificacao) {
+                n.lida = true;
+              }
+            });
+
+            this.notificacoes?.aniversariosAlunos.find((n) => {
+              if (n.idNotificacao === obj.idNotificacao) {
+                n.lida = true;
+              }
+            });
+          },
+        });
+    }
   }
 
   redirecionarAlunoAula(idAluno: number, idAula: number | undefined) {

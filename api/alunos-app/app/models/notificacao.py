@@ -41,7 +41,7 @@ class Notificacao(Base):
     lida = Column(Boolean, default=False)
     data_evento = Column(Date)
     data_criacao = Column(DateTime, default=datetime.utcnow)
-    data_expiracao = Column(Date, default=get_date_in_one_week())
+    data_expiracao = Column(Date, default=get_date_in_one_week(datetime.now()))
     data_leitura = Column(DateTime, nullable=True)
 
     # Novas colunas:

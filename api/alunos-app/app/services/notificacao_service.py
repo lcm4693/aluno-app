@@ -18,7 +18,8 @@ def buscar_todas_notificacoes_usuario(id_usuario, tipo_notificacao: TipoNotifica
             session.query(Notificacao)
             .filter(Notificacao.id_usuario == id_usuario)
             .filter(Notificacao.tipo == tipo_notificacao)
-            .filter(Notificacao.data_expiracao >= hoje)  # só notificações ainda válidas
+            .filter(Notificacao.lida == False)
+            # .filter(Notificacao.data_expiracao >= hoje)  # só notificações ainda válidas
             .order_by(Notificacao.data_criacao.desc())
             .all()
         )

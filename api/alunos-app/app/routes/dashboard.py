@@ -52,3 +52,24 @@ def buscar_todas_notificacoes_usuario():
     logger.debug(f"Retorno: {notificacoes}")
 
     return jsonify(notificacoes)
+
+
+@dashboard_bp.route("/notificacoes/<int:notificacao_id>", methods=["PUT"])
+@handle_errors
+@jwt_required()
+def marcar_notificacao_como_lida(notificacao_id):
+    idUsuario = get_jwt_identity()
+
+    logger.debug(f"Entrada - marcar_notificacao_como_lida: {notificacao_id}")
+
+    erro, status = atualizar_notificacao_marcar_como_lida(
+        notificacao_id, id_usuario=idUsuario
+    )
+
+    if erro:
+        return jsonify({"erro": erro}), status
+
+    retorno = {"mensagem": "Notificação marcada como lida"}
+    logger.debug(f"Retorno - marcar_notificacao_como_lida: {retorno}")
+
+    return jsonify(retorno), 200
