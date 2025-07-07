@@ -50,7 +50,7 @@ def buscar_notificacoes_nao_lidas(id_usuario: int, tipo: str):
                 joinedload(Notificacao.aluno),
                 joinedload(Notificacao.aula),
             )
-            .order_by(Notificacao.data_criacao.desc())
+            .order_by(Notificacao.data_evento.desc())
             .limit(limite)
             .all()
         )

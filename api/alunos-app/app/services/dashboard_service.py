@@ -169,7 +169,7 @@ def buscar_aulas_sem_anotacoes(id_usuario, page, page_size):
         lista = [
             {
                 "idAluno": aula.aluno_id,
-                "dataAula": converter_data_para_front(aula.data),
+                "dataAula": aula.data,
                 "idAula": aula.id,
                 "nomeAluno": aula.nome,
             }
@@ -275,10 +275,8 @@ def retornar_notificacoes_aulas_sem_anotacao(id_usuario):
                         id_usuario=id_usuario,
                         tipo=TipoNotificacao.SEM_ANOTACAO.value,
                         chave_unica=chave_unica,
-                        # titulo=f"A aula do dia {aula['dataAula']} do {aula['nomeAluno']} está em branco",
-                        # mensagem=f"A aula do dia {aula['dataAula']} do {aula['nomeAluno']} está em branco",
                         lida=False,
-                        data_evento=date.today(),
+                        data_evento=aula["dataAula"],
                         data_criacao=date.today(),
                         data_expiracao=get_date_in_one_week(),
                         id_aluno=aula["idAluno"],
