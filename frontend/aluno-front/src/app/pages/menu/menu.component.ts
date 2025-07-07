@@ -7,6 +7,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenubarModule } from 'primeng/menubar';
 import { UserStoreService } from '../../auth/services/user-store.service';
+import { Usuario } from '../../models/usuario';
 
 @Component({
   selector: 'app-menu',
@@ -27,7 +28,11 @@ export class MenuComponent implements OnInit {
   items: { label: string; icon: string; routerLink: string }[] | undefined =
     undefined;
 
+  usuario: Usuario | undefined;
+
   ngOnInit(): void {
+    this.usuario = this.userStorage.getUsuario()!;
+
     this.items = [
       {
         label: 'Dashboard',
@@ -52,9 +57,8 @@ export class MenuComponent implements OnInit {
       //   },
       // },
     ];
-    const isAdmin = this.userStorage.getUsuario()?.isAdmin;
 
-    if (isAdmin) {
+    if (this.usuario.isAdmin) {
       this.items.push({
         label: 'Cadastrar usuário',
         icon: 'pi pi-user-plus',
