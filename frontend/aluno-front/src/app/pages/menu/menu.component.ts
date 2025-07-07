@@ -62,7 +62,7 @@ export class MenuComponent implements OnInit {
     this.items.push({
       label: 'Cadastrar usuário',
       icon: 'pi pi-user-plus',
-      routerLink: '/cadastrar-usuario',
+      routerLink: '/alunos/cadastrar',
     });
     // }
   }
