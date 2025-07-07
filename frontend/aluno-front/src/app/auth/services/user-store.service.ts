@@ -31,7 +31,7 @@ export class UserStoreService {
       const usuario: Usuario = {
         id: decoded.sub,
         nome: decoded.nome,
-        isAdmin: decoded.admin,
+        admin: decoded.admin,
         email: decoded.email,
       };
 
