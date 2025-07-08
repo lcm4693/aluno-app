@@ -7,6 +7,7 @@ import { ListarAlunosComponent } from './pages/alunos/listar/listar-alunos.compo
 import { DetalharAlunoComponent } from './pages/alunos/detalhar/detalhar-aluno.component';
 import { CalendarioAulasComponent } from './pages/aulas/calendario-aulas/calendario-aulas.component';
 import { CadastrarUsuarioComponent } from './pages/usuarios/cadastrar-usuario/cadastrar-usuario.component';
+import { BuscarAnotacoesAulasComponent } from './pages/aulas/buscar-anotacoes-aulas/buscar-anotacoes-aulas.component';
 
 export const routes: Routes = [
   {
@@ -37,6 +38,11 @@ export const routes: Routes = [
   {
     path: 'usuarios/cadastrar',
     component: CadastrarUsuarioComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'aulas/buscar-anotacoes',
+    component: BuscarAnotacoesAulasComponent,
     canActivate: [authGuard],
   },
 ];

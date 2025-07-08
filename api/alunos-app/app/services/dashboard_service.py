@@ -126,6 +126,7 @@ def buscar_alunos_ultimas_aulas(id_usuario):
             .join(AlunoAlias, Aula.aluno_id == AlunoAlias.id)
             .join(sub_total_aulas, sub_total_aulas.c.aluno_id == AlunoAlias.id)
             .filter(AlunoAlias.id_usuario == id_usuario)
+            .filter(AlunoAlias.deletado == False)
             .order_by(Aula.data.desc())
             .limit(quantidade_alunos_ultimas_aulas)
             .all()
