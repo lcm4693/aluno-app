@@ -99,11 +99,10 @@ export class ListarAlunosComponent {
             this.alunos = this.alunos.filter(
               (a) => a.id !== alunoParaExcluir.id
             );
+            this.alunosFiltrados = this.alunosFiltrados.filter(
+              (a) => a.id !== alunoParaExcluir.id
+            );
             this.toastService.success(res.mensagem);
-          },
-          error: (err) => {
-            this.loggerService.error('Erro ao excluir:', err);
-            this.toastService.error(err.erro);
           },
           complete: () => {},
         });
