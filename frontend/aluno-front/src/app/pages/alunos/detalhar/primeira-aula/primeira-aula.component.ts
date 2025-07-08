@@ -6,9 +6,9 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Aluno } from '../../../models/aluno';
-import { AlunoService } from '../../../services/aluno.service';
-import { ToastService } from '../../../services/toast.service';
+import { Aluno } from '../../../../models/aluno';
+import { AlunoService } from '../../../../services/aluno.service';
+import { ToastService } from '../../../../services/toast.service';
 import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({

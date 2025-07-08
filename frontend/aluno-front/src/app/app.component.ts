@@ -7,8 +7,7 @@ import { LoadingService } from './services/loading.service';
 import { Observable } from 'rxjs';
 import { LoadingComponent } from './shared/loading/loading.component';
 import { CommonModule } from '@angular/common';
-import { MenuComponent } from './pages/menu/menu.component';
-import { Usuario } from './models/usuario';
+import { MenuComponent } from './shared/menu/menu.component';
 
 @Component({
   standalone: true,

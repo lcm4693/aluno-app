@@ -20,15 +20,15 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
-import { Pais } from '../../../models/pais';
-import { PaisService } from '../../../services/pais.service';
+import { Pais } from '../../../../models/pais';
+import { PaisService } from '../../../../services/pais.service';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-import { CidadePaisSpanComponent } from '../../../shared/cidade-pais-span/cidade-pais-span.component';
-import { CidadePaisInputComponent } from '../../../shared/cidade-pais-input/cidade-pais-input.component';
-import { AlunoService } from '../../../services/aluno.service';
-import { ToastService } from '../../../services/toast.service';
-import { AlunoMapper } from '../../../mappers/aluno.mapper';
-import { AlunoBasico } from '../../../models/dto/aluno-basico';
+import { CidadePaisSpanComponent } from '../../../../shared/cidade-pais-span/cidade-pais-span.component';
+import { CidadePaisInputComponent } from '../../../../shared/cidade-pais-input/cidade-pais-input.component';
+import { AlunoService } from '../../../../services/aluno.service';
+import { ToastService } from '../../../../services/toast.service';
+import { AlunoMapper } from '../../../../mappers/aluno.mapper';
+import { AlunoBasico } from '../../../../models/dto/aluno-basico';
 import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({

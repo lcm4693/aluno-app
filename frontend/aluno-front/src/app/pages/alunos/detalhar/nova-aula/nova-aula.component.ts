@@ -8,8 +8,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
-import { Aula } from '../../../models/aula';
-import { dataNoFuturoValidator } from '../../../validators';
+import { Aula } from '../../../../models/aula';
+import { dataNoFuturoValidator } from '../../../../validators';
 import { ButtonModule } from 'primeng/button';
 import { TextareaModule } from 'primeng/textarea';
 import { DatePickerModule } from 'primeng/datepicker';

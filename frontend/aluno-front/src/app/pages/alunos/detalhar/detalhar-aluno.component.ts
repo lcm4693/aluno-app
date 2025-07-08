@@ -6,22 +6,22 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { NovaAulaComponent } from './nova-aula/nova-aula.component';
-import { Aula } from '../../models/aula';
-import { Aluno } from '../../models/aluno';
+import { Aula } from '../../../models/aula';
+import { Aluno } from '../../../models/aluno';
 import { TooltipModule } from 'primeng/tooltip';
-import { InformacoesBasicasComponent } from './informacoes-basicas/informacoes-basicas.component';
-import { AlunoService } from '../../services/aluno.service';
-import { AulaService } from '../../services/aula.service';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { AlunoService } from '../../../services/aluno.service';
+import { AulaService } from '../../../services/aula.service';
+import { SafeUrl } from '@angular/platform-browser';
 import { IdiomasComponent } from './idiomas/idiomas.component';
-import { Idioma } from '../../models/idioma';
+import { Idioma } from '../../../models/idioma';
 import { DetalharAulaComponent } from './detalhar-aula/detalhar-aula.component';
-import { ToastService } from '../../services/toast.service';
+import { ToastService } from '../../../services/toast.service';
 import { InputTextModule } from 'primeng/inputtext';
+import { AlunoBasico } from '../../../models/dto/aluno-basico';
+import { DatePickerModule } from 'primeng/datepicker';
+import { InformacoesBasicasComponent } from './informacoes-basicas/informacoes-basicas.component';
 import { PrimeiraAulaComponent } from './primeira-aula/primeira-aula.component';
 import { UploadFotoComponent } from './upload-foto/upload-foto.component';
-import { AlunoBasico } from '../../models/dto/aluno-basico';
-import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   standalone: true,

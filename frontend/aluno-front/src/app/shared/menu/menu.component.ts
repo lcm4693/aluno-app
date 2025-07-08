@@ -49,7 +49,14 @@ export class MenuComponent implements OnInit {
       {
         label: 'Calendário',
         icon: 'pi pi-calendar',
-        routerLink: '/calendario-aulas',
+        routerLink: '/aulas/calendario',
+      },
+      {
+        label: 'Aulas',
+        icon: 'pi pi-calendar',
+        items: [
+          { label: 'Buscar anotações', routerLink: '/aulas/buscar-anotacoes' },
+        ],
       },
       // {
       //   label: 'Notificações',
@@ -64,7 +71,7 @@ export class MenuComponent implements OnInit {
       this.items.push({
         label: 'Cadastrar usuário',
         icon: 'pi pi-user-plus',
-        // routerLink: '/alunos/cadastrar',
+        routerLink: '/usuarios/cadastrar',
       });
     }
   }

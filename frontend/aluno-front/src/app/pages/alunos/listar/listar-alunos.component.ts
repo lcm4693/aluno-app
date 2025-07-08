@@ -9,13 +9,13 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
-import { AlunoService } from '../../services/aluno.service';
-import { Aluno } from '../../models/aluno';
-import { ToastService } from '../../services/toast.service';
+import { AlunoService } from '../../../services/aluno.service';
+import { Aluno } from '../../../models/aluno';
+import { ToastService } from '../../../services/toast.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
-import { LoggerService } from '../../services/logger.service';
+import { LoggerService } from '../../../services/logger.service';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 

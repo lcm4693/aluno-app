@@ -19,8 +19,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Aula } from '../../../models/aula';
-import { dataNoFuturoValidator } from '../../../validators';
+import { Aula } from '../../../../models/aula';
+import { dataNoFuturoValidator } from '../../../../validators';
 import { TextareaModule } from 'primeng/textarea';
 import { DatePicker } from 'primeng/datepicker';
 

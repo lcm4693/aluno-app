@@ -20,16 +20,16 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-import { Idioma } from '../../models/idioma';
+import { Idioma } from '../../../models/idioma';
 import { TextareaModule } from 'primeng/textarea';
-import { IdiomaService } from '../../services/idioma.service';
-import { AlunoService } from '../../services/aluno.service';
-import { ToastService } from '../../services/toast.service';
-import { PaisService } from '../../services/pais.service';
-import { Pais } from '../../models/pais';
+import { IdiomaService } from '../../../services/idioma.service';
+import { AlunoService } from '../../../services/aluno.service';
+import { ToastService } from '../../../services/toast.service';
+import { PaisService } from '../../../services/pais.service';
+import { Pais } from '../../../models/pais';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
-import { Constants } from '../../shared/constants';
-import { LoggerService } from '../../services/logger.service';
+import { Constants } from '../../../shared/constants';
+import { LoggerService } from '../../../services/logger.service';
 
 @Component({
   standalone: true,

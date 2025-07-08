@@ -12,10 +12,10 @@ import {
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
-import { AlunoService } from '../../../services/aluno.service';
-import { Aluno } from '../../../models/aluno';
-import { LoggerService } from '../../../services/logger.service';
-import { ToastService } from '../../../services/toast.service';
+import { AlunoService } from '../../../../services/aluno.service';
+import { Aluno } from '../../../../models/aluno';
+import { LoggerService } from '../../../../services/logger.service';
+import { ToastService } from '../../../../services/toast.service';
 
 @Component({
   selector: 'app-upload-foto',

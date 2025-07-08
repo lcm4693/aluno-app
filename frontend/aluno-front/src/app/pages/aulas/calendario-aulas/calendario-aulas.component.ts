@@ -6,13 +6,12 @@ import { CalendarOptions } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { Aula } from '../../models/aula';
-import { AulaService } from '../../services/aula.service';
+import { AulaService } from '../../../services/aula.service';
 import ptBrLocale from '@fullcalendar/core/locales/pt-br';
 import { ButtonModule } from 'primeng/button';
 import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
-import { Constants } from '../../shared/constants';
+import { Constants } from '../../../shared/constants';
 
 @Component({
   selector: 'app-calendario-aulas',
@@ -85,7 +84,7 @@ export class CalendarioAulasComponent implements OnInit {
 
     if (alunoId && aulaId) {
       this.router.navigate([`/alunos`, alunoId], {
-        queryParams: { aula: aulaId, origem: '/calendario-aulas' },
+        queryParams: { aula: aulaId, origem: '/aulas/calendario' },
       });
     }
   }

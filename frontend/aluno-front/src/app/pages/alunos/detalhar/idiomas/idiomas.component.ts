@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FieldsetModule } from 'primeng/fieldset';
-import { Idioma } from '../../../models/idioma';
-import { IdiomaService } from '../../../services/idioma.service';
+import { Idioma } from '../../../../models/idioma';
+import { IdiomaService } from '../../../../services/idioma.service';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
-import { ToastService } from '../../../services/toast.service';
+import { ToastService } from '../../../../services/toast.service';
 
 @Component({
   selector: 'app-idiomas',

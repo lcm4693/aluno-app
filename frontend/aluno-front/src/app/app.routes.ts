@@ -1,11 +1,12 @@
 import { Routes } from '@angular/router';
-import { ListarAlunosComponent } from './pages/listar-alunos/listar-alunos.component';
-import { CadastrarAlunoComponent } from './pages/cadastrar-aluno/cadastrar-aluno.component';
-import { DetalharAlunoComponent } from './pages/detalhar-aluno/detalhar-aluno.component';
+import { CadastrarAlunoComponent } from './pages/alunos/cadastrar/cadastrar-aluno.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './auth/login/login.component';
 import { authGuard } from './auth/guard/auth.guard';
-import { CalendarioAulasComponent } from './pages/calendario-aulas/calendario-aulas.component';
+import { ListarAlunosComponent } from './pages/alunos/listar/listar-alunos.component';
+import { DetalharAlunoComponent } from './pages/alunos/detalhar/detalhar-aluno.component';
+import { CalendarioAulasComponent } from './pages/aulas/calendario-aulas/calendario-aulas.component';
+import { CadastrarUsuarioComponent } from './pages/usuarios/cadastrar-usuario/cadastrar-usuario.component';
 
 export const routes: Routes = [
   {
@@ -29,8 +30,13 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: 'calendario-aulas',
+    path: 'aulas/calendario',
     component: CalendarioAulasComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'usuarios/cadastrar',
+    component: CadastrarUsuarioComponent,
     canActivate: [authGuard],
   },
 ];
