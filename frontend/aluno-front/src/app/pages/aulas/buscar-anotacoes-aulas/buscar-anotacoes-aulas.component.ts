@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
@@ -37,7 +43,9 @@ interface InterfaceAulaAnotacoes {
   templateUrl: './buscar-anotacoes-aulas.component.html',
   styleUrl: './buscar-anotacoes-aulas.component.css',
 })
-export class BuscarAnotacoesAulasComponent implements OnInit {
+export class BuscarAnotacoesAulasComponent implements OnInit, AfterViewInit {
+  @ViewChild('topo') topoRef!: ElementRef;
+
   searchControl = new FormControl('');
   hoje: Date = new Date();
   aula: InterfaceAulaAnotacoes | undefined = undefined;
@@ -67,6 +75,12 @@ export class BuscarAnotacoesAulasComponent implements OnInit {
             });
           });
       });
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.topoRef?.nativeElement?.focus();
+    }, 0);
   }
 
   removerAcentos(texto: string): string {
