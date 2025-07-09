@@ -65,8 +65,14 @@ export class ListarAlunosComponent {
           .subscribe((termo: string | null) => {
             const t = this.removerAcentos(termo?.toLowerCase().trim() || '');
             this.alunosFiltrados = this.alunos.filter((a) => {
+              // Pegar os valores "simples" + os campos aninhados relevantes
+              const camposExtras = [
+                a.paisNatal?.nome ?? '',
+                a.paisMora?.nome ?? '',
+              ];
+
               const alunoTexto = this.removerAcentos(
-                Object.values(a).join(' ').toLowerCase()
+                [...Object.values(a), ...camposExtras].join(' ').toLowerCase()
               );
               return alunoTexto.includes(t);
             });

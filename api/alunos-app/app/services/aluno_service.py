@@ -10,8 +10,8 @@ from app.models.aluno_idioma import AlunoIdioma
 from datetime import datetime
 from app.config import Config
 from app.utils.date_utils import converter_data_para_front, converter_data_para_banco
-from app.utils.foto_utils import salvar_foto, mover_foto_para_backup
 from app.utils.foto_utils import *
+from app.utils.converters_dicts import *
 
 
 def inserir_aluno(dados, foto_filename, idiomas_ids, id_usuario):
@@ -53,14 +53,22 @@ def buscar_lista_aluno(id_usuario=None):
     try:
         with get_session() as session:
 
-            query = session.query(Aluno).filter_by(deletado=0)
+            query = (
+                session.query(Aluno)
+                .options(
+                    joinedload(Aluno.pais_mora),
+                    joinedload(Aluno.pais_natal),
+                )
+                .filter_by(deletado=0)
+            )
 
             if id_usuario:
                 query = query.filter_by(id_usuario=id_usuario)
 
             alunos = query.order_by(Aluno.nome).all()
 
-            lista = [aluno.to_dict() for aluno in alunos]
+            lista = [converter_alunos_tela_listagem(aluno) for aluno in alunos]
+
             lista = [alterar_nome_foto_para_url_foto(a) for a in lista]
 
             return lista, None
