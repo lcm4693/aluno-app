@@ -67,7 +67,7 @@ export class MenuComponent implements OnInit {
       // },
     ];
 
-    if (this.usuario.admin) {
+    if (this.usuario?.admin) {
       this.items.push({
         label: 'Cadastrar usuário',
         icon: 'pi pi-user-plus',
