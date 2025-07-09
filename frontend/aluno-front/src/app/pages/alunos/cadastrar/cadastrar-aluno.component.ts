@@ -30,6 +30,8 @@ import { Pais } from '../../../models/pais';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { Constants } from '../../../shared/constants';
 import { LoggerService } from '../../../services/logger.service';
+import { AlunoNotificationService } from '../../../services/aluno-notification.service';
+import { TextUtils } from '../../../shared/utils/text-utils';
 
 @Component({
   standalone: true,
@@ -77,7 +79,8 @@ export class CadastrarAlunoComponent implements OnInit {
     private paisService: PaisService,
     private alunoService: AlunoService,
     private toast: ToastService,
-    private loggerService: LoggerService
+    private loggerService: LoggerService,
+    private alunoNotificationService: AlunoNotificationService
   ) {
     this.form = this.fb.group({
       nome: ['', Validators.required],
@@ -123,7 +126,10 @@ export class CadastrarAlunoComponent implements OnInit {
       Object.keys(this.form.controls).forEach((campo) => {
         const control = this.form.get(campo);
         if (control && control.invalid) {
-          console.warn(`Campo "${campo}" inválido. Erros:`, control.errors);
+          this.loggerService.debug(
+            `Campo "${campo}" inválido. Erros:`,
+            control.errors
+          );
         }
       });
       return;
@@ -172,6 +178,7 @@ export class CadastrarAlunoComponent implements OnInit {
 
     this.alunoService.incluirAluno(formData).subscribe({
       next: (res) => {
+        this.alunoNotificationService.notificarAlteracaoListaAluno();
         this.router.navigateByUrl('/listar');
         this.toast.success(res.mensagem);
       },
@@ -199,17 +206,23 @@ export class CadastrarAlunoComponent implements OnInit {
   }
 
   filtrarPaisMora(event: { query: string }) {
-    const query = event.query.toLowerCase();
-    this.paisesFiltradosMoraPais = this.paises.filter((pais) =>
-      pais.nome.toLowerCase().includes(query)
+    const query = TextUtils.removerAcentos(
+      event.query.toLowerCase().trim() || ''
     );
+    this.paisesFiltradosMoraPais = this.paises.filter((pais) => {
+      const nomePais = TextUtils.removerAcentos(pais.nome.toLowerCase());
+      return nomePais.includes(query);
+    });
   }
 
   filtrarPaisNatal(event: { query: string }) {
-    const query = event.query.toLowerCase();
-    this.paisesFiltradosPaisNatal = this.paises.filter((pais) =>
-      pais.nome.toLowerCase().includes(query)
+    const query = TextUtils.removerAcentos(
+      event.query.toLowerCase().trim() || ''
     );
+    this.paisesFiltradosPaisNatal = this.paises.filter((pais) => {
+      const nomePais = TextUtils.removerAcentos(pais.nome.toLowerCase());
+      return nomePais.includes(query);
+    });
   }
 
   resetarCropper() {

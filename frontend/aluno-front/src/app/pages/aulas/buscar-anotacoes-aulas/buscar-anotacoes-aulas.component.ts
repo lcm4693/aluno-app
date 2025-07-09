@@ -16,6 +16,7 @@ import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog';
 import { DatePickerModule } from 'primeng/datepicker';
 import { PanelModule } from 'primeng/panel';
+import { TextUtils } from '../../../shared/utils/text-utils';
 
 interface InterfaceAulaAnotacoes {
   id: number;
@@ -64,13 +65,15 @@ export class BuscarAnotacoesAulasComponent implements OnInit, AfterViewInit {
         this.searchControl.valueChanges
           .pipe(debounceTime(300))
           .subscribe((termo: string | null) => {
-            const t = this.removerAcentos(termo?.toLowerCase().trim() || '');
+            const t = TextUtils.removerAcentos(
+              termo?.toLowerCase().trim() || ''
+            );
             if (!t) {
               this.aulasFiltradas = [];
               return;
             }
             this.aulasFiltradas = this.aulas.filter((a) => {
-              const textoAnotacao = this.removerAcentos(a.anotacoes);
+              const textoAnotacao = TextUtils.removerAcentos(a.anotacoes);
               return textoAnotacao.includes(t);
             });
           });
@@ -81,10 +84,6 @@ export class BuscarAnotacoesAulasComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.topoRef?.nativeElement?.focus();
     }, 0);
-  }
-
-  removerAcentos(texto: string): string {
-    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   }
 
   selecionarAula(aula: InterfaceAulaAnotacoes) {

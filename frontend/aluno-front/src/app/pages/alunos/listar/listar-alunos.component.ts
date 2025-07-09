@@ -18,6 +18,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { LoggerService } from '../../../services/logger.service';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { AlunoNotificationService } from '../../../services/aluno-notification.service';
+import { TextUtils } from '../../../shared/utils/text-utils';
 
 @Component({
   standalone: true,
@@ -52,7 +54,8 @@ export class ListarAlunosComponent {
     private confirmationService: ConfirmationService,
     private alunoService: AlunoService, // Se você tiver um serviço específico para alunos, pode injetá-lo aqui
     private toastService: ToastService,
-    private loggerService: LoggerService
+    private loggerService: LoggerService,
+    private alunoNotificationService: AlunoNotificationService
   ) {}
 
   ngOnInit(): void {
@@ -63,7 +66,9 @@ export class ListarAlunosComponent {
         this.searchControl.valueChanges
           .pipe(debounceTime(300))
           .subscribe((termo: string | null) => {
-            const t = this.removerAcentos(termo?.toLowerCase().trim() || '');
+            const t = TextUtils.removerAcentos(
+              termo?.toLowerCase().trim() || ''
+            );
             this.alunosFiltrados = this.alunos.filter((a) => {
               // Pegar os valores "simples" + os campos aninhados relevantes
               const camposExtras = [
@@ -71,7 +76,7 @@ export class ListarAlunosComponent {
                 a.paisMora?.nome ?? '',
               ];
 
-              const alunoTexto = this.removerAcentos(
+              const alunoTexto = TextUtils.removerAcentos(
                 [...Object.values(a), ...camposExtras].join(' ').toLowerCase()
               );
               return alunoTexto.includes(t);
@@ -86,10 +91,6 @@ export class ListarAlunosComponent {
     this.router.navigateByUrl('');
   }
 
-  removerAcentos(texto: string): string {
-    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  }
-
   confirmarExclusao(alunoParaExcluir: any) {
     this.confirmationService.confirm({
       message: `Deseja excluir o aluno ${alunoParaExcluir.nome}?`,
@@ -101,6 +102,8 @@ export class ListarAlunosComponent {
       accept: () => {
         this.alunoService.excluirAluno(alunoParaExcluir.id).subscribe({
           next: (res: any) => {
+            this.alunoNotificationService.notificarAlteracaoListaAluno();
+
             // sucesso → remove da lista
             this.alunos = this.alunos.filter(
               (a) => a.id !== alunoParaExcluir.id

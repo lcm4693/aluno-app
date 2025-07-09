@@ -12,6 +12,8 @@ import { AutoComplete, AutoCompleteModule } from 'primeng/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoggerService } from '../../services/logger.service';
 import { AlunoService } from '../../services/aluno.service';
+import { AlunoNotificationService } from '../../services/aluno-notification.service';
+import { TextUtils } from '../utils/text-utils';
 
 @Component({
   selector: 'app-menu',
@@ -35,8 +37,10 @@ export class MenuComponent implements OnInit {
     private userStorage: UserStoreService,
     private router: Router,
     private loggerService: LoggerService,
-    private alunoService: AlunoService
+    private alunoService: AlunoService,
+    private alunoNotificationService: AlunoNotificationService
   ) {}
+
   @ViewChild('autocompleteRef', { read: ElementRef })
   autocompleteRef!: ElementRef;
 
@@ -52,11 +56,13 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {
     this.usuario = this.userStorage.getUsuario()!;
 
-    this.alunoService.getAlunosParaMenu().subscribe({
-      next: (res) => {
-        this.alunos = res;
-        this.alunosFiltrados = res;
-      },
+    if (this.usuario) {
+      this.carregarAlunosParaMenu();
+    }
+
+    this.alunoNotificationService.listaAlunosAlterada$.subscribe(() => {
+      this.loggerService.info('Recarregando listagem de alunos para o menu');
+      this.carregarAlunosParaMenu();
     });
 
     this.items = [
@@ -103,11 +109,24 @@ export class MenuComponent implements OnInit {
     }
   }
 
+  carregarAlunosParaMenu() {
+    this.alunoService.getAlunosParaMenu().subscribe({
+      next: (res) => {
+        this.alunos = res;
+        this.alunosFiltrados = res;
+      },
+    });
+  }
+
   filtrarAlunos(event: { query: string }) {
-    const query = event.query.toLowerCase();
-    this.alunosFiltrados = this.alunos.filter((aluno) =>
-      aluno.nome.toLowerCase().includes(query)
+    const query = TextUtils.removerAcentos(
+      event.query.toLowerCase().trim() || ''
     );
+    this.loggerService.info('Query:', query);
+    this.alunosFiltrados = this.alunos.filter((aluno) => {
+      const nomeAluno = TextUtils.removerAcentos(aluno.nome.toLowerCase());
+      return nomeAluno.includes(query);
+    });
   }
 
   irParaDetalharAluno(obj: any) {

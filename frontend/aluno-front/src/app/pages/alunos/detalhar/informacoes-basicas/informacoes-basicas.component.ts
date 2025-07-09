@@ -30,6 +30,7 @@ import { ToastService } from '../../../../services/toast.service';
 import { AlunoMapper } from '../../../../mappers/aluno.mapper';
 import { AlunoBasico } from '../../../../models/dto/aluno-basico';
 import { DatePickerModule } from 'primeng/datepicker';
+import { TextUtils } from '../../../../shared/utils/text-utils';
 
 @Component({
   selector: 'app-informacoes-basicas',
@@ -144,16 +145,18 @@ export class InformacoesBasicasComponent implements OnInit {
   }
 
   filtrarPaisMora(query: string) {
-    query = query.toLowerCase();
-    this.paisesFiltradosPaisMora = this.paises.filter((pais) =>
-      pais.nome.toLowerCase().includes(query)
-    );
+    query = TextUtils.removerAcentos(query.toLowerCase().trim() || '');
+    this.paisesFiltradosPaisMora = this.paises.filter((pais) => {
+      const nomePais = TextUtils.removerAcentos(pais.nome.toLowerCase());
+      return nomePais.toLowerCase().includes(query);
+    });
   }
 
   filtrarPaisNatal(query: string) {
-    query = query.toLowerCase();
-    this.paisesFiltradosPaisNatal = this.paises.filter((pais) =>
-      pais.nome.toLowerCase().includes(query)
-    );
+    query = TextUtils.removerAcentos(query.toLowerCase().trim() || '');
+    this.paisesFiltradosPaisNatal = this.paises.filter((pais) => {
+      const nomePais = TextUtils.removerAcentos(pais.nome.toLowerCase());
+      return nomePais.toLowerCase().includes(query);
+    });
   }
 }
