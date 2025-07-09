@@ -142,7 +142,10 @@
               rel="noopener noreferrer"
               class="ml-1 link"
             >
-              <span>{{ alunoEditado!.linkPerfil }}</span>
+              <span class="hidden md:inline">{{
+                alunoEditado!.linkPerfil
+              }}</span>
+              <span class="inline md:hidden">Ir para o link</span>
             </a>
           </ng-container>
           <ng-template #edicaoCampoPerfil>
