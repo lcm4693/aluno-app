@@ -14,7 +14,15 @@ export class AlunoService {
   constructor(private http: HttpClient) {}
 
   getAlunos(): Observable<Aluno[]> {
-    return this.http.get<Aluno[]>(`${this.baseUrl}` + '/');
+    return this.http.get<Aluno[]>(`${this.baseUrl}/`);
+  }
+
+  getAlunosParaMenu(): Observable<
+    { id: number; nome: string; fotoUrl: string }[]
+  > {
+    return this.http.get<{ id: number; nome: string; fotoUrl: string }[]>(
+      `${this.baseUrl}/lista-menu`
+    );
   }
 
   incluirAluno(formData: FormData): Observable<any> {

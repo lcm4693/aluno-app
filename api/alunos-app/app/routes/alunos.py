@@ -11,6 +11,7 @@ from app.services.aluno_service import (
     excluir_aluno,
     atualizar_data_primeira_aula,
     alterar_foto_usuario,
+    buscar_lista_aluno_para_menu,
 )
 from app.utils.error_handler import handle_errors
 from app.utils.validators import AlunoInputDTO
@@ -21,6 +22,21 @@ from app.config import Config
 logger = configurar_logger(__name__)
 
 alunos_bp = Blueprint("alunos", __name__, url_prefix="/api/alunos")
+
+
+@alunos_bp.route("/lista-menu", methods=["GET"])
+@handle_errors
+@jwt_required()
+def listar_alunos_para_lista_menu():
+
+    idUsuario = get_jwt_identity()
+    logger.debug(f"Buscar usuários para menu usuário: {idUsuario}")
+
+    alunos = buscar_lista_aluno_para_menu(id_usuario=idUsuario)
+
+    logger.debug(f"Retorno: {alunos}")
+
+    return jsonify(alunos)
 
 
 @alunos_bp.route("/", methods=["GET"])

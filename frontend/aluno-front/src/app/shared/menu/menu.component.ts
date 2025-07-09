@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { AvatarModule } from 'primeng/avatar';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
@@ -8,6 +8,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MenubarModule } from 'primeng/menubar';
 import { UserStoreService } from '../../auth/services/user-store.service';
 import { Usuario } from '../../models/usuario';
+import { AutoComplete, AutoCompleteModule } from 'primeng/autocomplete';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LoggerService } from '../../services/logger.service';
+import { AlunoService } from '../../services/aluno.service';
 
 @Component({
   selector: 'app-menu',
@@ -19,18 +23,41 @@ import { Usuario } from '../../models/usuario';
     InputTextModule,
     InputGroupModule,
     InputGroupAddonModule,
+    AutoCompleteModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css',
 })
 export class MenuComponent implements OnInit {
-  constructor(private userStorage: UserStoreService) {}
+  constructor(
+    private userStorage: UserStoreService,
+    private router: Router,
+    private loggerService: LoggerService,
+    private alunoService: AlunoService
+  ) {}
+  @ViewChild('autocompleteRef', { read: ElementRef })
+  autocompleteRef!: ElementRef;
+
   items: any[] | undefined = undefined;
 
   usuario: Usuario | undefined;
 
+  alunoSelecionado: any = null;
+
+  alunosFiltrados: { id: number; nome: string; fotoUrl: string }[] = [];
+  alunos: { id: number; nome: string; fotoUrl: string }[] = [];
+
   ngOnInit(): void {
     this.usuario = this.userStorage.getUsuario()!;
+
+    this.alunoService.getAlunosParaMenu().subscribe({
+      next: (res) => {
+        this.alunos = res;
+        this.alunosFiltrados = res;
+      },
+    });
 
     this.items = [
       {
@@ -74,5 +101,30 @@ export class MenuComponent implements OnInit {
         routerLink: '/usuarios/cadastrar',
       });
     }
+  }
+
+  filtrarAlunos(event: { query: string }) {
+    const query = event.query.toLowerCase();
+    this.alunosFiltrados = this.alunos.filter((aluno) =>
+      aluno.nome.toLowerCase().includes(query)
+    );
+  }
+
+  irParaDetalharAluno(obj: any) {
+    const aluno = obj.value;
+    this.router.navigate([`/alunos`, aluno.id]).then(() => {
+      this.loggerService.info(JSON.stringify(aluno));
+      this.alunoSelecionado = null;
+      this.alunosFiltrados = [];
+
+      // Tirar o foco do input após pequeno delay
+      setTimeout(() => {
+        const input = this.autocompleteRef.nativeElement.querySelector(
+          'input'
+        ) as HTMLInputElement;
+
+        input?.blur();
+      });
+    });
   }
 }

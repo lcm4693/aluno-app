@@ -22,6 +22,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { InformacoesBasicasComponent } from './informacoes-basicas/informacoes-basicas.component';
 import { PrimeiraAulaComponent } from './primeira-aula/primeira-aula.component';
 import { UploadFotoComponent } from './upload-foto/upload-foto.component';
+import { LoggerService } from '../../../services/logger.service';
 
 @Component({
   standalone: true,
@@ -66,37 +67,41 @@ export class DetalharAlunoComponent implements OnInit {
     private router: Router,
     private alunoService: AlunoService,
     private aulaService: AulaService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private loggerService: LoggerService
   ) {}
 
   ngOnInit(): void {
-    const alunoId = this.route.snapshot.paramMap.get('id');
-    const aulaId = this.route.snapshot.queryParamMap.get('aula');
-    this.origem = this.route.snapshot.queryParamMap.get('origem');
+    this.route.paramMap.subscribe((params) => {
+      const alunoId = params.get('id');
+      const aulaId = this.route.snapshot.queryParamMap.get('aula');
+      this.origem = this.route.snapshot.queryParamMap.get('origem');
 
-    if (alunoId) {
-      this.alunoService.getAluno(+alunoId).subscribe({
-        next: (res) => {
-          // Converte string ISO → Date
-          if (res?.aulas?.length) {
-            res.aulas = res.aulas.map((aula: any) => ({
-              ...aula,
-              dataAula: new Date(aula.dataAula),
-            }));
-          }
-          this.aluno = res;
-          this.alunoBasico = this.extrairAlunoBasicoInformacoesBasicas();
+      this.loggerService.info('Origem:' + this.origem);
+      if (alunoId) {
+        this.alunoService.getAluno(+alunoId).subscribe({
+          next: (res) => {
+            // Converte string ISO → Date
+            if (res?.aulas?.length) {
+              res.aulas = res.aulas.map((aula: any) => ({
+                ...aula,
+                dataAula: new Date(aula.dataAula),
+              }));
+            }
+            this.aluno = res;
+            this.alunoBasico = this.extrairAlunoBasicoInformacoesBasicas();
 
-          if (aulaId) {
-            const aulaSelecao: Aula | undefined = this.aluno.aulas.find(
-              (aula) => aula.id === Number(aulaId)
-            );
-            this.selecionarAula(aulaSelecao!);
-          }
-        },
-        complete: () => {},
-      });
-    }
+            if (aulaId) {
+              const aulaSelecao: Aula | undefined = this.aluno.aulas.find(
+                (aula) => aula.id === Number(aulaId)
+              );
+              this.selecionarAula(aulaSelecao!);
+            }
+          },
+          complete: () => {},
+        });
+      }
+    });
   }
 
   abrirModalNovaAula() {
@@ -108,6 +113,8 @@ export class DetalharAlunoComponent implements OnInit {
   }
 
   voltar(): void {
+    this.loggerService.info('Vai vltar para:' + this.origem);
+
     if (this.origem) {
       this.router.navigate([this.origem]);
     } else {

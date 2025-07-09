@@ -4,13 +4,40 @@
   class="fixed top-0 left-0 w-full z-50 shadow-md bg-white border-b border-gray-200"
 >
   <ng-template #end>
-    <div class="flex items-center gap-2">
-      <input
+    <div class="flex gap-2 items-center w-full">
+      <p-autoComplete
+        id="autocompleteNomeAlunos"
+        #autocompleteRef
+        [(ngModel)]="alunoSelecionado"
+        [suggestions]="alunosFiltrados"
+        (completeMethod)="filtrarAlunos($event)"
+        field="nome"
+        placeholder="Pesquise pelo nome do aluno..."
+        [minLength]="3"
+        inputStyleClass="w-80"
+        emptyMessage="Sem resultados"
+        (onSelect)="irParaDetalharAluno($event)"
+      >
+        <ng-template let-aluno pTemplate="item">
+          <div class="flex items-center gap-3 p-2">
+            <img
+              [src]="aluno.fotoUrl"
+              alt="Foto de {{ aluno.nome }}"
+              class="w-10 h-10 rounded-full object-cover border border-gray-300"
+            />
+            <span class="text-sm text-gray-800 dark:text-white">{{
+              aluno.nome
+            }}</span>
+          </div>
+        </ng-template>
+      </p-autoComplete>
+
+      <!-- <input
         type="text"
         pInputText
         placeholder="Pesquise pelo nome do aluno..."
         class="w-65 md:w-90"
-      />
+      /> -->
 
       <p-avatar
         class="ml-3"

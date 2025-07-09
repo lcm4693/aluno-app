@@ -49,6 +49,26 @@ def inserir_aluno(dados, foto_filename, idiomas_ids, id_usuario):
         raise RuntimeError(f"Erro ao inserir aluno: {e}")
 
 
+def buscar_lista_aluno_para_menu(id_usuario=None):
+    with get_session() as session:
+
+        alunos = (
+            session.query(Aluno.id, Aluno.nome, Aluno.foto)
+            .filter(Aluno.deletado == False)
+            .filter(Aluno.id_usuario == id_usuario)
+            .order_by(Aluno.nome)
+            .all()
+        )
+
+        lista = [
+            {"id": aluno.id, "nome": aluno.nome, "foto": aluno.foto} for aluno in alunos
+        ]
+
+        lista = [alterar_nome_foto_para_url_foto(a) for a in lista]
+
+        return lista
+
+
 def buscar_lista_aluno(id_usuario=None):
     try:
         with get_session() as session:
