@@ -1,1 +1,56 @@
-<p>buscar-anotacoes-aulas works!</p>
+<div class="flex items-center justify-center mt-10">
+  <p-card>
+    <ng-template pTemplate="header">
+      <span class="font-bold text-lg">Buscar anotações</span>
+    </ng-template>
+
+    <div class="busca-page">
+      <div class="busca-wrapper">
+        <p-inputgroup>
+          <p-inputgroup-addon>
+            <i
+              class="pi pi-search"
+              style="font-size: 1.3rem; color: #0d6efd"
+            ></i>
+          </p-inputgroup-addon>
+          <input
+            type="text"
+            pInputText
+            placeholder="Pesquise por termos nas anotações da aula"
+            [formControl]="searchControl"
+          />
+        </p-inputgroup>
+      </div>
+    </div>
+
+    <div
+      class="flex w-full text-sm py-3 px-2 text-gray-700 font-bold mb-2 text-center"
+    >
+      <div class="flex-1 text-lg">Aluno</div>
+      <div class="w-1/4 text-lg">Data</div>
+    </div>
+    <div class="text-center" *ngFor="let aula of aulasFiltradas">
+      <div
+        class="flex w-full items-center border-t-1 surface-border linha-clicavel p-2"
+      >
+        <div class="flex-1 font-medium pt-2">
+          <div class="flex items-center text-center">
+            <img
+              [src]="aula.fotoUrl"
+              alt="Foto do aluno"
+              class="border-circle shadow-1 img-aluno img-miniatura mb-2"
+              style="width: 50px; height: 50px"
+            />
+            <span class="ml-5">{{ aula.nomeAluno }}</span>
+          </div>
+        </div>
+        <div class="w-1/4">
+          {{ aula.dataAula | date : "dd/MM/yyyy" }}
+        </div>
+      </div>
+    </div>
+    <p *ngIf="aulasFiltradas.length === 0" class="text-secondary text-center">
+      Nenhuma aula recente encontrada.
+    </p>
+  </p-card>
+</div>

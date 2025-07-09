@@ -8,6 +8,7 @@ from datetime import datetime
 import time
 from app.utils.logger_config import configurar_logger
 from app.utils.date_utils import converter_data_para_front, converter_data_para_banco
+from app.utils.foto_utils import *
 
 logger = configurar_logger(__name__)
 
@@ -17,7 +18,12 @@ def listar_aulas_do_usuario(id_usuario):
         # Busca as aulas do usuario
         aulas = (
             session.query(
-                Aula.id, Aula.data, Aula.aluno_id, Aluno.nome.label("nomeAluno")
+                Aula.id,
+                Aula.data,
+                Aula.aluno_id,
+                Aluno.nome.label("nomeAluno"),
+                Aula.anotacoes,
+                Aluno.foto,
             )
             .join(Aluno)
             .filter(Aluno.id_usuario == id_usuario, Aluno.deletado == False)
@@ -25,15 +31,21 @@ def listar_aulas_do_usuario(id_usuario):
             .all()
         )
 
-        return [
+        lista = [
             {
                 "id": aula.id,
                 "dataAula": converter_data_para_front(aula.data),
                 "aluno_id": aula.aluno_id,
                 "nomeAluno": aula.nomeAluno,
+                "anotacoes": aula.anotacoes,
+                "foto": aula.foto,
             }
             for aula in aulas
-        ], None
+        ]
+
+        lista = [alterar_nome_foto_para_url_foto(a) for a in lista]
+
+        return lista, None
 
 
 def listar_aulas_do_aluno(aluno_id, id_usuario):
