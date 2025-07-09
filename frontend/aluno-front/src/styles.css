@@ -270,9 +270,9 @@ textarea {
   box-shadow: none;
 }
 
-.p-datatable-tbody > tr:hover {
+/* .p-datatable-tbody > tr:hover {
   background-color: #cde3f2 !important;
-}
+} */
 
 .linha-clicavel {
   border-radius: 0.5rem; /* ou 8px */
