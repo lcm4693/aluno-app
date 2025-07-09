@@ -1,5 +1,5 @@
 <div class="flex items-center justify-center mt-10">
-  <p-card>
+  <p-card class="w-200">
     <ng-template pTemplate="header">
       <span class="font-bold text-lg">Buscar anotações</span>
     </ng-template>
@@ -23,28 +23,26 @@
       </div>
     </div>
 
-    <div
-      class="flex w-full text-sm py-3 px-2 text-gray-700 font-bold mb-2 text-center"
-    >
+    <div class="flex text-sm py-3 px-2 text-gray-700 font-bold mb-2">
       <div class="flex-1 text-lg">Aluno</div>
-      <div class="w-1/4 text-lg">Data</div>
+      <div class="w-2/4 text-lg text-center">Data</div>
     </div>
     <div class="text-center" *ngFor="let aula of aulasFiltradas">
       <div
         class="flex w-full items-center border-t-1 surface-border linha-clicavel p-2"
+        (click)="selecionarAula(aula)"
       >
-        <div class="flex-1 font-medium pt-2">
-          <div class="flex items-center text-center">
+        <div class="flex-1 gap-10 font-medium pt-2">
+          <div class="flex items-center">
             <img
               [src]="aula.fotoUrl"
               alt="Foto do aluno"
-              class="border-circle shadow-1 img-aluno img-miniatura mb-2"
-              style="width: 50px; height: 50px"
+              class="img-aluno img-miniatura"
             />
             <span class="ml-5">{{ aula.nomeAluno }}</span>
           </div>
         </div>
-        <div class="w-1/4">
+        <div class="w-2/4 items-center justify-center">
           {{ aula.dataAula | date : "dd/MM/yyyy" }}
         </div>
       </div>
@@ -54,3 +52,42 @@
     </p>
   </p-card>
 </div>
+
+<p-dialog
+  header="Detalhar Aula"
+  *ngIf="aula"
+  [(visible)]="modalNovaDetalharAulaVisivel"
+  [modal]="true"
+  [draggable]="false"
+  [closable]="true"
+  styleClass="w-3/6"
+>
+  <span #topo tabindex="-10000"></span>
+  <div class="flex flex-col gap-4 md:flex-row md:items-center md:gap-4">
+    <div class="form-field w-full md:w-auto">
+      <label class="label">Data da aula:</label>
+      <p-datepicker
+        [ngModel]="aula.dataAula"
+        showIcon
+        iconDisplay="input"
+        dateFormat="dd/mm/yy"
+        [maxDate]="hoje"
+        disabled="true"
+      />
+    </div>
+  </div>
+
+  <!-- Linha 2: Anotações e demais campos -->
+  <div class="flex flex-col gap-4 md:flex-row">
+    <div class="form-field w-full md:w-3/3">
+      <p-panel class="w-full">
+        <ng-template pTemplate="header">
+          <span class="label">Anotações</span>
+        </ng-template>
+        <div class="break-words whitespace-pre-line">
+          {{ aula!.anotacoes || "—" }}
+        </div>
+      </p-panel>
+    </div>
+  </div>
+</p-dialog>
