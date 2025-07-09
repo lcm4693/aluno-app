@@ -6,13 +6,18 @@
   <div
     class="flex w-full text-sm py-3 px-2 text-gray-700 font-bold mb-2 text-center"
   >
-    <div class="flex-1 text-lg">Aluno</div>
-    <div class="w-1/4 text-lg">Data</div>
-    <div class="hidden md:block w-1/4 text-lg">Total de Aulas</div>
+    <div class="flex-1 text-lg dark:text-white">Aluno</div>
+    <div class="w-1/4 text-lg dark:text-white">Data</div>
+    <div class="hidden md:block w-1/4 text-lg dark:text-white">
+      Total de Aulas
+    </div>
   </div>
-  <div class="text-center" *ngFor="let aula of ultimasAulas">
+  <div
+    class="text-center border-t-1 surface-border"
+    *ngFor="let aula of ultimasAulas"
+  >
     <div
-      class="flex w-full items-center border-t-1 surface-border linha-clicavel p-2"
+      class="flex w-full linha-clicavel items-center p-2"
       (click)="redirecionarAluno(aula.idAluno, aula.idAula)"
     >
       <div class="flex-1 font-medium pt-2">
