@@ -86,7 +86,7 @@ export class MenuComponent implements OnInit {
       },
       {
         label: 'Aulas',
-        icon: 'pi pi-calendar',
+        icon: 'pi pi-file-edit',
         items: [
           { label: 'Buscar anotações', routerLink: '/aulas/buscar-anotacoes' },
         ],
