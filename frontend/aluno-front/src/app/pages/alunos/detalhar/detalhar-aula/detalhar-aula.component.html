@@ -47,10 +47,10 @@
 
   <!-- Linha 2: Anotações e demais campos -->
   <div class="flex flex-col gap-4 md:flex-row">
-    <div class="form-field w-full md:w-1/3" *ngIf="editando">
+    <div class="form-field w-full md:w-1/3">
       <label for="anotacoes" class="label">Anotações:</label>
       <textarea
-        pInputTextarea
+        pTextarea
         id="anotacoes"
         formControlName="anotacoes"
         rows="10"
@@ -70,18 +70,7 @@
         O campo Anotações é obrigatório</small
       >
     </div>
-    <div class="form-field w-full md:w-1/3" *ngIf="!editando">
-      <p-panel class="w-full">
-        <ng-template pTemplate="header">
-          <span class="label">Anotações</span>
-        </ng-template>
-        <div class="break-words whitespace-pre-line">
-          {{ aula!.anotacoes || "—" }}
-        </div>
-      </p-panel>
-    </div>
-
-    <div class="form-field w-full md:w-1/3" *ngIf="editando">
+    <div class="form-field w-full md:w-1/3">
       <label for="campo1" class="label">Comentários do professor:</label>
       <textarea
         pInputTextarea
@@ -91,17 +80,7 @@
         class="w-full"
       ></textarea>
     </div>
-    <div class="form-field w-full md:w-1/3" *ngIf="!editando">
-      <p-panel class="w-full">
-        <ng-template pTemplate="header">
-          <span class="label">Comentários do professor</span>
-        </ng-template>
-        <div class="break-words whitespace-pre-line">
-          {{ aula!.comentarios || "—" }}
-        </div>
-      </p-panel>
-    </div>
-    <div class="form-field w-full md:w-1/3" *ngIf="editando">
+    <div class="form-field w-full md:w-1/3">
       <label for="proxima-aula" class="label">Próxima aula:</label>
       <textarea
         pInputTextarea
@@ -110,17 +89,6 @@
         rows="10"
         class="w-full"
       ></textarea>
-    </div>
-    <div class="form-field w-full md:w-1/3" *ngIf="!editando">
-      <p-panel class="w-full">
-        <ng-template pTemplate="header">
-          <span class="label">Próxima aula</span>
-        </ng-template>
-
-        <div class="break-words whitespace-pre-line">
-          {{ aula!.proximaAula || "—" }}
-        </div>
-      </p-panel>
     </div>
   </div>
 </form>

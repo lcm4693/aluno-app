@@ -57,9 +57,13 @@ export class DetalharAulaComponent implements AfterViewInit, OnChanges {
         { value: this.aula?.dataAula || new Date(), disabled: !this.editando },
         [Validators.required, dataNoFuturoValidator()],
       ],
-      anotacoes: [this.aula?.anotacoes],
-      comentarios: [this.aula?.comentarios],
-      proximaAula: [this.aula?.proximaAula],
+      anotacoes: [{ value: this.aula?.anotacoes, disabled: !this.editando }],
+      comentarios: [
+        { value: this.aula?.comentarios, disabled: !this.editando },
+      ],
+      proximaAula: [
+        { value: this.aula?.proximaAula, disabled: !this.editando },
+      ],
     });
   }
 
@@ -78,6 +82,9 @@ export class DetalharAulaComponent implements AfterViewInit, OnChanges {
   alterarFlagEdicao() {
     this.editando = true;
     this.form.get('dataAula')?.enable();
+    this.form.get('anotacoes')?.enable();
+    this.form.get('comentarios')?.enable();
+    this.form.get('proximaAula')?.enable();
   }
 
   salvar(): void {
@@ -113,5 +120,8 @@ export class DetalharAulaComponent implements AfterViewInit, OnChanges {
     this.editando = false;
     this.retornarValoresPadraoAula();
     this.form.get('dataAula')?.disable();
+    this.form.get('anotacoes')?.disable();
+    this.form.get('comentarios')?.disable();
+    this.form.get('proximaAula')?.disable();
   }
 }
