@@ -54,8 +54,8 @@ import { TextUtils } from '../../../../shared/utils/text-utils';
 })
 export class InformacoesBasicasComponent implements OnInit {
   modoEdicao: boolean = false;
-  @Input()
-  alunoEditado!: AlunoBasico;
+  // @Input()
+  _alunoEditado!: AlunoBasico;
   @Output() editarInformacoesBasicas = new EventEmitter<AlunoBasico>();
 
   form!: FormGroup;
@@ -80,6 +80,10 @@ export class InformacoesBasicasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // this.criarForm();
+  }
+
+  criarForm() {
     this.paisMoraObj = this.alunoEditado.paisMora;
     this.mora = this.alunoEditado.mora;
     this.cidadeNatal = this.alunoEditado.cidadeNatal;
@@ -110,6 +114,17 @@ export class InformacoesBasicasComponent implements OnInit {
         this.paises = res;
       },
     });
+  }
+
+  @Input() set alunoEditado(value: AlunoBasico) {
+    this._alunoEditado = value;
+    if (value) {
+      this.criarForm();
+    }
+  }
+
+  get alunoEditado(): AlunoBasico {
+    return this._alunoEditado;
   }
 
   executarAcaoEdicao() {

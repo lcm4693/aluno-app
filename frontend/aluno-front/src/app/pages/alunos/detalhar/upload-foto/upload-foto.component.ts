@@ -16,6 +16,7 @@ import { AlunoService } from '../../../../services/aluno.service';
 import { Aluno } from '../../../../models/aluno';
 import { LoggerService } from '../../../../services/logger.service';
 import { ToastService } from '../../../../services/toast.service';
+import { AlunoNotificationService } from '../../../../services/aluno-notification.service';
 
 @Component({
   selector: 'app-upload-foto',
@@ -34,7 +35,8 @@ export class UploadFotoComponent {
     private cdRef: ChangeDetectorRef,
     private alunoService: AlunoService,
     private loggerService: LoggerService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private alunoNotificationService: AlunoNotificationService
   ) {}
   modalAberta = false;
   imagemEvento: any;
@@ -65,7 +67,7 @@ export class UploadFotoComponent {
 
       this.alunoService.uploadFoto(this.aluno.id, formData).subscribe({
         next: (res) => {
-          this.loggerService.debug('Resposta:', res);
+          this.alunoNotificationService.notificarAlteracaoListaAluno();
           this.resetarCropper();
           this.fotoAtualizada.emit(res.url);
         },

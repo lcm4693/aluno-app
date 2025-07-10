@@ -24,8 +24,11 @@ import { ToastService } from '../../../../services/toast.service';
   styleUrl: './idiomas.component.css',
 })
 export class IdiomasComponent implements OnInit {
-  @Input() idAluno!: number | null;
-  @Input() idiomasAluno!: Idioma[] | null;
+  // @Input() idAluno!: number | null;
+  // @Input() idiomasAluno!: Idioma[] | null;
+  _idAluno!: number | null;
+  _idiomasAluno!: Idioma[] | null;
+
   @Output() editarIdiomas = new EventEmitter<Idioma[]>();
 
   modoEdicao: boolean = false;
@@ -39,14 +42,36 @@ export class IdiomasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.idiomasSelecionados = this.idiomasAluno?.map((i) => i.id) || [];
-
+    this.iniciaIdiomasSelecionados();
     this.idiomaService.getIdiomas().subscribe({
       next: (res) => {
         this.idiomasDisponiveis = res;
       },
       complete: () => {},
     });
+  }
+
+  iniciaIdiomasSelecionados() {
+    this.idiomasSelecionados = this.idiomasAluno?.map((i) => i.id) || [];
+  }
+
+  @Input() set idAluno(value: number) {
+    this._idAluno = value;
+  }
+
+  get idAluno(): number | null {
+    return this._idAluno;
+  }
+
+  @Input() set idiomasAluno(value: Idioma[]) {
+    this._idiomasAluno = value;
+    if (value) {
+      this.iniciaIdiomasSelecionados();
+    }
+  }
+
+  get idiomasAluno(): Idioma[] | null {
+    return this._idiomasAluno;
   }
 
   executarAcaoEdicao() {

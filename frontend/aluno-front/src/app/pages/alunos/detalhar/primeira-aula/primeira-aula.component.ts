@@ -20,7 +20,8 @@ import { DatePickerModule } from 'primeng/datepicker';
 })
 export class PrimeiraAulaComponent implements OnInit {
   editandoAlunoDesde: boolean = false;
-  @Input() aluno!: Aluno;
+  // @Input() aluno!: Aluno;
+  _aluno!: Aluno;
 
   form!: FormGroup;
   hoje: Date = new Date();
@@ -31,7 +32,9 @@ export class PrimeiraAulaComponent implements OnInit {
     private toastService: ToastService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  criarForm() {
     this.form = this.fb.group({
       dataPrimeiraAula: [
         this.aluno.dataPrimeiraAula
@@ -40,6 +43,17 @@ export class PrimeiraAulaComponent implements OnInit {
         Validators.required,
       ],
     });
+  }
+
+  @Input() set aluno(value: Aluno) {
+    this._aluno = value;
+    if (value) {
+      this.criarForm();
+    }
+  }
+
+  get aluno(): Aluno {
+    return this._aluno;
   }
 
   cancelarEdicaoDesde() {
