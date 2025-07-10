@@ -101,7 +101,7 @@ export class CalendarioAulasComponent implements OnInit {
     return this.mapaCores.get(alunoId)!;
   }
 
-  voltarParaListagem(): void {
-    this.router.navigate(['']);
-  }
+  // voltarParaListagem(): void {
+  //   this.router.navigate(['']);
+  // }
 }

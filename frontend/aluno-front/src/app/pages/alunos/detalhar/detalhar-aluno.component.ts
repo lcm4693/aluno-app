@@ -112,15 +112,15 @@ export class DetalharAlunoComponent implements OnInit {
     this.modalNovaAulaVisivel = false;
   }
 
-  voltar(): void {
-    this.loggerService.info('Vai vltar para:' + this.origem);
+  // voltar(): void {
+  //   this.loggerService.info('Vai vltar para:' + this.origem);
 
-    if (this.origem) {
-      this.router.navigate([this.origem]);
-    } else {
-      this.router.navigate(['/listar']);
-    }
-  }
+  //   if (this.origem) {
+  //     this.router.navigate([this.origem]);
+  //   } else {
+  //     this.router.navigate(['/listar']);
+  //   }
+  // }
 
   onSalvarAula(aula: Aula): void {
     this.aulaService.incluirAula(aula, this.aluno!.id).subscribe({

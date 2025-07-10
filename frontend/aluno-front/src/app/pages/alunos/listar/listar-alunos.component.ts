@@ -87,9 +87,9 @@ export class ListarAlunosComponent {
     });
   }
 
-  voltarInicio(): void {
-    this.router.navigateByUrl('');
-  }
+  // voltarInicio(): void {
+  //   this.router.navigateByUrl('');
+  // }
 
   confirmarExclusao(alunoParaExcluir: any) {
     this.confirmationService.confirm({
