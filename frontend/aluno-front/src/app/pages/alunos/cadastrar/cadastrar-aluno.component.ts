@@ -96,7 +96,12 @@ export class CadastrarAlunoComponent implements OnInit {
       idade: [null],
       hobbies: [''],
       pontos: [''],
-      linkPerfil: [''],
+      linkPerfil: [
+        '',
+        Validators.pattern(
+          /^(https?:\/\/)?([\w\-]+\.)+[a-z]{2,6}(:\d{1,5})?(\/.*)?$/i
+        ),
+      ],
       idiomas: [''],
     });
   }

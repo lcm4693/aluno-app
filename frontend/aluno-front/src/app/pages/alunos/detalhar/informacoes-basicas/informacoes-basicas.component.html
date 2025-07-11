@@ -150,6 +150,17 @@
           </ng-container>
           <ng-template #edicaoCampoPerfil>
             <input pInputText formControlName="linkPerfil" class="ml-1 w-5/6" />
+            <div class="flex flex-col">
+              <small
+                class="error-message"
+                *ngIf="
+                  form.get('linkPerfil')?.hasError('pattern') &&
+                  form.get('linkPerfil')?.touched
+                "
+              >
+                O link é inválido
+              </small>
+            </div>
           </ng-template>
         </div>
 

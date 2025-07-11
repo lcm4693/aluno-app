@@ -79,9 +79,7 @@ export class InformacoesBasicasComponent implements OnInit {
     private fb: FormBuilder
   ) {}
 
-  ngOnInit(): void {
-    // this.criarForm();
-  }
+  ngOnInit(): void {}
 
   criarForm() {
     this.paisMoraObj = this.alunoEditado.paisMora;
@@ -105,7 +103,12 @@ export class InformacoesBasicasComponent implements OnInit {
       paisNatal: [''],
       profissao: [this.alunoEditado.profissao],
       hobbies: [this.alunoEditado.hobbies],
-      linkPerfil: [this.alunoEditado.linkPerfil],
+      linkPerfil: [
+        this.alunoEditado.linkPerfil,
+        Validators.pattern(
+          /^(https?:\/\/)?([\w\-]+\.)+[a-z]{2,6}(:\d{1,5})?(\/.*)?$/i
+        ),
+      ],
       pontos: [this.alunoEditado.pontos],
     });
 
@@ -129,6 +132,10 @@ export class InformacoesBasicasComponent implements OnInit {
 
   executarAcaoEdicao() {
     if (this.modoEdicao) {
+      if (this.form.invalid) {
+        this.form.markAllAsTouched();
+        return;
+      }
       this.form.value.mora = this.mora;
       this.form.value.cidadeNatal = this.cidadeNatal;
 
