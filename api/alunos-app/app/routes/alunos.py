@@ -12,6 +12,7 @@ from app.services.aluno_service import (
     atualizar_data_primeira_aula,
     alterar_foto_usuario,
     buscar_lista_aluno_para_menu,
+    atualizar_nome_nivel,
 )
 from app.utils.error_handler import handle_errors
 from app.utils.validators import AlunoInputDTO
@@ -127,6 +128,26 @@ def put_aluno_basico(aluno_id):
 
     retorno = {"mensagem": "Informações básicas atualizadas com sucesso"}
     logger.debug(f"Retorno - put_aluno_basico: {retorno}")
+
+    return jsonify(retorno), 200
+
+
+@alunos_bp.route("/nome-nivel/<int:aluno_id>", methods=["PUT"])
+@handle_errors
+@jwt_required()
+def put_nome_nivel_aluno(aluno_id):
+    idUsuario = get_jwt_identity()
+
+    dados = request.get_json()
+    logger.debug(f"Entrada - put_nome_nivel_aluno: {dados}")
+
+    erro, status = atualizar_nome_nivel(aluno_id, dados, id_usuario=idUsuario)
+
+    if erro:
+        return jsonify({"erro": erro}), status
+
+    retorno = {"mensagem": "Informações atualizadas com sucesso"}
+    logger.debug(f"Retorno - put_nome_nivel_aluno: {retorno}")
 
     return jsonify(retorno), 200
 

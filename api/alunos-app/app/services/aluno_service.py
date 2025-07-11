@@ -165,6 +165,23 @@ def buscar_aluno_completo(aluno_id, id_usuario):
         return aluno_dict_resultado, None
 
 
+def atualizar_nome_nivel(aluno_id, dados, id_usuario):
+    with get_session() as session:
+        aluno = retornar_id_aluno_banco(aluno_id, id_usuario)
+
+        if not aluno:
+            return "Aluno não encontrado", 404
+
+        # Atualização dos campos
+        aluno.nome = dados.get("nome")
+        aluno.nivel = dados.get("nivel")
+
+        session.add(aluno)  # opcional, mas explícito
+        # commit é feito automaticamente no get_session()
+
+        return None, 200
+
+
 def atualizar_informacoes_basicas(aluno_id, dados, id_usuario):
     with get_session() as session:
         aluno = retornar_id_aluno_banco(aluno_id, id_usuario)

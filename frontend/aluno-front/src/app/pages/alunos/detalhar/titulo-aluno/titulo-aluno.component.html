@@ -1,0 +1,76 @@
+<form [formGroup]="form">
+  <div class="flex gap-3 w-full">
+    <h2 class="text-5xl font-bold" *ngIf="!modoEdicao">
+      {{ alunoEditado.nome }} - {{ alunoEditado.nivel }}
+    </h2>
+    <div class="flex gap-5" *ngIf="modoEdicao">
+      <div class="flex flex-col gap-1 w-100">
+        <label for="nome" class="label">Nome:</label>
+        <input
+          pInputText
+          id="nome"
+          type="text"
+          formControlName="nome"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              form.get('nome')?.invalid && form.get('nome')?.touched
+          }"
+        />
+        <small
+          class="error-message"
+          *ngIf="
+            form.get('nome')?.hasError('required') && form.get('nome')?.touched
+          "
+        >
+          Nome é obrigatório
+        </small>
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="nome" class="label">Nível:</label>
+        <p-dropdown
+          [options]="niveis"
+          inputId="nivel"
+          formControlName="nivel"
+          optionLabel="label"
+          optionValue="value"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              form.get('nivel')?.invalid && form.get('nivel')?.touched
+          }"
+        ></p-dropdown>
+        <small
+          class="error-message"
+          *ngIf="
+            form.get('nivel')?.hasError('required') &&
+            form.get('nivel')?.touched
+          "
+        >
+          Nível é obrigatório
+        </small>
+      </div>
+    </div>
+    <div class="flex gap-3 ml-5">
+      <!-- Botão cancelar (só aparece no modo de edição) -->
+      <button
+        *ngIf="modoEdicao"
+        class="botao-cancelar"
+        pTooltip="Cancelar edição"
+        tooltipPosition="left"
+        (click)="cancelarEdicao()"
+      >
+        <i class="pi pi-times text-2xl!"></i>
+      </button>
+      <!-- Ícone do lápis -->
+      <button
+        class="botao-editar"
+        pTooltip="Editar nome e nível"
+        tooltipPosition="left"
+        (click)="executarAcaoEdicao()"
+      >
+        <i
+          class="pi {{ !modoEdicao ? 'pi-pencil' : 'pi-check' }} text-2xl!"
+        ></i>
+      </button>
+    </div>
+  </div>
+</form>

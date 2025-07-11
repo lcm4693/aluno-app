@@ -54,4 +54,11 @@ export class AlunoService {
   uploadFoto(idAluno: number, formData: FormData): Observable<any> {
     return this.http.post(`${this.baseUrl}/upload-foto/${idAluno}`, formData);
   }
+
+  atualizarNomeNivelAluno(
+    idAluno: number,
+    aluno: { nome: string; nivel: any }
+  ): Observable<any> {
+    return this.http.put(`${this.baseUrl}/nome-nivel/${idAluno}`, aluno);
+  }
 }

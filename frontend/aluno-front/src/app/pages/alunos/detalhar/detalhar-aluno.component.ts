@@ -23,6 +23,7 @@ import { InformacoesBasicasComponent } from './informacoes-basicas/informacoes-b
 import { PrimeiraAulaComponent } from './primeira-aula/primeira-aula.component';
 import { UploadFotoComponent } from './upload-foto/upload-foto.component';
 import { LoggerService } from '../../../services/logger.service';
+import { TituloAlunoComponent } from './titulo-aluno/titulo-aluno.component';
 
 @Component({
   standalone: true,
@@ -42,6 +43,7 @@ import { LoggerService } from '../../../services/logger.service';
     PrimeiraAulaComponent,
     UploadFotoComponent,
     DatePickerModule,
+    TituloAlunoComponent,
   ],
   templateUrl: './detalhar-aluno.component.html',
   styleUrl: './detalhar-aluno.component.css',
